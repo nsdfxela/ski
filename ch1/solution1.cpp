@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <fstream>
 
 
 int count(int n) {
@@ -13,20 +14,22 @@ int count(int n) {
       nn = nn * 3 + 1;
       cnt++;
     }
-//    std::cout << nn << std::endl;
+ //    std::cout << nn << std::endl;
   }
   return cnt+1;
 }
 
 int main(void) {
   int i,j;
-//  std::cout << count(22);
     int maxElement = 0;
     std::vector <int> results;
-  while(std::cin >> i >> j) {
-//    std::cout << i << " " << j;
+    /*#if 0
+    std::ifstream istr ("test.txt", std::ios::in);
+    while(istr >> i >> j) {
+    #elif*/
+    while(std::cin >> i >> j){
+      //#endif
     for(int t = i; t <= j; t++) {
-      //      std::cout << t << " " << count(t) << std::endl;
       int ct = count(t);
       if(ct > maxElement) {
 	maxElement = ct;
@@ -38,9 +41,9 @@ int main(void) {
     }
     maxElement = 0;
         for(int idx = 0; idx < results.size(); idx+=3){
-        std::cout << results[idx] << " " << results[idx+1] << " " << results[idx+2] << std::endl;
-
-  }
+	  if(idx) std::cout << std::endl;
+	  std::cout << results[idx] << " " << results[idx+1] << " " << results[idx+2];
+	}
   
   return 0;
 }
