@@ -22,6 +22,7 @@ int main(void) {
   int i,j;
 //  std::cout << count(22);
     int maxElement = 0;
+    std::vector <int> results;
   while(std::cin >> i >> j) {
 //    std::cout << i << " " << j;
     for(int t = i; t <= j; t++) {
@@ -31,8 +32,14 @@ int main(void) {
 	maxElement = ct;
       }
     }
-    std::cout << i << " " << j << " " << maxElement << std::endl;
+    results.push_back(i);
+    results.push_back(j);
+    results.push_back(maxElement);
+    }
     maxElement = 0;
+        for(int idx = 0; idx < results.size(); idx+=3){
+        std::cout << results[idx] << " " << results[idx+1] << " " << results[idx+2] << std::endl;
+
   }
   
   return 0;
