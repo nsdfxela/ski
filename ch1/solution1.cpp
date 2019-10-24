@@ -48,6 +48,6 @@ int main(void) {
 	  if(idx) std::cout << std::endl;
 	  std::cout << results[idx] << " " << results[idx+1] << " " << results[idx+2];
 	}
-  
+		std::cout << std::endl;
   return 0;
 }
