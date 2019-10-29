@@ -1,3 +1,4 @@
+
 #include <iostream>
 #include <fstream>
 
@@ -5,7 +6,8 @@
 #define N 100
 char field [M][N];
 
-void print_field(int m, int n){
+void print_field(int m, int n, int order){
+  std::cout << "Field #" << order << ":" << std::endl;
   for(int i = 0; i < m; i++) {
     for(int j = 0; j < n; j++){
       std::cout << field[i][j] << " ";
@@ -13,11 +15,10 @@ void print_field(int m, int n){
     std::cout << std::endl;
   }
 }
-int main (int argc, char **argv) {
-  std::ifstream istr ("test.txt", std::ios::in);
-  int m=0, n=0;
+
+void read_field(std::istream &istr,  int &m, int &n) {
   istr >> m >> n;
-  std::cout << m << " " << n << std::endl;
+  //std::cout << m << " " << n << std::endl;
   for(int i = 0; i < m; i++) {
     for(int j = 0 ; j < n; j++){
       char c;
@@ -25,6 +26,45 @@ int main (int argc, char **argv) {
       field[i][j] = c;
     }
   }
-  print_field(m, n);
+}
+
+void safe_set(int i, int j, int m, int n) {
+  if(i >= 0 && i < m && j >= 0 && j < n) {
+    if(field[i][j] == '.') {field[i][j] = '1';}
+    else if (field[i][j] >= '0' && field [i][j] <= '7') {field[i][j] ++;}
+  }
+}
+
+void calculate_field(int m, int n) {
+  for(int i = 0; i < m; i++) {
+    for (int j = 0; j < n; j++) {
+      if(field[i][j] == '*') {
+	safe_set(i-1,j-1,m,n);
+	safe_set(i-1,j  ,m,n);
+	safe_set(i-1,j+1,m,n);
+	safe_set(i  ,j-1,m,n);
+	safe_set(i  ,j+1,m,n);
+	safe_set(i+1,j-1,m,n);
+	safe_set(i+1,j  ,m,n);
+	safe_set(i+1,j+1,m,n);
+      } else if(field[i][j] == '.') {
+	field[i][j] = '0';
+      }
+    }
+  }
+}
+int main (int argc, char **argv) {
+
+  int m=0, n=0;
+  int order = 0;
+  std::ifstream istr ("test.txt", std::ios::in);
+
+  do{
+    read_field(istr, m, n);
+    if(!m) break;
+    calculate_field(m,n);
+    print_field(m, n, ++order);
+    std::cout << std::endl;
+  } while(true);
   return 0;
 }
