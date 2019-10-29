@@ -10,7 +10,7 @@ void print_field(int m, int n, int order){
   std::cout << "Field #" << order << ":" << std::endl;
   for(int i = 0; i < m; i++) {
     for(int j = 0; j < n; j++){
-      std::cout << field[i][j] << " ";
+      std::cout << field[i][j];
     }
     std::cout << std::endl;
   }
@@ -57,14 +57,16 @@ int main (int argc, char **argv) {
 
   int m=0, n=0;
   int order = 0;
-  std::ifstream istr ("test.txt", std::ios::in);
+  // std::ifstream istr ("test.txt", std::ios::in);
 
   do{
-    read_field(istr, m, n);
-    if(!m) break;
+    read_field(std::cin, m, n);
+    //read_field(istr, m, n);
+        if(!m) break;
+	if(order) std::cout << std::endl;
     calculate_field(m,n);
     print_field(m, n, ++order);
-    std::cout << std::endl;
+    
   } while(true);
   return 0;
 }
