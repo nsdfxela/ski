@@ -6,10 +6,10 @@ double payments[1000];
 int read_data(std::istream &stream, int &number){
 
   stream >> number;
-  std::cout << number;
+  //std::cout << number;
   for(int i = 0 ; i < number; i++) {
     stream >> payments[i];
-    std::cout << payments[i] << " ";
+    //    std::cout << payments[i] << " ";
   }
   return number;
 }
@@ -17,11 +17,12 @@ int read_data(std::istream &stream, int &number){
 void calculate(int n) {
   if(!n) return;
   double sum = std::accumulate(payments, payments + n, 0.0);
-  //std::cout << sum << std::endl;
   double avg = sum / n;
+  std::cout << avg << std::endl;
+
   double lsum = std::accumulate(payments, payments + n, 0.0,[avg](double lower_sum, double element){
 					    if(element < avg)
-					      return lower_sum + element;
+					      return lower_sum + (avg - element);
 					    else
 					      return lower_sum;
 					  });
@@ -36,7 +37,7 @@ int main(int argc, char ** argv) {
   int studs = 0;
   while(read_data(istr, studs)) {
     calculate(studs);
-    std::cout << studs;
+    //    std::cout << studs;
   }
   
 
