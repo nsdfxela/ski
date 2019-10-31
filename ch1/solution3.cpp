@@ -1,6 +1,8 @@
 #include <iostream>
+#include <cmath>
 #include <numeric>
 #include <fstream>
+#include <iomanip>
 
 double payments[1000];
 int read_data(std::istream &stream, int &number){
@@ -14,11 +16,11 @@ int read_data(std::istream &stream, int &number){
   return number;
 }
 
-void calculate(int n) {
-  if(!n) return;
+double calculate(int n) {
+  if(!n) return 0.0;
   double sum = std::accumulate(payments, payments + n, 0.0);
-  double avg = sum / n;
-  std::cout << avg << std::endl;
+  double avg = std::round(sum / n * 100.0) / 100.0;
+  //  std::cout << avg << std::endl;
 
   double lsum = std::accumulate(payments, payments + n, 0.0,[avg](double lower_sum, double element){
 					    if(element < avg)
@@ -26,7 +28,8 @@ void calculate(int n) {
 					    else
 					      return lower_sum;
 					  });
-  std::cout <<"ls: " << lsum << std::endl;
+  //  std::cout <<"ls: " << lsum << std::endl;
+  return lsum;
   
   
 }
@@ -35,8 +38,10 @@ int main(int argc, char ** argv) {
   
   std::ifstream istr ("test.txt", std::ios::in);
   int studs = 0;
+  std::cout <<   std::setprecision(2) << std::fixed;
+
   while(read_data(istr, studs)) {
-    calculate(studs);
+    std::cout << '$' << calculate(studs) << std::endl;
     //    std::cout << studs;
   }
   
