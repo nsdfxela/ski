@@ -13,6 +13,8 @@ int read_data(int &s, int &n, std::istream &st) {
 #define VSX (W-1)
 #define LVSX (0)
 
+#define DELIM '.'
+
 void v1(char *f, int s) {
   int xspos = VSX;//x start pos
   int yspos = 1;//y start pos
@@ -54,16 +56,6 @@ void h3(char *f, int s) {
   for(int i=0;i<s;i++){ f[yspos*W + xspos+i] = '_';}
 }
 
-
-void print_field(char *data, int s) {
-  for(int i = 0;i<H;i++){
-    for(int j = 0;j<W;j++){
-      std::cout << data[i*W+j];
-    }
-    std::cout << std::endl;
-  }
-
-}
 
 void print1(char * field, int s) {
   v1(field, s);
@@ -126,6 +118,15 @@ void print8(char * field, int s) {
   v1(field, s);
 }
 
+void print0(char * field, int s) {
+  h1(field, s);
+  lv1(field, s);
+  v2(field, s);
+  h3(field, s);
+  lv2(field, s);
+  v1(field, s);
+}
+
 void print9(char * field, int s) {
   h1(field, s);
   lv1(field, s);
@@ -135,20 +136,52 @@ void print9(char * field, int s) {
   v1(field, s);
 }
 
-
+void print_field(char *data, int w, int h) {
+  for(int i = 0;i<h;i++){
+    for(int j = 0;j<w;j++){
+      std::cout << data[i*w+j];
+    }
+    std::cout << std::endl;
+  }
+  std::cout << std::endl;
+}
 
 void print_data(const std::string &data, int s) {
+  int field_size = H*(W+1)*data.size();
+  char **fields = new char*[data.size()];
+  //  memset(field, '.', field_size);
+  char *current_field = nullptr;
   for(int i = 0; i < data.size(); i++) {
+    //    current_field = &field[i*H*(W+1)];
+    fields[i] = new char[H*(W)];
+    current_field = fields[i];
+    memset(current_field, DELIM, H*(W));
     //    std::cout << data[i];
-    if(data[i] == '1') {
-      s=5;
-      char *field = new char[H*W];
-      memset(field, '.', H*W);
-      print9(field, s);
-      print_field(field, s);
-    }
-    
+   
+    if(data[i] == '1') {  print1(current_field, s);  }
+    else if(data[i] == '2') {  print2(current_field, s);  }
+    else if(data[i] == '3') {  print3(current_field, s);  }
+    else if(data[i] == '4') {  print4(current_field, s);  }
+    else if(data[i] == '5') {  print5(current_field, s);  }
+    else if(data[i] == '6') {  print6(current_field, s);  }
+    else if(data[i] == '7') {  print7(current_field, s);  }
+    else if(data[i] == '8') {  print8(current_field, s);  }
+    else if(data[i] == '9') {  print9(current_field, s);  }
+    else if(data[i] == '0') {  print0(current_field, s);  }
+
+    //    print_field(current_field, (W), H);
   }
+
+  for(int I = 0; I < H; I++){
+    for(int i = 0; i < data.size(); i++) {
+    for(int j = 0; j < W; j++) {
+      std::cout << fields[i][W*I+j];
+    }
+    std::cout << DELIM;
+    }
+    std::cout << std::endl;
+  }
+  //  print_field(field, (W+1)*data.size(), H);
 }
 
 int main (void) {
