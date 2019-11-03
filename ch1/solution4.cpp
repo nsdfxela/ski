@@ -72,20 +72,79 @@ void print1(char * field, int s) {
 
 void print2(char * field, int s) {
   h1(field, s);
-  v2(field, s);
+  v1(field, s);
   h2(field, s);
   h3(field, s);
+  lv2(field, s);
+}
+
+void print3(char * field, int s) {
+  h1(field, s);
+  v1(field, s);
+  h2(field, s);
+  h3(field, s);
+  v2(field, s);
+}
+
+void print4(char * field, int s) {
+  v1(field, s);
+  h2(field, s);
+  v2(field, s);
   lv1(field, s);
 }
+
+void print5(char * field, int s) {
+  h1(field, s);
+  lv1(field, s);
+  h2(field, s);
+  v2(field, s);
+  h3(field, s);
+}
+
+void print6(char * field, int s) {
+  h1(field, s);
+  lv1(field, s);
+  h2(field, s);
+  v2(field, s);
+  h3(field, s);
+  lv2(field, s);
+}
+
+void print7(char * field, int s) {
+  v1(field, s);
+  v2(field, s);
+  h1(field, s);
+}
+
+void print8(char * field, int s) {
+  h1(field, s);
+  lv1(field, s);
+  h2(field, s);
+  v2(field, s);
+  h3(field, s);
+  lv2(field, s);
+  v1(field, s);
+}
+
+void print9(char * field, int s) {
+  h1(field, s);
+  lv1(field, s);
+  h2(field, s);
+  v2(field, s);
+  h3(field, s);
+  v1(field, s);
+}
+
 
 
 void print_data(const std::string &data, int s) {
   for(int i = 0; i < data.size(); i++) {
     //    std::cout << data[i];
     if(data[i] == '1') {
+      s=5;
       char *field = new char[H*W];
       memset(field, '.', H*W);
-      print2(field, s);
+      print9(field, s);
       print_field(field, s);
     }
     
