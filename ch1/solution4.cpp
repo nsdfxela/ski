@@ -181,6 +181,11 @@ void print_data(const std::string &data, int s) {
     }
     std::cout << std::endl;
   }
+
+  for(int i = 0; i < data.size(); i++) {
+    delete [] fields[i];
+  }
+  delete [] fields;
   //  print_field(field, (W+1)*data.size(), H);
 }
 
