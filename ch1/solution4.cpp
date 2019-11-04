@@ -1,7 +1,9 @@
 #include <iostream>
 #include <fstream>
 #include <string>
-int read_data(int &s, int &n, std::istream &st) {
+#include <cstring>
+
+int read_data(int &s, std::string &n, std::istream &st) {
   st >> s;
   st >> n;
   return s;
@@ -13,7 +15,8 @@ int read_data(int &s, int &n, std::istream &st) {
 #define VSX (W-1)
 #define LVSX (0)
 
-#define DELIM '.'
+#define DELIM ' '
+#define HOR '-'
 
 void v1(char *f, int s) {
   int xspos = VSX;//x start pos
@@ -43,17 +46,17 @@ void lv2(char *f, int s) {
 void h1(char *f, int s) {
   int xspos = 1;//x start pos
   int yspos = 0;//y start pos
-  for(int i=0;i<s;i++){ f[yspos*W + xspos+i] = '_';}
+  for(int i=0;i<s;i++){ f[yspos*W + xspos+i] = HOR;}
 }
 void h2(char *f, int s) {
   int xspos = 1;//x start pos
   int yspos = 0+s+1;//y start pos
-  for(int i=0;i<s;i++){ f[yspos*W + xspos+i] = '_';}
+  for(int i=0;i<s;i++){ f[yspos*W + xspos+i] = HOR;}
 }
 void h3(char *f, int s) {
   int xspos = 1;//x start pos
   int yspos = 0+s+1+s+1;//y start pos
-  for(int i=0;i<s;i++){ f[yspos*W + xspos+i] = '_';}
+  for(int i=0;i<s;i++){ f[yspos*W + xspos+i] = HOR;}
 }
 
 
@@ -155,7 +158,7 @@ void print_data(const std::string &data, int s) {
     //    current_field = &field[i*H*(W+1)];
     fields[i] = new char[H*(W)];
     current_field = fields[i];
-    memset(current_field, DELIM, H*(W));
+    std::memset(current_field, DELIM, H*(W));
     //    std::cout << data[i];
    
     if(data[i] == '1') {  print1(current_field, s);  }
@@ -172,14 +175,14 @@ void print_data(const std::string &data, int s) {
     //    print_field(current_field, (W), H);
   }
 
-  for(int I = 0; I < H; I++){
-    for(int i = 0; i < data.size(); i++) {
-    for(int j = 0; j < W; j++) {
+  for(int I = 0; I < H; I++){//rows
+    for(int i = 0; i < data.size(); i++) {//digits
+      for(int j = 0; j < W; j++) {//columns
       std::cout << fields[i][W*I+j];
     }
-    std::cout << DELIM;
+    if(i!=data.size()-1) std::cout << DELIM;
     }
-    std::cout << std::endl;
+    if(I!=H-1) std::cout << std::endl;
   }
 
   for(int i = 0; i < data.size(); i++) {
@@ -190,12 +193,17 @@ void print_data(const std::string &data, int s) {
 }
 
 int main (void) {
-  int s = 0, n = 0;
-  std::ifstream fstr ("test.txt", std::ios::in);
-  while(read_data(s, n, fstr)){
+  int s = 0;
+  std::string n;
+  //  std::ifstream fstr ("test.txt", std::ios::in);
+  
+  while(read_data(s, n, std::cin)){
     //    std::cout << s << std::endl;
-    std::string strn = std::to_string(n);
-    print_data(strn, s);
+    //    std::string strn = std::to_string(n);
+    print_data(n, s);
+	std::cout << std::endl;
+	std::cout << std::endl;
+	
   }
   return 0;
 }
