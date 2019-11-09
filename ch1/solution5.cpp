@@ -25,6 +25,15 @@ void L(std::istream &st) {
   image[y-1][x-1] = c;
 }
 
+void V(std::istream &istr) {
+  int x, y1, y2;
+  char c;
+  istr >> x >> y1 >> y2 >> c;
+  for(int i = y1; i <= y2; i++){
+    image[i-1][x-1] = c;
+  }
+}
+
 void f(int x, int y, char ic, char c){
   if(x < 1 || x > M || y < 1 || y > N) {
    
@@ -67,7 +76,8 @@ char read_command(std::istream &strm) {
   case 'I' : I(strm); break;
   case 'S' : S(strm); break;
   case 'L' : L(strm); break;
-  case 'F' : F(strm); break;    
+  case 'F' : F(strm); break;
+  case 'V' : V(strm); break;
   default:
     std::string tmp;
     std::getline(strm, tmp);
