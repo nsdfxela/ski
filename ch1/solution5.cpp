@@ -26,20 +26,26 @@ void L(std::istream &st) {
 }
 
 void f(int x, int y, char ic, char c){
-  if(x < 1 || x > N || y < 1 || y > M) {
-    std::cout << "fail" << std::endl;
+  if(x < 1 || x > M || y < 1 || y > N) {
+   
     return;
   } //numeration from 0
+
+  if(image[y-1][x-1] != ic) {return;}
   //y -row
   //x - col
+  //  std::cout << x << " " << y << " " << std::endl;
   image[y-1][x-1] = c;
-  
+  f(x+1, y , ic, c);
+  f(x  , y-1, ic, c);
+  f(x-1, y  , ic, c);
+  f(x  , y+1 , ic, c);
 }
 void F(std::istream &st) {
   char  c;
   int x, y;
   st >> x >> y >> c; //column, then row
-  f(y, x, image[y][x], c);
+  f(x, y, image[y-1][x-1], c);
 }
 
 void I(std::istream &st) {
@@ -61,7 +67,7 @@ char read_command(std::istream &strm) {
   case 'I' : I(strm); break;
   case 'S' : S(strm); break;
   case 'L' : L(strm); break;
-  case 'F' : L(strm); break;    
+  case 'F' : F(strm); break;    
   default:
     std::string tmp;
     std::getline(strm, tmp);
