@@ -68,16 +68,42 @@ void I(std::istream &st) {
   }
 }
 
+void H(std::istream &st) {
+  int x1, x2, y;
+  char c;
+  st >> x1 >> x2 >> y;
+  st >> c;
+
+  for(int x = x1; x <=x2; x++) {
+    image[y-1][x-1] = c;
+  }
+}
+
+void C(std::istream &st) {
+  if(image) {
+    for(int i = 0; i < N; i++){
+      delete [] image[i];
+    }
+    delete [] image;
+  }
+  for(int i = 0; i < N; i++){
+    image[i]=new char [M];
+    std::fill(image[i], image[i]+M, 'O');
+  }
+}
+
 char read_command(std::istream &strm) {
   char cmd;
   strm >> cmd;
-  std::cout << cmd << std::endl;
+  //  std::cout << cmd << std::endl;
   switch(cmd){
   case 'I' : I(strm); break;
   case 'S' : S(strm); break;
   case 'L' : L(strm); break;
   case 'F' : F(strm); break;
   case 'V' : V(strm); break;
+  case 'H' : H(strm); break;
+  case 'C' : C(strm); break;
   default:
     std::string tmp;
     std::getline(strm, tmp);
