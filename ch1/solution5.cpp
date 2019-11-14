@@ -92,6 +92,13 @@ void C(std::istream &st) {
   }
 }
 
+void K(std::istream &istr){
+  int x1, x2, y1, y2;
+  istr >> x1 >> x2 >> y1 >> y2;
+  char c;
+  istr >> c;
+}
+
 char read_command(std::istream &strm) {
   char cmd;
   strm >> cmd;
@@ -104,6 +111,7 @@ char read_command(std::istream &strm) {
   case 'V' : V(strm); break;
   case 'H' : H(strm); break;
   case 'C' : C(strm); break;
+  case 'K' : K(strm); break;
   default:
     std::string tmp;
     std::getline(strm, tmp);
