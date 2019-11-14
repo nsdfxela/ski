@@ -35,12 +35,15 @@ void V(std::istream &istr) {
 }
 
 void f(int x, int y, char ic, char c){
+  static int ll = 0;
+
   if(x < 1 || x > M || y < 1 || y > N) {
-   
+
     return;
   } //numeration from 0
 
   if(image[y-1][x-1] != ic) {return;}
+  //    std::cout << ll++ << " ";
   //y -row
   //x - col
   //  std::cout << x << " " << y << " " << std::endl;
@@ -54,6 +57,7 @@ void F(std::istream &st) {
   char  c;
   int x, y;
   st >> x >> y >> c; //column, then row
+  //  std::cout << "F" << std::endl;
   f(x, y, image[y-1][x-1], c);
 }
 
