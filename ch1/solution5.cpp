@@ -97,6 +97,11 @@ void K(std::istream &istr){
   istr >> x1 >> x2 >> y1 >> y2;
   char c;
   istr >> c;
+  for(int y = y1; y <= y2; y++){
+    for(int x = x1; x <= x2; x++) {
+      image[y-1][x-1] = c;
+    }
+  }
 }
 
 char read_command(std::istream &strm) {
