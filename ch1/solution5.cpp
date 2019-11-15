@@ -34,25 +34,23 @@ void V(std::istream &istr) {
   }
 }
 
+#define check_coord_valid(XT, YT, EQ)	     \
+  if(XT >= 1 && XT <= M && YT >= 1 && YT <= N && image[YT-1][XT-1] == ic) EQ;
+
 void f(int x, int y, char ic, char c){
-  static int ll = 0;
-
-  if(x < 1 || x > M || y < 1 || y > N) {
-
-    return;
-  } //numeration from 0
-
+  //  static int ll = 0;
   if(image[y-1][x-1] != ic) {return;}
   //    std::cout << ll++ << " ";
   //y -row
   //x - col
   //  std::cout << x << " " << y << " " << std::endl;
   image[y-1][x-1] = c;
-  f(x+1, y , ic, c);
-  f(x  , y-1, ic, c);
-  f(x-1, y  , ic, c);
-  f(x  , y+1 , ic, c);
+  check_coord_valid(x+1, y, f(x+1, y , ic, c))
+  check_coord_valid(x  , y-1,  f(x  , y-1, ic, c))
+  check_coord_valid(x-1, y,  f(x-1, y , ic, c))
+  check_coord_valid(x  , y+1,  f(x, y+1 , ic, c))
 }
+
 void F(std::istream &st) {
   char  c;
   int x, y;
