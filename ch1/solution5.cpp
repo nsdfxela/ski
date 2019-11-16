@@ -94,14 +94,20 @@ void C(std::istream &st) {
   }
 }
 
+void fix_order(int &a, int &b) {
+  if (a > b) {std::swap(a, b);}
+}
+
 void K(std::istream &istr){
   int x1, x2, y1, y2;
-  istr >> x1 >> x2 >> y1 >> y2;
+  istr >> x1 >> y1 >> x2 >> y2;
   char c;
   istr >> c;
-  for(int y = y1; y <= y2; y++){
-    for(int x = x1; x <= x2; x++) {
-      image[y-1][x-1] = c;
+  fix_order(x1, x2);
+  fix_order(y1, y2);
+  for(int yi = y1; yi <= y2; yi++){
+    for(int xi = x1; xi <= x2; xi++) {
+      image[yi-1][xi-1] = c;
     }
   }
 }
