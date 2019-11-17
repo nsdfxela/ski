@@ -35,7 +35,6 @@ void V(std::istream &istr) {
   char c;
   istr >> x >> y1 >> y2 >> c;
   fix_order(y1, y2);
-  std::cout<< x << std::endl;
   for(int i = y1; i <= y2; i++){
     image[i-1][x-1] = c;
   }
