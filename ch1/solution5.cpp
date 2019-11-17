@@ -18,6 +18,11 @@ void S(std::istream &st) {
   }
 }
 
+
+void fix_order(int &a, int &b) {
+  if (a > b) {std::swap(a, b);}
+}
+
 void L(std::istream &st) {
   char  c;
   int x, y;
@@ -29,10 +34,14 @@ void V(std::istream &istr) {
   int x, y1, y2;
   char c;
   istr >> x >> y1 >> y2 >> c;
+  fix_order(y1, y2);
+  std::cout<< x << std::endl;
   for(int i = y1; i <= y2; i++){
     image[i-1][x-1] = c;
   }
 }
+
+
 
 #define check_coord_valid(XT, YT, EQ)	     \
   if(XT >= 1 && XT <= M && YT >= 1 && YT <= N && image[YT-1][XT-1] == ic) EQ;
@@ -76,7 +85,7 @@ void H(std::istream &st) {
   char c;
   st >> x1 >> x2 >> y;
   st >> c;
-
+  fix_order(x1, x2);
   for(int x = x1; x <=x2; x++) {
     image[y-1][x-1] = c;
   }
@@ -88,9 +97,7 @@ void C(std::istream &st) {
   }
 }
 
-void fix_order(int &a, int &b) {
-  if (a > b) {std::swap(a, b);}
-}
+
 
 void K(std::istream &istr){
   int x1, x2, y1, y2;
