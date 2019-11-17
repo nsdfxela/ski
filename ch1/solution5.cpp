@@ -56,6 +56,7 @@ void F(std::istream &st) {
   int x, y;
   st >> x >> y >> c; //column, then row
   //  std::cout << "F" << std::endl;
+  if(image[y-1][x-1] == c) return;
   f(x, y, image[y-1][x-1], c);
 }
 
@@ -82,14 +83,7 @@ void H(std::istream &st) {
 }
 
 void C(std::istream &st) {
-  if(image) {
-    for(int i = 0; i < N; i++){
-      delete [] image[i];
-    }
-    delete [] image;
-  }
   for(int i = 0; i < N; i++){
-    image[i]=new char [M];
     std::fill(image[i], image[i]+M, 'O');
   }
 }
