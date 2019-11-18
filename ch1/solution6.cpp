@@ -8,15 +8,27 @@
 
 int mem [L][S];
 int regs [10];
-int *cur=nullptr;
+int cur=0;
 void read_blocks(std::istream &istr) {
   std::string ln;
+  bool block_started = false;
   while(getline(istr, ln)){
-    if(ln == "") std::cout << "empty ";
-    std::cout << ln << std::endl;
-
+    if(ln == "" && block_started) {return;}
+    else {
+      block_started = true;
+    }
+    int data;
+    istr >> data;
+    mem[cur][0] = data/100;
+    mem[cur][1] = (data-mem[cur][0]*100)/10;
+    mem[cur][2] = data%10;
   }
 }
+
+void p_debug()
+{
+}
+
 void clear_mem() {
   std::fill(regs, regs+R, 0);
   for(int i = 0; i < L; i++){
@@ -24,7 +36,7 @@ void clear_mem() {
       mem [i][j] = 0;
     }
   }
-  cur = mem[0];
+  cur = 0;
 }
 
 int main(void) {
