@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <fstream>
+#include <sstream>
 
 #define L 1000
 #define S 3
@@ -13,15 +14,20 @@ void read_blocks(std::istream &istr) {
   std::string ln;
   bool block_started = false;
   while(getline(istr, ln)){
-    if(ln == "" && block_started) {return;}
-    else {
-      block_started = true;
+    //std::cout << ln << std::endl;
+    if(ln == "") {
+      if(block_started)
+	return;
+      else continue;
     }
+    else {block_started = true;}
+    std::stringstream ss(ln);
     int data;
-    istr >> data;
+    ss >> data;
     mem[cur][0] = data/100;
     mem[cur][1] = (data-mem[cur][0]*100)/10;
     mem[cur][2] = data%10;
+    cur++;
   }
 }
 
