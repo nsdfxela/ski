@@ -25,11 +25,16 @@ void read_blocks(std::istream &istr) {
   }
 }
 
-void p_debug()
+void p_debug(int count = -1)
 {
+  int lim = count < 0 ? L : count;
+  for(int i = 0; i < lim; i++) {
+    std::cout << mem[i][0] << mem[i][1] << mem[i][2] << std::endl;
+  }
 }
 
 void clear_mem() {
+
   std::fill(regs, regs+R, 0);
   for(int i = 0; i < L; i++){
     for(int j = 0; j < S; j++) {
@@ -48,6 +53,7 @@ int main(void) {
     clear_mem();
     read_blocks(istr);
   }
+  p_debug(30);
   return 0;
 }
 	      
