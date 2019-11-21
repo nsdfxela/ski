@@ -61,14 +61,27 @@ void exec_cmd() {
   switch(M(0))
   {
   case 2: R(M(1)) = M(2); break;
-  case 3: R(M(1)) += M(3); break;
+  case 3: R(M(1)) += M(2); break;
+  case 4: R(M(1)) *= M(2); break;
+  case 5: R(M(1)) = R(M(2)); break;
+   
       default: break;
   }
 }
 
+void p_debug2(){
+  std::cout << "Register values: ";
+  for(int i = 0; i < Rn; i++){
+    int val = R(i);
+    std:: cout << "R#" << i << " " << val << " ";
+  }
+  std::cout << std::endl;
+}
+
 void exec_programm(){
   do{
-    
+    exec_cmd();
+    p_debug2();
     cur++;
   } while (!is_end());
 }
@@ -81,6 +94,7 @@ int main(void) {
   for(int i = 0; i < n_of_blocks; i++) {
     clear_mem();
     read_block(istr);
+    exec_programm();
   }
   p_debug(30);
   return 0;
