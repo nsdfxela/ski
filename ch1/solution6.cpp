@@ -57,6 +57,11 @@ inline int& PTR(int r, int i) {
   return mem[addr][i];
 }
 
+void decomp (int v, int res[3]) {
+     res[0] = v / 100;
+     res[1] = (v - res[0]*100) / 10;
+     res[2] = v - res[0]*100 - res[1]*10;
+}
 
 bool is_end(){
   //  std::cout << mem[cur][0] << mem[cur][1] << mem[cur][2] << "\n ISEND";
@@ -75,6 +80,19 @@ void exec_cmd() {
   case 8: R(M(1)) = PTR(M(2), 0)*100 +
                     PTR(M(2), 1)*10 +
                     PTR(M(2), 2)*1; break;
+  case 9: {
+    int valsToSet [3];
+    int targetAddr = R(M(2));
+    decomp(R(M(1)), valsToSet);
+    mem[targetAddr][0] = valsToSet[0];
+    mem[targetAddr][1] = valsToSet[1];
+    mem[targetAddr][2] = valsToSet[2];
+  }
+  break;
+  case 0: {
+  }
+  break;
+    //  case 9: 
     //  case 9: (M(1)) = PTR(M(2), 0)*100 +
     //              PTR(M(2), 1)*10 +
     //              PTR(M(2), 2)*1; break;
@@ -102,7 +120,8 @@ void exec_programm(){
 }
 
 int main(void) {
-  //  std::istream &istr = std::cin;
+
+    //  std::istream &istr = std::cin;
   std::ifstream ifstr ("test.txt", std::ios::in);   std::istream &istr = ifstr;
   int n_of_blocks = 0;
   istr >> n_of_blocks;
