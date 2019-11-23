@@ -57,6 +57,10 @@ inline int& PTR(int r, int i) {
   return mem[addr][i];
 }
 
+inline void OF(int &val) {
+  val %= 1000;
+}
+
 void decomp (int v, int res[3]) {
      res[0] = v / 100;
      res[1] = (v - res[0]*100) / 10;
@@ -68,21 +72,26 @@ bool is_end(){
   return mem[cur][0] == 1 && mem[cur][1] == 0 && mem[cur][2] == 0;
 }
 
+
+
 void exec_cmd() {
   switch(M(0))
   {
-  case 2: R(M(1)) = M(2); break;
-  case 3: R(M(1)) += M(2); break;
-  case 4: R(M(1)) *= M(2); break;
-  case 5: R(M(1)) = R(M(2)); break;
-  case 6: R(M(1)) += R(M(2)); break;
-  case 7: R(M(1)) *= R(M(2)); break;
+  case 2: R(M(1)) = M(2); OF(R(M(1)));  break;
+  case 3: R(M(1)) += M(2); OF(R(M(1))); break;
+  case 4: R(M(1)) *= M(2); OF(R(M(1))); break;
+  case 5: R(M(1)) = R(M(2)); OF(R(M(1)));  break;
+  case 6: R(M(1)) += R(M(2)); OF(R(M(1))); break;
+  case 7: R(M(1)) *= R(M(2)); OF(R(M(1))); break;
   case 8: R(M(1)) = PTR(M(2), 0)*100 +
                     PTR(M(2), 1)*10 +
-                    PTR(M(2), 2)*1; break;
+                    PTR(M(2), 2)*1;
+    OF(R(M(1)));
+    break;
   case 9: {
     int valsToSet [3];
     int targetAddr = R(M(2));
+    OF(targetAddr);
     decomp(R(M(1)), valsToSet);
     mem[targetAddr][0] = valsToSet[0];
     mem[targetAddr][1] = valsToSet[1];
@@ -90,15 +99,14 @@ void exec_cmd() {
   }
   break;
   case 0: {
+    if(R(M(2))) {
+      int cellAddr = R(M(1));
+      OF(cellAddr);
+      cur = cellAddr;
+    }
   }
   break;
-    //  case 9: 
-    //  case 9: (M(1)) = PTR(M(2), 0)*100 +
-    //              PTR(M(2), 1)*10 +
-    //              PTR(M(2), 2)*1; break;
-  
-    
-      default: break;
+  default: break;
   }
 }
 
