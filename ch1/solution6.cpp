@@ -131,8 +131,8 @@ void exec_programm(){
 
 int main(void) {
 
-    //  std::istream &istr = std::cin;
-  std::ifstream ifstr ("test.txt", std::ios::in);   std::istream &istr = ifstr;
+    std::istream &istr = std::cin;
+  //std::ifstream ifstr ("test.txt", std::ios::in);   std::istream &istr = ifstr;
   int n_of_blocks = 0;
   istr >> n_of_blocks;
   for(int i = 0; i < n_of_blocks; i++) {
@@ -140,9 +140,13 @@ int main(void) {
     read_block(istr);
     cur = 0;
     commands_executed = 0;
-    exec_programm();
+    exec_programm();	
 	std::cout << commands_executed+1 << std::endl;
+	if(i != n_of_blocks-1) {
 	std::cout << std::endl;
+		
+	}
+	
   }
   
   //  p_debug(30);
