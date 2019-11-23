@@ -139,9 +139,12 @@ int main(void) {
     clear_mem();
     read_block(istr);
     cur = 0;
+    commands_executed = 0;
     exec_programm();
+	std::cout << commands_executed+1 << std::endl;
+	std::cout << std::endl;
   }
-  std::cout << commands_executed+1;
+  
   //  p_debug(30);
   return 0;
 }
