@@ -52,8 +52,14 @@ void clear_mem() {
 
 inline int& M(int p){ return  mem[cur][p];}
 inline int& R(int p) {return regs[p];}
+inline int& PTR(int r, int i) {
+  int addr = R(r);
+  return mem[addr][i];
+}
+
 
 bool is_end(){
+  //  std::cout << mem[cur][0] << mem[cur][1] << mem[cur][2] << "\n ISEND";
   return mem[cur][0] == 1 && mem[cur][1] == 0 && mem[cur][2] == 0;
 }
 
@@ -64,7 +70,16 @@ void exec_cmd() {
   case 3: R(M(1)) += M(2); break;
   case 4: R(M(1)) *= M(2); break;
   case 5: R(M(1)) = R(M(2)); break;
-   
+  case 6: R(M(1)) += R(M(2)); break;
+  case 7: R(M(1)) *= R(M(2)); break;
+  case 8: R(M(1)) = PTR(M(2), 0)*100 +
+                    PTR(M(2), 1)*10 +
+                    PTR(M(2), 2)*1; break;
+    //  case 9: (M(1)) = PTR(M(2), 0)*100 +
+    //              PTR(M(2), 1)*10 +
+    //              PTR(M(2), 2)*1; break;
+  
+    
       default: break;
   }
 }
@@ -73,7 +88,7 @@ void p_debug2(){
   std::cout << "Register values: ";
   for(int i = 0; i < Rn; i++){
     int val = R(i);
-    std:: cout << "R#" << i << " " << val << " ";
+    std:: cout << "R" << i << " " << val << " ";
   }
   std::cout << std::endl;
 }
@@ -94,6 +109,7 @@ int main(void) {
   for(int i = 0; i < n_of_blocks; i++) {
     clear_mem();
     read_block(istr);
+    cur = 0;
     exec_programm();
   }
   p_debug(30);
