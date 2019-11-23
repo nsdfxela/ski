@@ -102,7 +102,7 @@ void exec_cmd() {
     if(R(M(2))) {
       int cellAddr = R(M(1));
       OF(cellAddr);
-      cur = cellAddr;
+      cur = cellAddr-1; //will be incremented as usual so -1
     }
   }
   break;
@@ -119,10 +119,12 @@ void p_debug2(){
   std::cout << std::endl;
 }
 
+int commands_executed = 0;
 void exec_programm(){
   do{
     exec_cmd();
-    p_debug2();
+    commands_executed++;
+    //    p_debug2();
     cur++;
   } while (!is_end());
 }
@@ -139,7 +141,8 @@ int main(void) {
     cur = 0;
     exec_programm();
   }
-  p_debug(30);
+  std::cout << commands_executed+1;
+  //  p_debug(30);
   return 0;
 }
 	      
