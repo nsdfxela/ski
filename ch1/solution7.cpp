@@ -27,10 +27,10 @@ bool read8(std::istream &istr) {
       if(chess_board[i][j] == 'k') {
 	b_k_pos_x = j;
 	b_k_pos_y = i;
-	std::cout << "k " << i << j << std::endl;
+	//std::cout << "k " << i << j << std::endl;
       }
       if(chess_board[i][j] == 'K') {
-	std::cout << "K " << i << j << std::endl;
+	//std::cout << "K " << i << j << std::endl;
 	w_k_pos_x = j;
 	w_k_pos_y = i;
       }
@@ -54,14 +54,30 @@ void s_safe(int  field [N][N], int i, int j){
   field[i][j] = 1;
 }
 
-void pawn(int i, int j) {
-  s_safe(blocked_W, i-1, j-1);
-  s_safe(blocked_W, i-1, j+1);
-  s_safe(blocked_W, i+1, j-1);
-  s_safe(blocked_W, i+1, j+1);
+
+#define WHITE +1
+#define BLACK -1
+#define BLOCKED(bw) (bw == -1 ? blocked_B : blocked_W)
+void pawn(int i, int j, int bow) {
+  //  s_safe(blocked_W, i-1, j-1);
+  //  s_safe(blocked_W, i-1, j+1);
+  s_safe(BLOCKED(bow), i + bow, j-1);
+  s_safe(BLOCKED(bow), i + bow, j+1);
 }
+
+
 #define ITER_I for (int i = 0; i < N; i++)
 #define ITER_J for (int j = 0; j < N; j++)
+void rook(int ii, int jj, int bw) {
+  ITER_I
+    {
+      s_safe(BLOCKED(bw), i, jj);
+    }
+  ITER_J
+    {
+      s_safe(BLOCKED(bw), ii, j);
+    }
+}
 
 template <class T>
 void d_print_field(T f[8][8]) {
@@ -81,9 +97,12 @@ void get_b_pos(){
     {
       ITER_J
 	{
-	  if(chess_board[i][j] == 'p') {
-	    pawn(i,j);
+	  switch (chess_board[i][j]) {
+	  case 'p': pawn(i, j, BLACK); break;
+	  case 'r': rook(i, j, BLACK); break;
+	  
 	  }
+
 	}
     }
 }
@@ -95,6 +114,7 @@ int main(void) {
   std::string ln;
   while(read8(istr)){
     clear_pos();
+    get_b_pos();
     d_print_field(blocked_W);
     
   }
