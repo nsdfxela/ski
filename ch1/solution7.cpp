@@ -98,7 +98,7 @@ void get_b_pos(){
       ITER_J
 	{
 	  switch (chess_board[i][j]) {
-	  case 'p': pawn(i, j, BLACK); break;
+	  case 'p': pawn(i, j, WHITE); break;
 	  case 'r': rook(i, j, BLACK); break;
 	  
 	  }
