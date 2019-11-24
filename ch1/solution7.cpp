@@ -1,9 +1,13 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <algorithm>
 
 const int N = 8;
 char chess_board [N][N];
+int blocked_W [N][N];
+int blocked_B [N][N];
+
 
 int w_k_pos_x = -1;
 int w_k_pos_y = -1;
@@ -23,8 +27,10 @@ bool read8(std::istream &istr) {
       if(chess_board[i][j] == 'k') {
 	b_k_pos_x = j;
 	b_k_pos_y = i;
+	std::cout << "k " << i << j << std::endl;
       }
       if(chess_board[i][j] == 'K') {
+	std::cout << "K " << i << j << std::endl;
 	w_k_pos_x = j;
 	w_k_pos_y = i;
       }
@@ -34,12 +40,62 @@ bool read8(std::istream &istr) {
   //  std::cout << '\n';
   return !is_empty;
 }
+
+void clear_pos() {
+  for(int i = 0; i < N;i++){
+    std::fill(blocked_W[i], blocked_W[i]+N, 0);
+    std::fill(blocked_B[i], blocked_B[i]+N, 0);
+  }
+}
+
+void s_safe(int  field [N][N], int i, int j){
+  if(i < 0 || i > N -1) return;
+  if(j < 0 || j > N -1) return;
+  field[i][j] = 1;
+}
+
+void pawn(int i, int j) {
+  s_safe(blocked_W, i-1, j-1);
+  s_safe(blocked_W, i-1, j+1);
+  s_safe(blocked_W, i+1, j-1);
+  s_safe(blocked_W, i+1, j+1);
+}
+#define ITER_I for (int i = 0; i < N; i++)
+#define ITER_J for (int j = 0; j < N; j++)
+
+template <class T>
+void d_print_field(T f[8][8]) {
+  ITER_I
+    {
+      ITER_J
+	{
+	  std::cout << f[i][j];
+	}
+      std::cout << std::endl;
+    }
+}
+
+//get blocked positions
+void get_b_pos(){
+  ITER_I
+    {
+      ITER_J
+	{
+	  if(chess_board[i][j] == 'p') {
+	    pawn(i,j);
+	  }
+	}
+    }
+}
+
 int main(void) {
 
   //  std::istream &istr = std::cin;
   std::fstream istr ("test.txt", std::ios::in);
   std::string ln;
   while(read8(istr)){
+    clear_pos();
+    d_print_field(blocked_W);
     
   }
 
