@@ -46,6 +46,7 @@ void clear_pos() {
     std::fill(blocked_W[i], blocked_W[i]+N, 0);
     std::fill(blocked_B[i], blocked_B[i]+N, 0);
   }
+  
 }
 
 void s_safe(int  field [N][N], int i, int j){
@@ -89,6 +90,16 @@ void d_print_field(T f[8][8]) {
 	}
       std::cout << std::endl;
     }
+  std::cout << std::endl;
+}
+
+void bishop(int ii, int jj, int bw){
+  for(int i = 0; ii + i < N; i++){
+    s_safe(BLOCKED(bw), ii+i, jj+i);
+  }
+  for(int i = 0; ii - i >= 0; i++){
+    s_safe(BLOCKED(bw), ii-i, jj-i);
+  }
 }
 
 //get blocked positions
@@ -99,8 +110,9 @@ void get_b_pos(){
 	{
 	  switch (chess_board[i][j]) {
 	  case 'p': pawn(i, j, WHITE); break;
-	  case 'r': rook(i, j, BLACK); break;
-	  
+	  case 'r': rook(i, j, WHITE); break;
+	  case 'R': rook(i, j, BLACK); break;
+	  case 'B': bishop(i, j, BLACK); break;
 	  }
 
 	}
@@ -116,6 +128,7 @@ int main(void) {
     clear_pos();
     get_b_pos();
     d_print_field(blocked_W);
+    d_print_field(blocked_B);
     
   }
 
