@@ -49,10 +49,11 @@ void clear_pos() {
   
 }
 
-void s_safe(int  field [N][N], int i, int j){
-  if(i < 0 || i > N -1) return;
-  if(j < 0 || j > N -1) return;
+bool s_safe(int  field [N][N], int i, int j){
+  if(i < 0 || i > N -1) return false;
+  if(j < 0 || j > N -1) return false;
   field[i][j] = 1;
+  return true;
 }
 
 
@@ -94,12 +95,18 @@ void d_print_field(T f[8][8]) {
 }
 
 void bishop(int ii, int jj, int bw){
-  for(int i = 0; ii + i < N; i++){
-    s_safe(BLOCKED(bw), ii+i, jj+i);
+  for(int m = 0; m < N; m++){
+    int j = jj - ii + m;
+    int n = N - m;
+    s_safe(BLOCKED(bw), m, j); //x increasing, y increasing
+    s_safe(BLOCKED(bw), n-1, j-1); //x increasing, y decreasing
   }
-  for(int i = 0; ii - i >= 0; i++){
-    s_safe(BLOCKED(bw), ii-i, jj-i);
-  }
+
+}
+
+void queen(int ii, int jj, int bw){
+  bishop(ii, jj, bw);
+  rook(ii, jj, bw);
 }
 
 //get blocked positions
@@ -110,9 +117,16 @@ void get_b_pos(){
 	{
 	  switch (chess_board[i][j]) {
 	  case 'p': pawn(i, j, WHITE); break;
+	  case 'P': pawn(i, j, BLACK); break;
+
 	  case 'r': rook(i, j, WHITE); break;
 	  case 'R': rook(i, j, BLACK); break;
+
 	  case 'B': bishop(i, j, BLACK); break;
+	  case 'b': bishop(i, j, WHITE); break;
+
+	  case 'Q': queen(i, j, BLACK); break;
+	  case 'q': queen(i, j, WHITE); break;
 	  }
 
 	}
