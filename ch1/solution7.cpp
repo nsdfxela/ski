@@ -52,17 +52,24 @@ void clear_pos() {
 bool s_safe(int  field [N][N], int i, int j){
   if(i < 0 || i > N -1) return false;
   if(j < 0 || j > N -1) return false;
+  if(chess_board[i][j] != '.') { return false;  }
   field[i][j] = 1;
   return true;
 }
+
+bool s_nsafe(int field[N][N], int i, int j) {
+  if(i < 0 || i > N -1) return false;
+  if(j < 0 || j > N -1) return false;
+  field[i][j] = 1;
+  return true;
+}
+
 
 
 #define WHITE +1
 #define BLACK -1
 #define BLOCKED(bw) (bw == -1 ? blocked_B : blocked_W)
 void pawn(int i, int j, int bow) {
-  //  s_safe(blocked_W, i-1, j-1);
-  //  s_safe(blocked_W, i-1, j+1);
   s_safe(BLOCKED(bow), i + bow, j-1);
   s_safe(BLOCKED(bow), i + bow, j+1);
 }
@@ -73,11 +80,15 @@ void pawn(int i, int j, int bow) {
 void rook(int ii, int jj, int bw) {
   ITER_I
     {
-      s_safe(BLOCKED(bw), i, jj);
+      if(!s_safe(BLOCKED(bw), i, jj)){
+	break;
+      }
     }
   ITER_J
     {
-      s_safe(BLOCKED(bw), ii, j);
+      if(!s_safe(BLOCKED(bw), ii, j)){
+	break;
+      }
     }
 }
 
@@ -95,11 +106,14 @@ void d_print_field(T f[8][8]) {
 }
 
 void bishop(int ii, int jj, int bw){
+  bool d1 = true;
+  bool d2 = true;
+  s_nsafe(BLOCKED(bw), ii, jj);
   for(int m = 0; m < N; m++){
     int j = jj - ii + m;
     int n = N - m;
-    s_safe(BLOCKED(bw), m, j); //x increasing, y increasing
-    s_safe(BLOCKED(bw), n-1, j-1); //x increasing, y decreasing
+    if(d1){d1 = s_safe(BLOCKED(bw), m, j);}; //x increasing, y increasing
+    if(d2){d2 = s_safe(BLOCKED(bw), n-1, j-1);}; //x increasing, y decreasing
   }
 
 }
