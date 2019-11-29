@@ -109,13 +109,16 @@ void bishop(int ii, int jj, int bw){
   bool d1 = true;
   bool d2 = true;
   s_nsafe(BLOCKED(bw), ii, jj);
-  for(int m = 0; m < N; m++){
-    int j = jj - ii + m;
-    int n = N - m;
-    if(d1){d1 = s_safe(BLOCKED(bw), m, j);}; //x increasing, y increasing
-    if(d2){d2 = s_safe(BLOCKED(bw), n-1, j-1);}; //x increasing, y decreasing
-  }
 
+  int i = ii;
+  int j = jj;
+  while(s_safe(BLOCKED(bw), --i, --j));
+  i = ii; j = jj;
+  while(s_safe(BLOCKED(bw), ++i, ++j));
+  i = ii; j = jj;
+  while(s_safe(BLOCKED(bw), --i, ++j));
+  i = ii; j = jj;
+  while(s_safe(BLOCKED(bw), ++i, --j));
 }
 
 void queen(int ii, int jj, int bw){
