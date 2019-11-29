@@ -78,18 +78,12 @@ void pawn(int i, int j, int bow) {
 #define ITER_I for (int i = 0; i < N; i++)
 #define ITER_J for (int j = 0; j < N; j++)
 void rook(int ii, int jj, int bw) {
-  ITER_I
-    {
-      if(!s_safe(BLOCKED(bw), i, jj)){
-	break;
-      }
-    }
-  ITER_J
-    {
-      if(!s_safe(BLOCKED(bw), ii, j)){
-	break;
-      }
-    }
+  s_nsafe(BLOCKED(bw), ii, jj);
+  for(int i = ii; i < N; i++) {s_safe(BLOCKED(bw), i, jj);}
+  for(int i = ii; i >= 0; i--) {s_safe(BLOCKED(bw), i, jj);}
+  for(int j = jj; j < N; j++) {s_safe(BLOCKED(bw), ii, j);}
+  for(int j = jj; j >= 0; j--) {s_safe(BLOCKED(bw), ii, j);}
+
 }
 
 template <class T>
