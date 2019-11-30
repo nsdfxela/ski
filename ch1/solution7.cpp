@@ -120,6 +120,28 @@ void queen(int ii, int jj, int bw){
   rook(ii, jj, bw);
 }
 
+void king(int ii, int jj, int bw) {
+  s_nsafe(BLOCKED(bw), ii, jj);
+  for(int i = ii - 1; i <= ii + 1; i++){
+      for(int j = jj - 1; j <= jj + 1; j++){
+	s_safe(BLOCKED(bw), i, j);
+      }
+  }
+}
+
+void knight(int ii, int jj, int bw) {
+  s_safe(BLOCKED(bw), ii + 1, jj -2);
+  s_safe(BLOCKED(bw), ii + 1, jj +2);
+  s_safe(BLOCKED(bw), ii - 1, jj -2);
+  s_safe(BLOCKED(bw), ii - 1, jj +2);
+
+  s_safe(BLOCKED(bw), ii + 2, jj -1);
+  s_safe(BLOCKED(bw), ii + 2, jj +1);
+  s_safe(BLOCKED(bw), ii - 2, jj -1);
+  s_safe(BLOCKED(bw), ii - 2, jj +1);
+  
+}
+
 //get blocked positions
 void get_b_pos(){
   ITER_I
@@ -138,6 +160,12 @@ void get_b_pos(){
 
 	  case 'Q': queen(i, j, BLACK); break;
 	  case 'q': queen(i, j, WHITE); break;
+
+ 	  case 'K': king(i, j, BLACK); break;
+	  case 'k': king(i, j, WHITE); break;
+
+  	  case 'N': knight(i, j, BLACK); break;
+	  case 'n': knight(i, j, WHITE); break;
 	  }
 
 	}
