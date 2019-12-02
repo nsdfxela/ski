@@ -52,6 +52,7 @@ void clear_pos() {
 bool s_safe(int  field [N][N], int i, int j){
   if(i < 0 || i > N -1) return false;
   if(j < 0 || j > N -1) return false;
+  //  std::cout << chess_board[i][j];
   if(chess_board[i][j] != '.') { return false;  }
   field[i][j] = 1;
   return true;
@@ -79,10 +80,10 @@ void pawn(int i, int j, int bow) {
 #define ITER_J for (int j = 0; j < N; j++)
 void rook(int ii, int jj, int bw) {
   s_nsafe(BLOCKED(bw), ii, jj);
-  for(int i = ii; i < N; i++) {s_safe(BLOCKED(bw), i, jj);}
-  for(int i = ii; i >= 0; i--) {s_safe(BLOCKED(bw), i, jj);}
-  for(int j = jj; j < N; j++) {s_safe(BLOCKED(bw), ii, j);}
-  for(int j = jj; j >= 0; j--) {s_safe(BLOCKED(bw), ii, j);}
+  for(int i = ii+1; i < N; i++) {if(!s_safe(BLOCKED(bw), i, jj)) break;}
+  for(int i = ii-1; i >= 0; i--) {if(!s_safe(BLOCKED(bw), i, jj)) break;}
+  for(int j = jj+1; j < N; j++) {if(!s_safe(BLOCKED(bw), ii, j)) break;}
+  for(int j = jj-1; j >= 0; j--) {if(!s_safe(BLOCKED(bw), ii, j)) break;}
 
 }
 
@@ -130,6 +131,7 @@ void king(int ii, int jj, int bw) {
 }
 
 void knight(int ii, int jj, int bw) {
+  s_nsafe(BLOCKED(bw), ii, jj);
   s_safe(BLOCKED(bw), ii + 1, jj -2);
   s_safe(BLOCKED(bw), ii + 1, jj +2);
   s_safe(BLOCKED(bw), ii - 1, jj -2);
