@@ -62,8 +62,8 @@ bool s_safe(int  field [N][N], int i, int j){
 }
 
 bool s_nsafe(int field[N][N], int i, int j) {
-  //  if(i < 0 || i > N -1) return false;
-  //if(j < 0 || j > N -1) return false;
+   if(i < 0 || i > N -1) return false;
+   if(j < 0 || j > N -1) return false;
   //field[i][j] = 1;
   return true;
 }
@@ -82,7 +82,7 @@ void pawn(int i, int j, int bow) {
 #define ITER_I for (int i = 0; i < N; i++)
 #define ITER_J for (int j = 0; j < N; j++)
 void rook(int ii, int jj, int bw) {
-  s_nsafe(BLOCKED(bw), ii, jj);
+  s_nsafe(BLOCKED(-bw), ii, jj);
   for(int i = ii+1; i < N; i++) {if(!s_safe(BLOCKED(bw), i, jj)) break;}
   for(int i = ii-1; i >= 0; i--) {if(!s_safe(BLOCKED(bw), i, jj)) break;}
   for(int j = jj+1; j < N; j++) {if(!s_safe(BLOCKED(bw), ii, j)) break;}
@@ -106,7 +106,7 @@ void d_print_field(T f[8][8]) {
 void bishop(int ii, int jj, int bw){
   bool d1 = true;
   bool d2 = true;
-  s_nsafe(BLOCKED(bw), ii, jj);
+  s_nsafe(BLOCKED(-bw), ii, jj);
 
   int i = ii;
   int j = jj;
@@ -131,11 +131,12 @@ void king(int ii, int jj, int bw) {
       }
   }
   BLOCKED(bw)[ii][jj] = 0;
+  BLOCKED(-bw)[ii][jj] = 1;
 
 }
 
 void knight(int ii, int jj, int bw) {
-  s_nsafe(BLOCKED(bw), ii, jj);
+  s_nsafe(BLOCKED(-bw), ii, jj);
   s_safe(BLOCKED(bw), ii + 1, jj -2);
   s_safe(BLOCKED(bw), ii + 1, jj +2);
   s_safe(BLOCKED(bw), ii - 1, jj -2);
@@ -185,7 +186,7 @@ bool is_check(int blocked[N][N], int kx, int ky){
     for(int j = -1; j <=1; j++){
       int ny = ky + j;
       if(nx >= 0 && nx <N && ny>=0 && ny <N && (j || i)){
-	//	std::cout << nx << " " << ny <<  " " << blocked[nx][ny]<<  " \n";
+	std::cout << nx << " " << ny <<  " " << blocked[nx][ny]<<  " \n";
 	if(blocked[ny][nx] == 0) return false;
       }
     }
@@ -193,6 +194,7 @@ bool is_check(int blocked[N][N], int kx, int ky){
   return true;
   
 }
+
 
 int main(void) {
 
