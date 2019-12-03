@@ -53,15 +53,18 @@ bool s_safe(int  field [N][N], int i, int j){
   if(i < 0 || i > N -1) return false;
   if(j < 0 || j > N -1) return false;
   //  std::cout << chess_board[i][j];
-  if(chess_board[i][j] != '.') { return false;  }
+  if(chess_board[i][j] != '.') {
+    field[i][j] = 1;
+    return false;
+  }
   field[i][j] = 1;
   return true;
 }
 
 bool s_nsafe(int field[N][N], int i, int j) {
-  if(i < 0 || i > N -1) return false;
-  if(j < 0 || j > N -1) return false;
-  field[i][j] = 1;
+  //  if(i < 0 || i > N -1) return false;
+  //if(j < 0 || j > N -1) return false;
+  //field[i][j] = 1;
   return true;
 }
 
@@ -174,6 +177,22 @@ void get_b_pos(){
     }
 }
 
+bool is_check(int blocked[N][N], int kx, int ky){
+  for(int i = -1; i <=1; i++)
+  {
+    int nx = kx + i;
+    for(int j = -1; j <=1; j++){
+      int ny = ky + j;
+      if(nx >= 0 && nx <N && ny>=0 && ny <N && (j || i)){
+	//	std::cout << nx << " " << ny <<  " " << blocked[nx][ny]<<  " \n";
+	if(blocked[ny][nx] == 0) return false;
+      }
+    }
+  }
+  return true;
+  
+}
+
 int main(void) {
 
   //  std::istream &istr = std::cin;
@@ -182,8 +201,12 @@ int main(void) {
   while(read8(istr)){
     clear_pos();
     get_b_pos();
+    
     d_print_field(blocked_W);
     d_print_field(blocked_B);
+
+    std::cout << "black check " << is_check(blocked_B, b_k_pos_x, b_k_pos_y) << std::endl;
+    std::cout << "white check " << is_check(blocked_W, w_k_pos_x, w_k_pos_y) << std::endl;
     
   }
 
