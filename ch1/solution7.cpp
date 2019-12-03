@@ -125,12 +125,13 @@ void queen(int ii, int jj, int bw){
 }
 
 void king(int ii, int jj, int bw) {
-  s_nsafe(BLOCKED(bw), ii, jj);
   for(int i = ii - 1; i <= ii + 1; i++){
       for(int j = jj - 1; j <= jj + 1; j++){
 	s_safe(BLOCKED(bw), i, j);
       }
   }
+  BLOCKED(bw)[ii][jj] = 0;
+
 }
 
 void knight(int ii, int jj, int bw) {
@@ -198,15 +199,26 @@ int main(void) {
   //  std::istream &istr = std::cin;
   std::fstream istr ("test.txt", std::ios::in);
   std::string ln;
+  int d = 1;
   while(read8(istr)){
     clear_pos();
     get_b_pos();
-    
-    d_print_field(blocked_W);
-    d_print_field(blocked_B);
+    bool wic = is_check(blocked_W, w_k_pos_x, w_k_pos_y);
+    bool bic = is_check(blocked_B, b_k_pos_x, b_k_pos_y);
+        d_print_field(blocked_W);
+        d_print_field(blocked_B);
+    bool c = wic || bic;
 
-    std::cout << "black check " << is_check(blocked_B, b_k_pos_x, b_k_pos_y) << std::endl;
-    std::cout << "white check " << is_check(blocked_W, w_k_pos_x, w_k_pos_y) << std::endl;
+    
+    std::cout << "Game #" << d++ << ": ";
+    if(!c) {std::cout  << "no";}
+    else{
+      if(wic) std::cout << "white";
+      else std::cout << "black";
+    }
+    std::cout << " king is in check. \n";
+    /*    std::cout << "black check " << is_check(blocked_B, b_k_pos_x, b_k_pos_y) << std::endl;
+	  std::cout << "white check " << is_check(blocked_W, w_k_pos_x, w_k_pos_y) << std::endl;*/
     
   }
 
