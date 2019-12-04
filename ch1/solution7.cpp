@@ -131,7 +131,7 @@ void king(int ii, int jj, int bw) {
       }
   }
   BLOCKED(bw)[ii][jj] = 0;
-  BLOCKED(-bw)[ii][jj] = 1;
+  //  BLOCKED(-bw)[ii][jj] = 1;
 
 }
 
@@ -180,21 +180,26 @@ void get_b_pos(){
 }
 
 bool is_check(int blocked[N][N], int kx, int ky){
-  for(int i = -1; i <=1; i++)
+  /*  for(int i = -1; i <=1; i++)
   {
     int nx = kx + i;
     for(int j = -1; j <=1; j++){
       int ny = ky + j;
+      //      printf("kx %d ky %d i %d j %d \n", kx, ky, i, j);
+
       if(nx >= 0 && nx <N && ny>=0 && ny <N && (j || i)){
 	std::cout << nx << " " << ny <<  " " << blocked[nx][ny]<<  " \n";
 	if(blocked[ny][nx] == 0) return false;
       }
     }
-  }
-  return true;
+  }*
+  return true;*/
+  return blocked[ky][kx];
   
 }
 
+
+//blocked_W is fields blocked by black (filds where white king is under strike)
 
 int main(void) {
 
@@ -207,8 +212,8 @@ int main(void) {
     get_b_pos();
     bool wic = is_check(blocked_W, w_k_pos_x, w_k_pos_y);
     bool bic = is_check(blocked_B, b_k_pos_x, b_k_pos_y);
-        d_print_field(blocked_W);
-        d_print_field(blocked_B);
+    //d_print_field(blocked_W);
+    //d_print_field(blocked_B);
     bool c = wic || bic;
 
     
