@@ -216,14 +216,14 @@ int main(void) {
     //d_print_field(blocked_B);
     bool c = wic || bic;
 
-    
+    if(d != 1) std::cout << "\n";
     std::cout << "Game #" << d++ << ": ";
     if(!c) {std::cout  << "no";}
     else{
       if(wic) std::cout << "white";
       else std::cout << "black";
     }
-    std::cout << " king is in check. \n";
+    std::cout << " king is in check.";
     /*    std::cout << "black check " << is_check(blocked_B, b_k_pos_x, b_k_pos_y) << std::endl;
 	  std::cout << "white check " << is_check(blocked_W, w_k_pos_x, w_k_pos_y) << std::endl;*/
     
