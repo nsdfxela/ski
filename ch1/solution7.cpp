@@ -203,8 +203,8 @@ bool is_check(int blocked[N][N], int kx, int ky){
 
 int main(void) {
 
-  //  std::istream &istr = std::cin;
-  std::fstream istr ("test.txt", std::ios::in);
+    std::istream &istr = std::cin;
+  //std::fstream istr ("test.txt", std::ios::in);
   std::string ln;
   int d = 1;
   while(read8(istr)){
@@ -228,6 +228,6 @@ int main(void) {
 	  std::cout << "white check " << is_check(blocked_W, w_k_pos_x, w_k_pos_y) << std::endl;*/
     
   }
-
+std::cout << std::endl;
   return 0;
 }
