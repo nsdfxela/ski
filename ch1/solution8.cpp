@@ -7,6 +7,7 @@ char cand[20][80];
 int votes[1000][20];
 int ncand = 0;
 int nvotes = 0;
+int cand_el[ncand];
  
 void read_data(std::istream &istr) {
   std::string buf;
@@ -30,13 +31,21 @@ void read_data(std::istream &istr) {
 void nullall(){
   ncand = 0;
   nvotes = 0;
+  memset(cand_el, 0, sizeof cand_el);
 }
 
 std::string get_winner(int level){
   int vc[ncand];
   memset(vc, 0, sizeof vc);
   for(int i = 0; i < nvotes; i++) {
-      vc[votes[i][level]-1]++;
+    int llev = level;
+    int c =0;
+    do
+    {
+       c = votes[i][llev++];
+    }
+    while(cand_el[c]);
+    vc[c-1]++;
   }
 
   for(int i =0;i < ncand;i++){
