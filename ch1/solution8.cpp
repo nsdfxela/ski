@@ -52,24 +52,29 @@ std::string get_winner(int level){
   }
 
   int lidx = 0;
+  while(cand_el[lidx++]);
+  
   int midx = 0;
+  while(cand_el[midx++]);
   for(int i =0; i < ncand; i++) {
     perc[i] = vc[i] / (float)nvotes;
   }
 
   for(int i =0;i < ncand;i++){
+    if(!cand_el[i]) {
     if(perc[i] < perc[lidx]){
       lidx = i;
     }
     if(perc[i] > perc[midx]) {
       midx = i;
     }
+    }
   }
-  //std::cout << "midx " << perc[midx] << "\n";
+
     for(int i = 0; i < ncand; i++){
       std::cout << perc[i] << " ";
     }
-    std::cout<< std::endl;
+    std::cout << perc[lidx] << " " << lidx << std::endl;
   if(perc[midx] > 0.5f){
     return cand[midx];
   } else {
