@@ -7,7 +7,8 @@ char cand[20][80];
 int votes[1000][20];
 int ncand = 0;
 int nvotes = 0;
-int cand_el[ncand];
+int cand_el[20];
+float perc[20];
  
 void read_data(std::istream &istr) {
   std::string buf;
@@ -24,8 +25,9 @@ void read_data(std::istream &istr) {
     if(buf == "") break;
     std::stringstream ss(buf);
     for(int i = 0; i < ncand; i++){
-      ss >> votes[nvotes++][i];
+      ss >> votes[nvotes][i];
     }
+    nvotes++;
   }
 }
 void nullall(){
@@ -48,11 +50,36 @@ std::string get_winner(int level){
     vc[c-1]++;
   }
 
+  int lidx = 0;
+  int midx = 0;
+  for(int i =0; i < ncand; i++) {
+    perc[i] = vc[i] / (float)nvotes;
+  }
+
   for(int i =0;i < ncand;i++){
-    std::cout << vc[i] << " ";
+    if(vc[i] < vc[lidx]){
+      lidx = i;
+    }
+    if(vc[i] > midx) {
+      midx = i;
+    }
+  }
+
+  for(int i = 0; i < ncand; i++){
+    std::cout << perc[i] << " ";
+  }
+  
+  if(vc[midx] > 50.0f){
+    return cand[midx];
+  } else {
+    cand_el[lidx] = 1;
+    return "";
+  }
+  /*  for(int i =0;i < ncand;i++){
+    std::cout << perc[i]  << " ";
   }
   std::cout << std::endl;
-  return "";
+  return "";*/
 }
 
 int main (void) {
@@ -62,7 +89,12 @@ int main (void) {
   istr.ignore(1); //ignore empty line
   for( int i = 0; i < nblocks; i++) {  
     read_data(istr);
-    std::cout << get_winner(0);
+    std::string w = "";
+    do{
+    w = get_winner(0);
+    std::cout << w << std::endl;
+    } while (w == "");
+
     nullall();
   }
   return 0;
