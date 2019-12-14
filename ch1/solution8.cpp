@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <cstring>
 #include <sstream>
 
 char cand[20][80];
@@ -46,7 +47,7 @@ std::string get_winner(int level){
     {
        c = votes[i][llev++];
     }
-    while(cand_el[c]);
+    while(cand_el[c-1]);
     vc[c-1]++;
   }
 
@@ -57,19 +58,19 @@ std::string get_winner(int level){
   }
 
   for(int i =0;i < ncand;i++){
-    if(vc[i] < vc[lidx]){
+    if(perc[i] < perc[lidx]){
       lidx = i;
     }
-    if(vc[i] > midx) {
+    if(perc[i] > perc[midx]) {
       midx = i;
     }
   }
-
-  for(int i = 0; i < ncand; i++){
-    std::cout << perc[i] << " ";
-  }
-  
-  if(vc[midx] > 50.0f){
+  //std::cout << "midx " << perc[midx] << "\n";
+    for(int i = 0; i < ncand; i++){
+      std::cout << perc[i] << " ";
+    }
+    std::cout<< std::endl;
+  if(perc[midx] > 0.5f){
     return cand[midx];
   } else {
     cand_el[lidx] = 1;
@@ -84,6 +85,7 @@ std::string get_winner(int level){
 
 int main (void) {
   std::ifstream istr ("test.txt", std::ios::in);
+//std::istream &istr = std::cin;
   int nblocks = 0;
   istr >> nblocks;
   istr.ignore(1); //ignore empty line
@@ -92,9 +94,9 @@ int main (void) {
     std::string w = "";
     do{
     w = get_winner(0);
-    std::cout << w << std::endl;
+    //std::cout << w << std::endl;
     } while (w == "");
-
+    std::cout << w << std::endl;
     nullall();
   }
   return 0;
