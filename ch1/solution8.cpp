@@ -33,6 +33,7 @@ void read_data(std::istream &istr) {
   }
 
   vlim = (int)floor(nvotes / 2.0f);
+  //  std::cout << "vlim is " << vlim << std::endl;
 }
 void nullall(){
   ncand = 0;
@@ -59,11 +60,11 @@ std::string get_winner(int level){
   
   int midx = 0;
   while(cand_el[midx])midx++;
-  for(int i =0; i < ncand; i++) {
+  /*  for(int i =0; i < ncand; i++) {
   //perc[i] = vc[i] / (float)nvotes;
     std::cout << vc[i] << " " ;
-  }
-  std::cout << std::endl;
+    }*/
+
   for(int i =0;i < ncand;i++) {
     if(!cand_el[i]) {
     if(vc[i] < vc[lidx]){
@@ -86,12 +87,16 @@ std::string get_winner(int level){
       if(vc[i] == vc[midx]){
 	result += cand[i];
 	result.append("\n");
-
       }
     }
     return result;
   } else {
-    cand_el[lidx] = 1;
+    for(int i = 0; i < ncand; i++){
+      //      std::cout << vc [i] << "\n";
+      if(vc[i] == vc[lidx]){
+	cand_el[i] = 1;
+      }
+    }
     return "";
   }
   /*  for(int i =0;i < ncand;i++){
