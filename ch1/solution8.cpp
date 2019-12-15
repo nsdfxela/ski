@@ -59,11 +59,11 @@ std::string get_winner(int level){
   
   int midx = 0;
   while(cand_el[midx])midx++;
-  //  for(int i =0; i < ncand; i++) {
+  for(int i =0; i < ncand; i++) {
   //perc[i] = vc[i] / (float)nvotes;
-    //    std::cout << vc[i] << " " << nvotes << "\n";
-  //  }
-
+    std::cout << vc[i] << " " ;
+  }
+  std::cout << std::endl;
   for(int i =0;i < ncand;i++) {
     if(!cand_el[i]) {
     if(vc[i] < vc[lidx]){
@@ -89,7 +89,6 @@ std::string get_winner(int level){
 
       }
     }
-    
     return result;
   } else {
     cand_el[lidx] = 1;
