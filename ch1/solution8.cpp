@@ -50,11 +50,14 @@ std::string get_winner(int level){
     int c =0;
     do
     {
+      if(llev == ncand) {
+	break;
+      }
        c = votes[i][llev++];
     }
     while(cand_el[c-1]);
     vc[c-1]++;
-    std::cout << "c-1 is " << (c-1) << "vc s is " << ncand << std::endl;
+    //    std::cout << "c-1 is " << (c-1) << " vc s is " << ncand << std::endl;
   }
 
   int lidx = 0;
