@@ -115,8 +115,8 @@ std::string get_winner(int level){
 }
 
 int main (void) {
-  std::ifstream istr ("test.txt", std::ios::in);
-//std::istream &istr = std::cin;
+//std::ifstream istr ("test.txt", std::ios::in);
+std::istream &istr = std::cin;
   int nblocks = 0;
   istr >> nblocks;
   istr.ignore(1); //ignore empty line
