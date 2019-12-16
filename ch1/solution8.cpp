@@ -44,6 +44,8 @@ void nullall(){
 std::string get_winner(int level){
   int vc[ncand];
   memset(vc, 0, sizeof vc);
+  // std::cout << "nvotes is " << nvotes << std::endl;
+  // std::cout << "ncand is " << ncand << std::endl;
 
   for(int i = 0; i < nvotes; i++) {
     int llev = level;
@@ -51,13 +53,13 @@ std::string get_winner(int level){
     do
     {
       if(llev == ncand) {
-	break;
+	//	break;
       }
        c = votes[i][llev++];
     }
     while(cand_el[c-1]);
     vc[c-1]++;
-    //    std::cout << "c-1 is " << (c-1) << " vc s is " << ncand << std::endl;
+       //    std::cout << "c-1 is " << (c-1) << " vc s is " << ncand << std::endl;
   }
 
   int lidx = 0;
@@ -81,11 +83,12 @@ std::string get_winner(int level){
     }
   }
 
-    for(int i = 0; i < ncand; i++){
+  //DEBUG
+  /*    for(int i = 0; i < ncand; i++){
       std::cout << vc[i] << " ";
-    }
-  std::cout << "dbg" << std::endl;
-  if(vc[midx] >= vlim){
+      }*/
+    //    std::cout << "dbg " << vc[midx] << " " << vc[lidx] << std::endl;
+  if(vc[midx] >= vlim || vc[midx] == vc[lidx]){
     std::string result;
     for(int i = 0; i < ncand; i++){
       //      std::cout << vc [i] << "\n";
@@ -102,6 +105,11 @@ std::string get_winner(int level){
 	cand_el[i] = 1;
       }
     }
+
+    /*for(int i = 0 ; i < ncand; i++){
+      std::cout << cand_el[i] << " ";
+      }*/
+    //    std::cout << std::endl;
     return "";
   }
 }
