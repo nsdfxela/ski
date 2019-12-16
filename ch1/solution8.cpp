@@ -32,7 +32,7 @@ void read_data(std::istream &istr) {
     nvotes++;
   }
 
-  vlim = (int)floor(nvotes / 2.0f);
+  vlim = (int)ceil(nvotes / 2.0f);
   //  std::cout << "vlim is " << vlim << std::endl;
 }
 void nullall(){
@@ -84,10 +84,10 @@ std::string get_winner(int level){
   }
 
   //DEBUG
-  /*    for(int i = 0; i < ncand; i++){
-      std::cout << vc[i] << " ";
-      }*/
-    //    std::cout << "dbg " << vc[midx] << " " << vc[lidx] << std::endl;
+  //  for(int i = 0; i < ncand; i++){
+  //	std::cout << vc[i] << " " ;
+  //  }
+  //  std::cout << "dbg " << vc[midx] << " " << vlim << std::endl;
   if(vc[midx] >= vlim || vc[midx] == vc[lidx]){
     std::string result;
     for(int i = 0; i < ncand; i++){
@@ -100,7 +100,7 @@ std::string get_winner(int level){
     return result;
   } else {
     for(int i = 0; i < ncand; i++){
-      //      std::cout << vc [i] << "\n";
+      // std::cout << vc [i] << "\n";
       if(vc[i] == vc[lidx]){
 	cand_el[i] = 1;
       }
@@ -130,7 +130,9 @@ int main (void) {
     w = get_winner(0);
     //std::cout << w << std::endl;
     } while (w == "");
-    std::cout << w << std::endl;
+    std::cout << w;
+    if(i != nblocks-1)
+      std::cout << std::endl;
 
     nullall();
 
