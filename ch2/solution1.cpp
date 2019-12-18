@@ -5,9 +5,11 @@
 
 int numbers[3000];
 int n;
+std::set<int> s;
 
 bool read_data(std::istream &istr) 
 {
+    s.clear();
     istr >> n;
     if (!istr) return false;
     for (int i = 0; i < n; i++) {
@@ -15,7 +17,6 @@ bool read_data(std::istream &istr)
     }
     return true;
 }
-std::set<int> s;
 #define NJ "Not jolly"
 #define J "Jolly"
 std::string solve() {
