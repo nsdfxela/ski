@@ -17,15 +17,15 @@ int rank(char value, char suit) {
     return 0;
 }
 
-bool flash(int * crds, int size) {
+bool flash(const int * crds, int size) {
     if (size == 1) return true;
     int ors = crds[0] % 10;
     for (int i = 1; i < size; i++) {
         if ((crds[i] % 10) != ors) {
-            return false;
+            return -1;
         }
     }
-    return true;
+    return crds[size-1];
 }
 
 std::map<int, int> get_map(const int *crds, int size) {
@@ -45,14 +45,51 @@ int same_cards(const int *crds, int size, int numberOfSameCards) {
 	else return cr->first;
 }
 
-bool street(const int *crds, int size) {
+int street(const int *crds, int size) {
 	bool result = true;
 	for (int i = 1; i < size; i++) {
 		if(crds[i]/10 - crds[i - 1]/10 == 1) continue;
-		else { return false; }
+		else { return -1; }
 	}
-	return true;
+	return crds[size-1];
 }
+
+#define IS(c) (c!=-1)
+
+int detect_comb(const int *crds, int size, int * strongest_card) {
+	int str = street(crds, size);
+	int fl = flash(crds, size);
+
+	//street flash
+	if (IS(str) && IS(fl)) { 
+		*strongest_card = fl;
+		return 9;
+	} 
+
+	//carre
+	*strongest_card = same_cards(crds, size, 4);
+	if (IS(*strongest_card)) { return 8; }
+
+	//full house
+	int pair = same_cards(crds, size, 2);
+	if (IS(pair)) { 
+		*strongest_card = same_cards(crds, size, 3);
+		if (IS(*strongest_card)) {
+			return 7;
+		}
+	}
+
+	//flash
+	*strongest_card = flash(crds, size);
+	if (IS(*strongest_card)) { return 6; }
+	//street
+	*strongest_card = street(crds, size);
+	if (IS(*strongest_card)) { return 5; }
+	
+	*strongest_card = same_cards(crds, size, 3);
+	if (IS(*strongest_card)) { return 4; }
+}
+
 int hands[2][5];
 
 
