@@ -17,7 +17,7 @@ int rank(char value, char suit) {
     return 0;
 }
 
-bool flash(const int * crds, int size) {
+int flash(const int * crds, int size) {
     if (size == 1) return true;
     int ors = crds[0] % 10;
     for (int i = 1; i < size; i++) {
@@ -46,7 +46,6 @@ int same_cards(const int *crds, int size, int numberOfSameCards) {
 }
 
 int street(const int *crds, int size) {
-	bool result = true;
 	for (int i = 1; i < size; i++) {
 		if(crds[i]/10 - crds[i - 1]/10 == 1) continue;
 		else { return -1; }
@@ -55,7 +54,6 @@ int street(const int *crds, int size) {
 }
 
 #define IS(c) (c!=-1)
-
 int detect_comb(const int *crds, int size, int * strongest_card) {
 	int str = street(crds, size);
 	int fl = flash(crds, size);
@@ -82,12 +80,37 @@ int detect_comb(const int *crds, int size, int * strongest_card) {
 	//flash
 	*strongest_card = flash(crds, size);
 	if (IS(*strongest_card)) { return 6; }
-	//street
+	
+    //street
 	*strongest_card = street(crds, size);
 	if (IS(*strongest_card)) { return 5; }
-	
+    
+    //set
 	*strongest_card = same_cards(crds, size, 3);
 	if (IS(*strongest_card)) { return 4; }
+    
+    //two pairs
+    auto mp = get_map(crds, size);
+    int pair1 = -1, pair2 = -1;
+    for (auto it = mp.begin(); it != mp.end(); ++it) {
+        if (it->second == 2) {
+            if (!IS(pair1)) { pair1 = it->first; }
+            else if(!IS(pair2)) { pair2 = it->first; }
+        }
+    }
+    if ( IS(pair1) && IS(pair2) ) {
+        *strongest_card = std::max(pair1, pair2);
+        return 3;
+    } else if (IS(pair1)) { //one pair
+        *strongest_card = pair1;
+        return 2;
+    } else if (IS(pair2)) {
+        *strongest_card = pair2;
+        return 2;
+    }
+
+    *strongest_card = crds[size-1];
+    return 1;
 }
 
 int hands[2][5];
@@ -103,10 +126,16 @@ bool process_line(std::istream &istr) {
 			std::cout << hands[h][i] << " ";
 		}
 		std::sort(hands[h], hands[h] + 5);
+        
 	}
-	
-	std::cout <<  " cards: "  << same_cards(hands[0], 5, 3);
-	std::cout << " cards: " << same_cards(hands[0], 5, 2);
+
+    int leftStr = -1, rightStr = -1;
+    int leftComb = detect_comb(&hands[0][0], 5, &leftStr);
+    int rightComb = detect_comb(&hands[1][0], 5, &rightStr);
+    printf("\n left : combination %d card: %d \n", leftComb, leftStr);
+    printf("\n right : combination %d card: %d \n", rightComb, rightStr);
+	/*std::cout <<  " cards: "  << same_cards(hands[0], 5, 3);
+	std::cout << " cards: " << same_cards(hands[0], 5, 2);*/
 	return true;
 }
 
@@ -114,7 +143,7 @@ int main(void) {
 #if defined (__GNUC__)
     std::istream &istr = std::cin;
 #else
-    std::ifstream istr(R"(C:\FUNHOUSE\Skiena-20191022\solutions\ch2\test.txt)", std::ios::in);
+    std::ifstream istr(R"(D:\study\ski\ch2\test.txt)", std::ios::in);
 #endif
 	while (process_line(istr)) {
 		std::cout << std::endl;
