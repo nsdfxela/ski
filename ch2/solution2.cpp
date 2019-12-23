@@ -53,11 +53,13 @@ int street(const int *crds, int size) {
 	return crds[size-1];
 }
 
+
+#define TWO_PAIRS 3
 #define IS(c) (c!=-1)
-int detect_comb(const int *crds, int size, int * strongest_card) {
+int detect_comb(const int *crds, int size, int * strongest_card, int * weakest_card) {
 	int str = street(crds, size);
 	int fl = flash(crds, size);
-
+    *weakest_card = -1; // only needed in two pairs
 	//street flash
 	if (IS(str) && IS(fl)) { 
 		*strongest_card = fl;
@@ -100,6 +102,7 @@ int detect_comb(const int *crds, int size, int * strongest_card) {
     }
     if ( IS(pair1) && IS(pair2) ) {
         *strongest_card = std::max(pair1, pair2);
+        *weakest_card = std::min(pair1, pair2);
         return 3;
     } else if (IS(pair1)) { //one pair
         *strongest_card = pair1;
@@ -130,8 +133,28 @@ bool process_line(std::istream &istr) {
 	}
 
     int leftStr = -1, rightStr = -1;
-    int leftComb = detect_comb(&hands[0][0], 5, &leftStr);
-    int rightComb = detect_comb(&hands[1][0], 5, &rightStr);
+    int leftWeak = -1, rightWeak = -1;
+    int leftComb = detect_comb(&hands[0][0], 5, &leftStr, &leftWeak);
+    int rightComb = detect_comb(&hands[1][0], 5, &rightStr, &rightWeak);
+
+    if (leftComb > rightComb) {
+        std::cout << "Black wins." << std::endl;
+    }
+    else if (leftComb > rightComb) {
+        std::cout << "White wins." << std::endl;
+    }
+    else {
+        if (leftStr > rightStr) {
+            std::cout << "Black wins." << std::endl;
+        }
+        else if (leftStr < rightStr) {
+            std::cout << "White wins." << std::endl;
+        }
+        else {
+            std::cout << "Tie." << std::endl;
+        }
+    }
+
     printf("\n left : combination %d card: %d \n", leftComb, leftStr);
     printf("\n right : combination %d card: %d \n", rightComb, rightStr);
 	/*std::cout <<  " cards: "  << same_cards(hands[0], 5, 3);
