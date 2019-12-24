@@ -55,6 +55,7 @@ int street(const int *crds, int size) {
 
 
 #define TWO_PAIRS 3
+#define PAIR 2
 #define HIGH 1
 #define IS(c) (c!=-1)
 int detect_comb(const int *crds, int size, int * strongest_card, int * weakest_card) {
@@ -163,7 +164,7 @@ bool process_line(std::istream &istr) {
         else if (leftStr < rightStr) {
             whitew();
         }
-        else {
+        else {            
             if (leftComb == TWO_PAIRS) {
                 if (leftWeak > rightWeak) {
                     blackw();
@@ -172,10 +173,11 @@ bool process_line(std::istream &istr) {
                     whitew();
                 }
                 else {
-                    tie();
+                    leftComb = HIGH;
                 }
             }
-            else if (leftComb = HIGH) {
+
+            if (leftComb == HIGH || leftComb == PAIR) {
                 int *black = &hands[0][4];
                 int *white = &hands[1][4];
                 bool found = false;
