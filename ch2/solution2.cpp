@@ -118,7 +118,13 @@ int detect_comb(const int *crds, int size, int * strongest_card, int * weakest_c
 
 int hands[2][5];
 
+void blackw() {
+    std::cout << "Black wins." << std::endl;
+}
 
+void whitew() {
+    std::cout << "White wins." << std::endl;
+}
 bool process_line(std::istream &istr) {
 	for (int h = 0; h < 2; h++) {
 		for (int i = 0; i < 5; i++) {
@@ -138,19 +144,28 @@ bool process_line(std::istream &istr) {
     int rightComb = detect_comb(&hands[1][0], 5, &rightStr, &rightWeak);
 
     if (leftComb > rightComb) {
-        std::cout << "Black wins." << std::endl;
+        blackw();
     }
     else if (leftComb > rightComb) {
-        std::cout << "White wins." << std::endl;
+        whitew();
     }
     else {
+        
         if (leftStr > rightStr) {
-            std::cout << "Black wins." << std::endl;
+            blackw();
         }
         else if (leftStr < rightStr) {
-            std::cout << "White wins." << std::endl;
+            whitew();
         }
         else {
+            if (leftComb == TWO_PAIRS) {
+                if (leftWeak > rightWeak) {
+                    blackw();
+                }
+                else if (leftWeak < rightWeak) {
+                    whitew();
+                }
+            } 
             std::cout << "Tie." << std::endl;
         }
     }
