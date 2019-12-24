@@ -55,6 +55,7 @@ int street(const int *crds, int size) {
 
 
 #define TWO_PAIRS 3
+#define HIGH 1
 #define IS(c) (c!=-1)
 int detect_comb(const int *crds, int size, int * strongest_card, int * weakest_card) {
 	int str = street(crds, size);
@@ -101,8 +102,8 @@ int detect_comb(const int *crds, int size, int * strongest_card, int * weakest_c
         }
     }
     if ( IS(pair1) && IS(pair2) ) {
-        *strongest_card = std::max(pair1, pair2);
-        *weakest_card = std::min(pair1, pair2);
+        *strongest_card = std::max(pair1, pair2)*10;
+        *weakest_card = std::min(pair1, pair2)*10;
         return 3;
     } else if (IS(pair1)) { //one pair
         *strongest_card = pair1;
@@ -121,7 +122,9 @@ int hands[2][5];
 void blackw() {
     std::cout << "Black wins." << std::endl;
 }
-
+void tie() {
+    std::cout << "Tie." << std::endl;
+}
 void whitew() {
     std::cout << "White wins." << std::endl;
 }
@@ -132,7 +135,7 @@ bool process_line(std::istream &istr) {
 			istr >> buf;
 			if (!istr) return false;
 			hands[h][i] = rank(buf[0], buf[1]);
-			std::cout << hands[h][i] << " ";
+			//std::cout << hands[h][i] << " ";
 		}
 		std::sort(hands[h], hands[h] + 5);
         
@@ -142,7 +145,10 @@ bool process_line(std::istream &istr) {
     int leftWeak = -1, rightWeak = -1;
     int leftComb = detect_comb(&hands[0][0], 5, &leftStr, &leftWeak);
     int rightComb = detect_comb(&hands[1][0], 5, &rightStr, &rightWeak);
-
+    leftStr /= 10;
+    rightStr /= 10;
+    leftWeak /= 10;
+    rightWeak /= 10;
     if (leftComb > rightComb) {
         blackw();
     }
@@ -165,13 +171,38 @@ bool process_line(std::istream &istr) {
                 else if (leftWeak < rightWeak) {
                     whitew();
                 }
-            } 
-            std::cout << "Tie." << std::endl;
+                else {
+                    tie();
+                }
+            }
+            else if (leftComb = HIGH) {
+                int *black = &hands[0][4];
+                int *white = &hands[1][4];
+                bool found = false;
+                for (int i = 0; i <= 4 && !found; i++) {
+                    int b = *(black - i)/10;
+                    int w = *(white - i)/10;
+                    if (b > w) {
+                        blackw();
+                        found = true;
+                    }
+                    else if (w > b) {
+                        whitew();
+                        found = true;
+                    }
+                }
+                if (!found) {
+                    tie();
+                }
+                
+            } else {
+                tie();
+            }
         }
     }
 
-    printf("\n left : combination %d card: %d \n", leftComb, leftStr);
-    printf("\n right : combination %d card: %d \n", rightComb, rightStr);
+    /*printf("\n left : combination %d card: %d \n", leftComb, leftStr);
+    printf("\n right : combination %d card: %d \n", rightComb, rightStr);*/
 	/*std::cout <<  " cards: "  << same_cards(hands[0], 5, 3);
 	std::cout << " cards: " << same_cards(hands[0], 5, 2);*/
 	return true;
@@ -184,7 +215,7 @@ int main(void) {
     std::ifstream istr(R"(D:\study\ski\ch2\test.txt)", std::ios::in);
 #endif
 	while (process_line(istr)) {
-		std::cout << std::endl;
+		//std::cout << std::endl;
 
 	}
     return 0;
