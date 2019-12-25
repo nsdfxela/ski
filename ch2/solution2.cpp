@@ -81,7 +81,6 @@ int detect_comb(const int *crds, int size, int * strongest_card, int * weakest_c
 			return 7;
 		}
 	}
-
 	//flash
 	*strongest_card = flash(crds, size);
 	if (IS(*strongest_card)) { return 6; }
