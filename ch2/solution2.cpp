@@ -42,7 +42,7 @@ int same_cards(const int *crds, int size, int numberOfSameCards) {
 		return v.second == numberOfSameCards;
 	});
 	if (cr == mp.end()) { return -1; }
-	else return cr->first;
+	else return cr->first * 10;
 }
 
 int street(const int *crds, int size) {
@@ -145,7 +145,7 @@ bool process_line(std::istream &istr) {
     int leftStr = -1, rightStr = -1;
     int leftWeak = -1, rightWeak = -1;
     int leftComb = detect_comb(&hands[0][0], 5, &leftStr, &leftWeak);
-    int rightComb = detect_comb(&hands[1][0], 5, &rightStr, &rightWeak);
+    int rightComb = detect_comb(&hands[1][0], 5, &rightStr, &rightWeak);    
     leftStr /= 10;
     rightStr /= 10;
     leftWeak /= 10;
