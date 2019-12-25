@@ -25,6 +25,7 @@ TC 7D 9D 8H JS 7C 8S JC TD 9H //tie
 TC 7D 9D 8H JS QC 8S JC TD 9H //white wins
 TC 7D 9D 8H JS 6C 6H 6D 2H 3D //black wins
 
+
 //flash
 AC 7C 9C 8C JC 6C 6H 6D 2H 2D // white wins
 AC 7C 9C 8C JC AH 2H 9H 8H JH //black wins
