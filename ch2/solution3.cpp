@@ -33,7 +33,7 @@ int get_hartals() {
 
 int main(void) {
 
-#if defined (_GNUC_)
+#if defined (__GNUC__)
 	std::istream &istr = std::cin;
 #else
 	std::fstream istr(R"(D:\repos\ski\ch2\test.txt)", std::ios::in);
