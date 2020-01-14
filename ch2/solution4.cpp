@@ -33,8 +33,10 @@ std::map<std::string, std::vector<wrd>> lc;
 
 std::string solve(const std::vector<std::string> &src) {
    
-    wrd w(src[0]);
+    
     for (int i = 0; i < src.size(); i++) {
+        wrd w(src[i]);
+        auto pairs = lc.find(w.fp);
         
     }
     return "";
