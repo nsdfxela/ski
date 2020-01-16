@@ -48,21 +48,34 @@ bool translate(wrd &enc, wrd &dct, alphabet &a) {
         a[enc.str[i]] = dct.str[i];
     }
 }
+
+std::string fail(const std::vector<std::string> &src) {
+	return "****";
+}
+
 std::string solve(const std::vector<std::string> &src) {
     wrd w0(src[0]);
     auto pairs = lc.find(w0.fp);
-    for (int i = 0; i < pairs->second.size(); i++) {
+	if (pairs == lc.end()) return fail(src);
+    for (int i = 0; i < pairs->second.size(); i++) { //possible translations of 0 word
         bool match = true;
         alphabet a;
         translate(w0, pairs->second[i], a);
-        for (int j = 0; j < src.size(); j++) {
+        for (int j = 1; j < src.size(); j++) { //words from 1 to n
             auto w1 = wrd(src[j]);
-            if (!translate(w0, w1, a)) {
-                match = false;
-                break;
-            }
-
+			auto ps = lc.find(w1.fp);
+			bool translation_found = false;
+			if (ps == lc.end()) return fail(src);
+			else {
+				for (int k = 0; k < ps->second.size(); k++) { //translations of k'th word
+					translation_found = translate(w1, ps->second[k], a);
+					if (translation_found) break;
+				}
+				if (translation_found) continue;
+				else { break; }
+			}
         }
+		
     }
     return "";
 }
@@ -72,7 +85,7 @@ int main(void) {
 #if defined(__GNUC__)
     std::istream &istr = std::cin;
 #else
-    std::ifstream istr(R"(D:\study\ski\ch2\test.txt)", std::ios::in);
+    std::ifstream istr(R"(D:\repos\ski\ch2\test.txt)", std::ios::in);
 #endif
     int wc;
     istr >> wc;
@@ -99,4 +112,4 @@ int main(void) {
         
     }
     return 0;
-}
+} 
