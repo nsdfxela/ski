@@ -6,6 +6,8 @@
 #include <vector>
 #include <algorithm>
 
+typedef std::map<char, char> alphabet;
+
 struct wrd 
 {
     std::string str;
@@ -30,14 +32,37 @@ struct wrd
 
 std::map<std::string, std::vector<wrd>> lc;
 
-
+bool translate(wrd &enc, wrd &dct, alphabet &a) { 
+    if (enc.fp != dct.fp) return false;
+    std::string enc_s;
+    for (int i = 0; i < enc.str.length(); i++) {
+        auto decc = a.find(enc.str[i]);
+        if (decc != a.end() ) {
+            if (dct.str[i] != decc->second) {
+                return false;
+            }
+        }
+    }
+    //dct matches enc with respect to a. let's fill 'a'
+    for (int i = 0; i < dct.str.length(); i++) {
+        a[enc.str[i]] = dct.str[i];
+    }
+}
 std::string solve(const std::vector<std::string> &src) {
-   
-    
-    for (int i = 0; i < src.size(); i++) {
-        wrd w(src[i]);
-        auto pairs = lc.find(w.fp);
-        
+    wrd w0(src[0]);
+    auto pairs = lc.find(w0.fp);
+    for (int i = 0; i < pairs->second.size(); i++) {
+        bool match = true;
+        alphabet a;
+        translate(w0, pairs->second[i], a);
+        for (int j = 0; j < src.size(); j++) {
+            auto w1 = wrd(src[j]);
+            if (!translate(w0, w1, a)) {
+                match = false;
+                break;
+            }
+
+        }
     }
     return "";
 }
