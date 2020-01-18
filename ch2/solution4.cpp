@@ -60,11 +60,11 @@ std::string solve(const std::vector<std::string> &src) {
     for (int i = 0; i < pairs->second.size(); i++) { //possible translations of 0 word
         bool match = true;
         alphabet a;
+		bool translation_found = false;
         translate(w0, pairs->second[i], a);
-        for (int j = 1; j < src.size(); j++) { //words from 1 to n
+        for (int j = 1; j < src.size()-1; j++) { //words from 1 to n
             auto w1 = wrd(src[j]);
 			auto ps = lc.find(w1.fp);
-			bool translation_found = false;
 			if (ps == lc.end()) return fail(src);
 			else {
 				for (int k = 0; k < ps->second.size(); k++) { //translations of k'th word
@@ -75,7 +75,17 @@ std::string solve(const std::vector<std::string> &src) {
 				else { break; }
 			}
         }
-		
+		if (translation_found) {
+			std::stringstream ss;
+			for (int I = 0; I < src.size(); I++) {
+				
+				for (int J = 0; J < src[I].size(); J++) {
+					ss << a[src[I][J]];
+				}
+				if(I != src.size()-1)ss << " ";
+			}
+			return ss.str();
+		}
     }
     return "";
 }
