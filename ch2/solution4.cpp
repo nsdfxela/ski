@@ -36,12 +36,19 @@ bool translate(wrd &enc, wrd &dct, alphabet &a) {
     if (enc.fp != dct.fp) return false;
     std::string enc_s;
     for (int i = 0; i < enc.str.length(); i++) {
-        auto decc = a.find(enc.str[i]);
-        if (decc != a.end() ) {
+        auto decc = a.find(enc.str[i]);		
+        if (decc != a.end() ) {			
             if (dct.str[i] != decc->second) {
                 return false;
             }
-        }
+		}
+		else {
+			auto decd = std::find_if(a.begin(), a.end(),
+				[&](std::pair<char, char> p) { return p.second == dct.str[i]; });
+			if (decd != a.end()) {
+				return false;
+			}
+		}
     }
     //dct matches enc with respect to a. let's fill 'a'
     for (int i = 0; i < dct.str.length(); i++) {
@@ -66,6 +73,7 @@ std::string solve(const std::vector<std::string> &src) {
     wrd w0(src[0]);
     auto pairs = lc.find(w0.fp);
 	if (pairs == lc.end()) return fail(src);
+	if (src.size() == 2) return pairs->second[0].str;
     for (int i = 0; i < pairs->second.size(); i++) { //possible translations of 0 word
         bool match = true;
         alphabet a;
