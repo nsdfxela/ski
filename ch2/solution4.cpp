@@ -50,7 +50,16 @@ bool translate(wrd &enc, wrd &dct, alphabet &a) {
 }
 
 std::string fail(const std::vector<std::string> &src) {
-	return "****";
+
+	std::stringstream ss;
+	for (int I = 0; I < src.size(); I++) {
+
+		for (int J = 0; J < src[I].size(); J++) {
+			ss << '*';
+		}
+		if (I != src.size() - 1)ss << " ";
+	}
+	return ss.str();
 }
 
 std::string solve(const std::vector<std::string> &src) {
@@ -87,7 +96,8 @@ std::string solve(const std::vector<std::string> &src) {
 			return ss.str();
 		}
     }
-    return "";
+	return fail(src);
+	
 }
 
 int main(void) {
