@@ -73,13 +73,13 @@ std::string solve(const std::vector<std::string> &src) {
     wrd w0(src[0]);
     auto pairs = lc.find(w0.fp);
 	if (pairs == lc.end()) return fail(src);
-	if (src.size() == 2) return pairs->second[0].str;
+	if (src.size() == 1) return pairs->second[0].str;
     for (int i = 0; i < pairs->second.size(); i++) { //possible translations of 0 word
         bool match = true;
         alphabet a;
 		bool translation_found = false;
         translate(w0, pairs->second[i], a);
-        for (int j = 1; j < src.size()-1; j++) { //words from 1 to n
+        for (int j = 1; j < src.size(); j++) { //words from 1 to n
             auto w1 = wrd(src[j]);
 			auto ps = lc.find(w1.fp);
 			if (ps == lc.end()) return fail(src);
@@ -113,7 +113,7 @@ int main(void) {
 #if defined(__GNUC__)
     std::istream &istr = std::cin;
 #else
-    std::ifstream istr(R"(D:\repos\ski\ch2\test.txt)", std::ios::in);
+    std::ifstream istr(R"(D:\study\ski\ch2\test.txt)", std::ios::in);
 #endif
     int wc;
     istr >> wc;
@@ -128,12 +128,15 @@ int main(void) {
     while (istr) {
         std::string buf;
         std::getline(istr, buf);
+        if (!istr) return 0;
         std::stringstream ss(buf);
         std::vector<std::string> vec;
         while (ss) {
             std::string w;
             ss >> w;
-            vec.push_back(w);
+            if (ss) {
+                vec.push_back(w);
+            }
         }
         std::cout << solve(vec);
         std::cout << '\n';
