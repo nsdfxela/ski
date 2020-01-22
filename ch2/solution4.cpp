@@ -54,6 +54,7 @@ bool translate(wrd &enc, wrd &dct, alphabet &a) {
     for (int i = 0; i < dct.str.length(); i++) {
         a[enc.str[i]] = dct.str[i];
     }
+    return true;
 }
 
 std::string fail(const std::vector<std::string> &src) {
