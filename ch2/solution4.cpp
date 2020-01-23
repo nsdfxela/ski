@@ -7,7 +7,45 @@
 #include <algorithm>
 
 typedef std::map<char, char> alphabet;
+template <typename T>
+struct list_el
+{
+    T el;
+    list_el<T> *nxt = nullptr;
+    list_el(T &e) {
+        el = e;
+    }
+};
+template <typename T>
+struct list {
+    list_el<T> *head = nullptr;
+    list_el<T> *tail = nullptr;
 
+    void add(T &e) {
+        list_el<T> *elt = new list_el<T>(e);
+        if (tail) {
+            tail->nxt = elt;
+            tail = elt;
+        }
+        else {
+            head = elt;
+            tail = elt;            
+        }
+    }
+
+    void clear(list_el<T> *el) {
+        if (el->nxt) {
+            clear(el->nxt);
+            
+        }
+        delete el;
+    }
+    ~list() {
+        clear(head);
+        head = nullptr;
+        tail = nullptr;
+    }
+};
 struct wrd 
 {
     std::string str;
@@ -56,57 +94,58 @@ bool translate(wrd &enc, wrd &dct, alphabet &a) {
     }
     return true;
 }
+std::string success(const list<std::string> &src, alphabet &a) {
+    std::stringstream ss;
+    list_el <std::string> *el = src.head;
+    while (el) {
+        for (int i = 0; i < el->el.size(); i++) {
+            ss << a[el->el[i]];
+        }
+        if (el->nxt) {
+            ss << " ";
+        }
+        el = el->nxt;
+    }
+    return ss.str();
+}
 
-std::string fail(const std::vector<std::string> &src) {
-
+std::string fail(const list<std::string> &src) {
 	std::stringstream ss;
-	for (int I = 0; I < src.size(); I++) {
-
-		for (int J = 0; J < src[I].size(); J++) {
-			ss << '*';
-		}
-		if (I != src.size() - 1)ss << " ";
-	}
+    list_el <std::string> *el = src.head;
+    while (el)
+    {
+        for (int i = 0; i < el->el.size(); i++) {
+            ss << '*';
+        }
+        if (el->nxt) {
+            ss << " ";
+        }
+        el = el->nxt;
+    }
 	return ss.str();
 }
 
-std::string solve(const std::vector<std::string> &src) {
-    wrd w0(src[0]);
+bool solve(list_el<std::string> e, alphabet &a) {
+    wrd w0(e.el);
     auto pairs = lc.find(w0.fp);
-	if (pairs == lc.end()) return fail(src);
-	if (src.size() == 1) return pairs->second[0].str;
-    for (int i = 0; i < pairs->second.size(); i++) { //possible translations of 0 word
-        bool match = true;
-        alphabet a;
-		bool translation_found = false;
-        translate(w0, pairs->second[i], a);
-        for (int j = 1; j < src.size(); j++) { //words from 1 to n
-            auto w1 = wrd(src[j]);
-			auto ps = lc.find(w1.fp);
-			if (ps == lc.end()) return fail(src);
-			else {
-				for (int k = 0; k < ps->second.size(); k++) { //translations of k'th word
-					translation_found = translate(w1, ps->second[k], a);
-					if (translation_found) break;
-				}
-				if (translation_found) continue;
-				else { break; }
-			}
+    if (pairs == lc.end()) return false;
+    bool is_solved = false;
+    for (int i = 0; i < pairs->second.size(); i++) {
+        alphabet _a = a;
+        if (translate(w0, pairs->second[i], _a)) {
+            if (e.nxt) {
+                is_solved = solve(*e.nxt, _a);
+            }
+            else {
+                is_solved = true;
+            }
         }
-		if (translation_found) {
-			std::stringstream ss;
-			for (int I = 0; I < src.size(); I++) {
-				
-				for (int J = 0; J < src[I].size(); J++) {
-					ss << a[src[I][J]];
-				}
-				if(I != src.size()-1)ss << " ";
-			}
-			return ss.str();
-		}
-    }
-	return fail(src);
-	
+        if (is_solved) { 
+            std::swap(a, _a); 
+            break;
+        } 
+    }   
+    return is_solved;
 }
 
 int main(void) {
@@ -131,15 +170,23 @@ int main(void) {
         std::getline(istr, buf);
         if (!istr) return 0;
         std::stringstream ss(buf);
-        std::vector<std::string> vec;
+        //std::vector<std::string> vec;
+        list<std::string> lst;
         while (ss) {
             std::string w;
             ss >> w;
             if (ss) {
-                vec.push_back(w);
+                lst.add(w);
             }
         }
-        std::cout << solve(vec);
+        alphabet a;
+        if (solve(*lst.head, a)) {
+            std::cout << success(lst, a);
+        }
+        else {
+            std::cout << fail(lst);
+        }
+
         std::cout << '\n';
         
     }
