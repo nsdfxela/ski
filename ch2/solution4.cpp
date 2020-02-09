@@ -73,18 +73,21 @@ std::map<std::string, std::vector<wrd>> lc;
 bool translate(wrd &enc, wrd &dct, alphabet &a) { 
     if (enc.fp != dct.fp) return false;
     std::string enc_s;
+	alphabet _a = a;
     for (int i = 0; i < enc.str.length(); i++) {
-        auto decc = a.find(enc.str[i]);		
-        if (decc != a.end() ) {			
+        auto decc = _a.find(enc.str[i]);		
+        if (decc != _a.end() ) {			
             if (dct.str[i] != decc->second) {
                 return false;
             }
-		}
-		else {
-			auto decd = std::find_if(a.begin(), a.end(),
+		} else {
+			auto decd = std::find_if(_a.begin(), _a.end(),
 				[&](std::pair<char, char> p) { return p.second == dct.str[i]; });
-			if (decd != a.end()) {
+			if (decd != _a.end()) {
 				return false;
+			}
+			else {
+				_a[enc.str[i]] = dct.str[i];
 			}
 		}
     }
