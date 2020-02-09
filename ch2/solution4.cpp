@@ -153,7 +153,7 @@ int main(void) {
 #if defined(__GNUC__)
     std::istream &istr = std::cin;
 #else
-    std::ifstream istr(R"(D:\study\ski\ch2\test.txt)", std::ios::in);
+    std::ifstream istr(R"(D:\repos\ski\ch2\test.txt)", std::ios::in);
 #endif
     int wc;
     istr >> wc;
