@@ -2,10 +2,32 @@
 #include <string>
 #include <fstream>
 
+#define CT 52
+int tricks[100][CT];
+int ntricks;
 
-void handle_block() 
+void handle_block(std::istream &istr) 
 {
+	
+	istr >> ntricks;
 
+	for (int i = 0; i < ntricks; i++) {
+		for (int j = 0; j < CT; j++) {
+			istr >> tricks[i][j];
+		}
+	}
+	istr.ignore();
+
+	std::string buf;
+	do {
+		std::getline(istr, buf);
+		if (buf.empty() || !istr) {
+			break;
+		}
+		int ntrick = std::stoi(buf, nullptr, 10);
+		
+	} while (1);
+	
 }
 
 int main(void) {
@@ -19,10 +41,10 @@ int main(void) {
 
 	int ntb = 0;
 	istr >> ntb;
-
+	istr.ignore();
 	for (int i = 0; i < ntb; i++) {
 
-		handle_block();
+		handle_block(istr);
 	}
 
 	return 0;
