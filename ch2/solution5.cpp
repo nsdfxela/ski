@@ -8,8 +8,12 @@
 
 int tricks[100][CT];
 int ntricks;
-int cards[CT];
 
+int cards [CT];
+int p_cards[CT];
+void cpyCards() {
+    std::copy(std::begin(cards), std::end(cards), std::begin(p_cards));
+}
 
 std::string vnames[]{"2", "3", "4", "5", "6", "7", "8", "9", "10", "Jack", "Queen", "King", "Ace" };
 std::string snames[]{"Clubs", "Diamonds", "Hearts", "Spades" };
@@ -25,11 +29,14 @@ void fillCards() {
             
         }
     }
+    cpyCards();
 }
 void handleShuffle(int *shuffle) {
     for (int i = 0; i < CT; i++) {
-        std::swap(cards[i], cards[shuffle[i]-1]);
+        /*std::swap(cards[i], cards[shuffle[i]-1]);*/
+        cards[i] = p_cards[shuffle[i] - 1];
     }
+    cpyCards();
 }
 void handle_block(std::istream &istr) 
 {
@@ -74,9 +81,10 @@ int main(void) {
 	istr >> ntb;
     istr.ignore();
     for (int i = 0; i < ntb; i++) {
+        fillCards();
         handle_block(istr);
         for (int j = 0; j < CT; j++) {
-            printCard(cards[j]);
+            printCard(cards[i*VALUES + j]);
         }
         std::cout << std::endl;
     }
