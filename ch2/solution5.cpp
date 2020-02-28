@@ -38,6 +38,8 @@ void handleShuffle(int *shuffle) {
     }
     cpyCards();
 }
+
+
 void handle_block(std::istream &istr) 
 {
 	istr >> ntricks;
@@ -80,13 +82,16 @@ int main(void) {
 	int ntb = 0;
 	istr >> ntb;
     istr.ignore();
-    for (int i = 0; i < ntb; i++) {
-        fillCards();
+    for (int b = 0; b < ntb; b++) {
         handle_block(istr);
-        for (int j = 0; j < CT; j++) {
-            printCard(cards[i*VALUES + j]);
+        for (int i = 0; i < SUITS; i++) {
+            for (int j = 0; j < VALUES; j++) {
+                printCard(cards[i*VALUES + j]);
+            }
         }
-        std::cout << std::endl;
+        if (b != ntb - 1) {
+            std::cout << std::endl;
+        }
     }
 	return 0;
 }
