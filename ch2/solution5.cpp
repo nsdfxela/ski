@@ -69,7 +69,7 @@ void handle_block(std::istream &istr)
     }
 
 }
-
+//Accepted!
 int main(void) {
 
 #if defined (__GNUC__)
