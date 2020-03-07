@@ -7,12 +7,42 @@
 
 std::vector<std::vector<std::string>> articles;
 std::map<std::string, int> numbers;
-void count() {
-	for (int i = 0; i < articles.size(); i++) {
-		for (int j = 0; j < articles[i].size(); j++) {
-			bool isErdos = articles[i][j].find("Erdos") != std::string::npos;
+#define UNKNOWN 10000
+
+int get_level(std::string &name) {
+	if (name.find("Erdos") != std::string::npos) {
+		return 0;
+	}
+	else
+	{
+		if (numbers.count(name)) {
+			return numbers[name];
+		}
+		else {
+			numbers[name] = UNKNOWN;
+			return numbers[name];
 		}
 	}
+}
+
+void set_level(int article, int level) {
+	for (int i = 0; i < articles[article].size(); i++) {
+		if (get_level(articles[article][i]) > level) {
+			numbers[articles[article][i]] = level;
+		}
+	}
+}
+
+void count() {
+	int level = 1;
+	for (int i = 0; i < articles.size(); i++) {
+		for (int j = 0; j < articles[i].size(); j++) {
+			if (get_level(articles[i][j]) == level-1) {
+				set_level(i, level);
+			}
+		}
+	}
+	
 }
 void trim(std::string &str) {
 	if (str[0] == ' ') {
@@ -40,7 +70,6 @@ void split_names(const std::string &in, std::vector<std::string> &vec) {
 		vec.push_back(found_name);
 		instr = instr.substr(pos+1);
  	} while (true);
-	count();
 }
 
 void handle_scenario(std::istream &istr) {
@@ -58,6 +87,8 @@ void handle_scenario(std::istream &istr) {
 		split_names(buf, article);
 		articles.push_back(article);
 	}
+	count();
+
 }
 
 int main(void) {
