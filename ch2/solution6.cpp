@@ -2,17 +2,45 @@
 #include <fstream>
 #include <string>
 #include <vector>
+#include <map>
 
 
 std::vector<std::vector<std::string>> articles;
-
+std::map<std::string, int> numbers;
+void count() {
+	for (int i = 0; i < articles.size(); i++) {
+		for (int j = 0; j < articles[i].size(); j++) {
+			bool isErdos = articles[i][j].find("Erdos") != std::string::npos;
+		}
+	}
+}
+void trim(std::string &str) {
+	if (str[0] == ' ') {
+		str = str.substr(1);
+	}
+}
 void split_names(const std::string &in, std::vector<std::string> &vec) {
 	std::string instr(in);
 	size_t pos;
 	do {
-		pos	= in.find(',');
+		std::string result;
+		pos	= instr.find(',');
+		pos = instr.find(',', pos+1);
 
-	} while (pos != std::string::npos);
+		if (pos == std::string::npos) {
+			trim(instr);
+			vec.push_back(instr);
+			break;
+		}
+
+		int startpos = 0;
+		
+		std::string found_name = instr.substr(0, pos);
+		trim(found_name);
+		vec.push_back(found_name);
+		instr = instr.substr(pos+1);
+ 	} while (true);
+	count();
 }
 
 void handle_scenario(std::istream &istr) {
