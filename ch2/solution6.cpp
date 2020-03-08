@@ -24,6 +24,16 @@ int get_level(std::string &name) {
 		}
 	}
 }
+int get_level(int article) {
+	int level = UNKNOWN;
+	for (int i = 0; i < articles[article].size(); i++) {
+		int artlevel = get_level(articles[article][i]);
+		if (artlevel < level) {
+			level = artlevel;
+		}
+	}
+	return level;
+}
 
 void set_level(int article, int level) {
 	for (int i = 0; i < articles[article].size(); i++) {
@@ -35,14 +45,19 @@ void set_level(int article, int level) {
 
 void count() {
 	int level = 1;
-	for (int i = 0; i < articles.size(); i++) {
-		for (int j = 0; j < articles[i].size(); j++) {
-			if (get_level(articles[i][j]) == level-1) {
-				set_level(i, level);
+	bool level_found;
+	do {
+		level_found = false;
+		for (int i = 0; i < articles.size(); i++) {
+			for (int j = 0; j < articles[i].size(); j++) {
+				if (get_level(i) == level - 1) {
+					set_level(i, level);
+					level_found = true;
+				}
 			}
 		}
-	}
-	
+		++level;
+	} while (level_found);
 }
 void trim(std::string &str) {
 	if (str[0] == ' ') {
@@ -72,7 +87,7 @@ void split_names(const std::string &in, std::vector<std::string> &vec) {
  	} while (true);
 }
 
-void handle_scenario(std::istream &istr) {
+void handle_scenario(std::istream &istr, int n_scenario) {
 	articles.clear();
 	int nart, nn;
 	istr >> nart >> nn;
@@ -88,7 +103,21 @@ void handle_scenario(std::istream &istr) {
 		articles.push_back(article);
 	}
 	count();
+	std::cout << "Scenario " << n_scenario << std::endl;
+	buf.clear();
 
+	for (int j = 0; j < nn; j++) {
+		std::getline(istr, buf);
+		int res = numbers[buf];
+		std::cout << buf << " ";
+		if (res == UNKNOWN) {
+			std::cout << "infinity";
+		}
+		else {
+			std::cout << res;
+		}
+		std::cout << std::endl;
+	}
 }
 
 int main(void) {
@@ -101,9 +130,9 @@ int main(void) {
 
 	int nsc = 0, nart = 0, nnames = 0;
 	istr >> nsc;
-
-	for (int i = 0; i < nsc; i++) {
-		handle_scenario(istr);
+ 	for (int i = 0; i < nsc; i++) {
+		handle_scenario(istr, i+1);
+		
 	}
 
  	return 0;
