@@ -88,6 +88,8 @@ void split_names(const std::string &in, std::vector<std::string> &vec) {
 }
 
 void handle_scenario(std::istream &istr, int n_scenario) {
+	
+	numbers.clear();
 	articles.clear();
 	int nart, nn;
 	istr >> nart >> nn;
@@ -102,15 +104,19 @@ void handle_scenario(std::istream &istr, int n_scenario) {
 		split_names(buf, article);
 		articles.push_back(article);
 	}
+
 	count();
 	std::cout << "Scenario " << n_scenario << std::endl;
+	
 	buf.clear();
-
 	for (int j = 0; j < nn; j++) {
 		std::getline(istr, buf);
 		int res = numbers[buf];
 		std::cout << buf << " ";
 		if (res == UNKNOWN) {
+			std::cout << "infinity";
+		}
+		else if (res == 0) {
 			std::cout << "infinity";
 		}
 		else {
