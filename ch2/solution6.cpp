@@ -123,7 +123,7 @@ void handle_scenario(std::istream &istr, int n_scenario) {
 int main(void) {
 
 #ifdef  __GNUC__
-	std::istream &istr = std:cin;
+	std::istream &istr = std::cin;
 #else
 	std::ifstream istr(R"(D:\repos\ski\ch2\test.txt)");
 #endif //  __GNUC__
