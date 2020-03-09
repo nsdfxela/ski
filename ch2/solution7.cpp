@@ -1,37 +1,55 @@
 #include <iostream>
 #include <string>
 #include <fstream>
-#include <map>
 #include <sstream>
+#include <set>
 
-struct entry {
-	/*entry(int part, std::istream &istr) : participant{ part } {
-		istr >> solved >> time;
-	}*/
-	int participant, solved, time;	
-};
-std::map<int, entry> entries;
+
+
+
 
 void read_block(std::istream &istr) {
-	
+	int exercies[100][9];
+	for (int i = 0; i < 100; i++) {
+		memset(exercies[i], 0, sizeof(int)*9);
+	}
 	std::string buf;
+	std::set<int> prtsp;
 	while (true) {
 		std::getline(istr, buf);
 		if (buf.empty()) { break; }
 		std::stringstream ss(buf);
-		int participant, solved, time;
+		int participant, ex, time;
 		char L;
-		ss >> participant >> solved >> time >> L;
+		ss >> participant >> ex >> time >> L;
+		
 		if (L == 'C') {
-			entries[participant].solved++;
-			entries[participant].time += time;
+			exercies[participant][ex - 1] *= -1;
+			exercies[participant][ex - 1] += time;
+			prtsp.insert(participant);
 		}
 		else if (L == 'I') {
-			entries[participant].time += 20;
+			exercies[participant][ex - 1] -= 20;
+			prtsp.insert(participant);
 		}
+
+		
 		//>> exercise >> time >> L;
 
 		//std::cout << buf << std::endl;
+	}
+
+	for (auto &p : prtsp) {
+		std::cout << p << " ";
+		int count = 0;
+		int time = 0;
+		for (int i = 0; i < 10; i++) {
+			if (exercies[p][i] > 0) {
+				++count;
+				time += exercies[p][i];
+			}
+		}
+		std::cout << count << " " << time << std::endl;
 	}
 }
 
@@ -47,6 +65,7 @@ int main(void) {
 	istr.ignore(2);
 	for (int i = 0; i < nblocks; i++) {
 		read_block(istr);
+		std::cout << std::endl;
 	}
 
 	return 0;
