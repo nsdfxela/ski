@@ -2,12 +2,19 @@
 #include <string>
 #include <fstream>
 
+
+struct entry {
+	int participant, exercise, time, L;
+};
 void read_block(std::istream &istr) {
 	
 	std::string buf;
 	while (true) {
 		std::getline(istr, buf);
 		if (buf.empty()) { break; }
+		
+		//istr >> participant >> exercise >> time >> L;
+
 		//std::cout << buf << std::endl;
 	}
 }
