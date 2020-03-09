@@ -3,10 +3,7 @@
 #include <fstream>
 #include <sstream>
 #include <set>
-
-
-
-
+#include <cstring>
 
 void read_block(std::istream &istr) {
 	int exercies[100][9];
