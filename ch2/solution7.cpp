@@ -40,7 +40,7 @@ void read_block(std::istream &istr) {
 		std::cout << p << " ";
 		int count = 0;
 		int time = 0;
-		for (int i = 0; i < 10; i++) {
+		for (int i = 0; i < 9; i++) {
 			if (exercies[p][i] > 0) {
 				++count;
 				time += exercies[p][i];
@@ -54,7 +54,8 @@ int main(void) {
 #ifdef __GNUC__
 	std::istream &istr = std::cin;
 #else
-	std::fstream istr(R"(C:\FUNHOUSE\Skiena-20191022\solutions\ch2\test.txt)");
+	//std::fstream istr(R"(C:\FUNHOUSE\Skiena-20191022\solutions\ch2\test.txt)");
+    std::fstream istr(R"(D:\study\ski\ch2\test.txt)");
 #endif
 	int nblocks;
 	istr >> nblocks;
