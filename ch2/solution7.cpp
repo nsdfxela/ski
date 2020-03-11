@@ -4,10 +4,18 @@
 #include <sstream>
 #include <set>
 #include <cstring>
+#include <algorithm>
+#include <vector>
+
+struct result {
+    int id;
+    int count;
+    int time;
+};
 
 void read_block(std::istream &istr) {
-	int exercies[100][9];
-	for (int i = 0; i < 100; i++) {
+	int exercies[101][9];
+	for (int i = 0; i < 101; i++) {
 		memset(exercies[i], 0, sizeof(int)*9);
 	}
 	std::string buf;
@@ -21,14 +29,21 @@ void read_block(std::istream &istr) {
 		ss >> participant >> ex >> time >> L;
 		
 		if (L == 'C') {
-			exercies[participant][ex - 1] *= -1;
-			exercies[participant][ex - 1] += time;
-			prtsp.insert(participant);
+            if (exercies[participant][ex - 1] <= 0) {
+                exercies[participant][ex - 1] *= -1;
+                exercies[participant][ex - 1] += time;
+                prtsp.insert(participant);
+            }
 		}
 		else if (L == 'I') {
-			exercies[participant][ex - 1] -= 20;
-			prtsp.insert(participant);
-		}
+            if (exercies[participant][ex - 1] <= 0) {
+                exercies[participant][ex - 1] -= 20;
+                prtsp.insert(participant);
+            }
+        }
+        else {
+            prtsp.insert(participant);
+        }
 
 		
 		//>> exercise >> time >> L;
@@ -36,8 +51,9 @@ void read_block(std::istream &istr) {
 		//std::cout << buf << std::endl;
 	}
 
+    std::vector<result> vec;
 	for (auto &p : prtsp) {
-		std::cout << p << " ";
+		
 		int count = 0;
 		int time = 0;
 		for (int i = 0; i < 9; i++) {
@@ -46,8 +62,28 @@ void read_block(std::istream &istr) {
 				time += exercies[p][i];
 			}
 		}
-		std::cout << count << " " << time << std::endl;
+        result r;
+        r.count = count;
+        r.time = time;
+        r.id = p;
+        vec.push_back(r);        
 	}
+    std::sort(vec.begin(), vec.end(), [](result &r1, result &r2) { 
+        if (r1.count == r2.count) {
+            if (r1.time == r2.time) {
+                return r1.id < r2.id;
+            }
+            else {
+                return r1.time < r2.time;
+            }
+        }
+        else {
+            return r1.count > r2.count;
+        }
+    });
+    for (int i = 0; i < vec.size(); i++) {
+        std::cout << vec[i].id << " " << vec[i].count << " " << vec[i].time << std::endl;
+    }
 }
 
 int main(void) {
@@ -63,7 +99,9 @@ int main(void) {
 	istr.ignore(2);
 	for (int i = 0; i < nblocks; i++) {
 		read_block(istr);
-		std::cout << std::endl;
+        if (i != nblocks - 1) {
+            std::cout << std::endl;
+        }
 	}
 
 	return 0;
