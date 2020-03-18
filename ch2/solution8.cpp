@@ -21,23 +21,9 @@ int uniques(int *arr, int val) {
     }
 }
 
-struct p_ord {
-    int idx;
-    int val;
-    p_ord() {
-        idx = 0;
-        val = 0;
-    }
-    p_ord(int v) : val{ v } {
-
-    }
-    bool operator==(int other) {
-        return val == other;
-    }
-};
 
 void solve(int game[13][5]) {
-    p_ord table[13][13];
+    int table[13][13];
     for (int i = 0; i < 13; i++) { //iterate over throws
         table[i][0] = std::count(std::begin(game[i]), std::end(game[i]), 1);
         table[i][1] = std::count(std::begin(game[i]), std::end(game[i]), 2);
@@ -74,10 +60,8 @@ void solve(int game[13][5]) {
         else {
             table[i][12] = 0;
         }
-        for (int k = 0; k < 13; k++) {
-            table[i][k].idx = k;
-        }
-        std::sort(table[i], table[i] + 13, [](p_ord &p1, p_ord &p2) { return p1.val > p2.val; });
+        
+        //std::sort(table[i], table[i] + 13);
     }
 
 
@@ -95,7 +79,8 @@ int main(int arch, char **argv) {
 #if __GNUC__
     std::istream &istr = std::cin;
 #else 
-    std::ifstream istr(R"(D:\study\ski\ch2\test.txt)");
+	std::fstream istr(R"(C:\FUNHOUSE\Skiena-20191022\solutions\ch2\test.txt)");
+    //std::ifstream istr(R"(D:\study\ski\ch2\test.txt)");
 #endif
 
     int game[13][5];
