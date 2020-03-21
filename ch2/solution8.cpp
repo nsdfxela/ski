@@ -21,6 +21,19 @@ int uniques(int *arr, int val) {
     }
 }
 
+void traverse(int idx, int counter) {
+    static int n = 0;
+    std::cout << n++ << std::endl;
+    if (counter == 12) {
+        //std::cout << std::endl;
+        return;
+    }
+    //std::cout << idx << " ";
+    for (int i = 0; i < 13; i++) {
+        traverse(i, counter+1);
+
+    }
+}
 
 void solve(int game[13][5]) {
     int table[13][13];
@@ -66,7 +79,12 @@ void solve(int game[13][5]) {
 
 
     std::cout << "done";
+    for (int i = 0; i < 13; i++) {
+        traverse(i, -1);
+    }
+    
 }
+
 
 
 void clear(int game[13][5]) {
@@ -79,8 +97,10 @@ int main(int arch, char **argv) {
 #if __GNUC__
     std::istream &istr = std::cin;
 #else 
-	std::fstream istr(R"(C:\FUNHOUSE\Skiena-20191022\solutions\ch2\test.txt)");
+	//std::fstream istr(R"(C:\FUNHOUSE\Skiena-20191022\solutions\ch2\test.txt)");
     //std::ifstream istr(R"(D:\study\ski\ch2\test.txt)");
+    std::fstream istr(R"(C:\fedosin\repos\ski\ch2\test.txt)");
+
 #endif
 
     int game[13][5];
