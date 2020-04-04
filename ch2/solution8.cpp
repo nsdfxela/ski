@@ -35,6 +35,41 @@ void traverse(int idx, int counter) {
     }
 }
 
+template<int nr, int nc>
+//ROWS are games, COLS are value of a game at J position
+void hungarian(int m [nr][nc]) {
+    auto mc = m;
+   /* int nr = 13;
+    int nc = 13;*/
+    for (int i = 0; i < nr; i++) {
+        int min = INT_MAX;
+        //searching for min
+        for (int j = 0; j < nc; j++) {
+            if (m[i][j] < min) {
+                min = m[i][j];
+            }
+        }
+        for (int j = 0; j < nc; j++) {
+            mc[i][j] -= min;
+        }
+    }
+
+    for (int j = 0; j < nc; j++) {
+        int min = INT_MAX;
+        for (int i = 0; i < nr; i++) {
+            if (mc[i][j] < min) {
+                min = mc[i][j];
+            }
+        }
+
+        for (int i = 0; i < nr; i++) {
+            mc[i][j] -= min;
+        }
+    }
+
+
+}
+
 void solve(int game[13][5]) {
     int table[13][13];
     for (int i = 0; i < 13; i++) { //iterate over throws
@@ -79,9 +114,10 @@ void solve(int game[13][5]) {
 
 
     std::cout << "done";
-    for (int i = 0; i < 13; i++) {
+    hungarian<13, 13>(table);
+    /*for (int i = 0; i < 13; i++) {
         traverse(i, -1);
-    }
+    }*/
     
 }
 
@@ -93,6 +129,18 @@ void clear(int game[13][5]) {
     }
 }
 int main(int arch, char **argv) {
+
+    int tt[3][3];
+    tt[0][0] = 1;
+    tt[0][1] = 4;
+    tt[0][2] = 5;
+    tt[1][0] = 5;
+    tt[1][1] = 7;
+    tt[1][2] = 6;
+    tt[2][0] = 5;
+    tt[2][1] = 8;
+    tt[2][2] = 8;
+    hungarian<3, 3>(tt);
 
 #if __GNUC__
     std::istream &istr = std::cin;
