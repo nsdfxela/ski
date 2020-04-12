@@ -35,6 +35,81 @@ void traverse(int idx, int counter) {
     }
 }
 
+#include <queue>
+template <int nr, int nc>
+bool findPath(int G[nr][nc], int path[nr], int s, int t) {
+    std::queue<int> q;
+    q.push(s);
+    int visited[nr];    
+    memset(visited, 0, sizeof(int) * nr);
+    int current = s;
+    visited[current] = 1;
+    while (current != t) {
+        if (q.empty()) {
+            return false;
+        }
+        current = q.front();
+        q.pop();
+        
+        for (int i = 0; i < nr; i++) {
+            if (G[current][i] && !visited[i]) {
+                q.push(i);
+                visited[i] = 1;
+                path[i] = current;
+            }
+        }
+        
+    }
+    return true;
+    /*int idx = nr - 1;
+    std::cout << "Path is : " << idx << " ";
+    do {
+        
+        idx = path[idx];
+        std::cout << idx << " ";
+    } while (idx);*/    
+}
+
+template <int nr, int nc>
+int fordFulkerson(int G[nr][nc], int s, int t) {
+    auto Gr = G;
+    int path[nr];
+    memset(path, 0, nr * sizeof(int));
+    int totalFlow = 0;
+    while (findPath<nr, nc>(Gr, path, s, t)) {
+        int idx = t;
+        int minFlow = INT_MAX;
+        do {
+            minFlow = std::min(Gr[path[idx]][idx], minFlow);
+            idx = path[idx];            
+        } while (idx);
+        idx = t;
+        do {
+            Gr[path[idx]][idx] -= minFlow;
+            Gr[idx][path[idx]] += minFlow;
+            idx = path[idx];
+        } while (idx);
+        totalFlow += minFlow;
+    }
+    return totalFlow;
+}
+
+template <int nr, int nc>
+int maxBipartile(int G[nr][nc]) {
+    int nG[nr+2][nc+2];
+    for (int i = 1; i < nr + 1; i++) {
+        for (int j = 1; j < nc + 1; j++) {
+            nG[i][j] = G[i - 1][j - 1];
+        }
+    }
+    
+    for (int i = 0; i < nr+2; i++) {
+        nG[i][0] = 0;  nG[0][i] = 0;
+        nG[i][nr + 1] = 0; nG[nr + 1][i] = 0;
+    }
+    return 0;
+}
+
 template<int nr, int nc>
 //ROWS are games, COLS are value of a game at J position
 void hungarian(int m [nr][nc]) {
@@ -130,6 +205,24 @@ void clear(int game[13][5]) {
 }
 int main(int arch, char **argv) {
 
+    int graph[6][6] = { {0, 16, 13, 0, 0, 0},
+                        {0, 0, 10, 12, 0, 0},
+                        {0, 4, 0, 0, 14, 0},
+                        {0, 0, 9, 0, 0, 20},
+                        {0, 0, 0, 7, 0, 4},
+                        {0, 0, 0, 0, 0, 0}
+    };
+    std::cout << fordFulkerson<6,6>(graph, 0, 5);
+    int graphBp[6][6] = { {0, 1, 1, 0, 0, 0},
+                        {0, 0, 0, 0, 0, 0},
+                        {1, 0, 0, 1, 0, 0},
+                        {0, 0, 1, 0, 0, 0},
+                        {0, 0, 1, 1, 0, 0},
+                        {0, 0, 0, 0, 0, 1}
+    };
+    std::cout << maxBipartile<6, 6>(graphBp);
+
+    return 0;
     int tt[3][3];
     tt[0][0] = 1;
     tt[0][1] = 4;
