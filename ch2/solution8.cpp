@@ -139,6 +139,7 @@ int maxBipartile(int G[nr][nc], int resultGraph[nr][nc]) {
     return r;
 }
 
+
 template<int nr, int nc>
 void alternatings(int z, int G[nr][nc], int maxMatching[nr][nc], int visited[nr][nc]) {
     for (int i = 0; i < nc; i++) {
@@ -154,6 +155,8 @@ void alternatings(int z, int G[nr][nc], int maxMatching[nr][nc], int visited[nr]
     }
 }
 
+#include <set>
+#include <iterator>
 template<int nr, int nc>
 std::vector<int> minVertexCover(int G[nr][nc], int maxMatching[nr][nc]) {
     std::vector<int> result;
@@ -178,11 +181,30 @@ std::vector<int> minVertexCover(int G[nr][nc], int maxMatching[nr][nc]) {
             visited[i][j] = 0;
         }
     }
+
+    std::set<int> Z;
     for (int i = 0; i < zeros.size(); i++) {
+        Z.insert(zeros[i]);
         alternatings<nr, nc>(zeros[i], G, maxMatching, visited);
     }
-
-
+    for (int i = 0; i < nr; i++) {
+        for (int j = 0; j < nc; j++) {
+            if (visited[i][j]) {
+                Z.insert(i);
+                Z.insert(j+nc);
+            }            
+        }
+    }
+    std::set<int> L, R;
+    for (int i = 0; i < nr; i++) {
+        L.insert(i);
+        R.insert(i + nr);
+    }
+    std::set<int> p1, p2, p;
+    std::set_difference(L.begin(), L.end(), Z.begin(), Z.end(), std::inserter(p1, p1.begin()));
+    std::set_intersection(R.begin(), R.end(), Z.begin(), Z.end(), std::inserter( p2, p2.begin()));
+    std::set_union(p1.begin(), p1.end(), p2.begin(), p2.end(), std::inserter(p, p.begin()));
+    
     return result;
 }
 
