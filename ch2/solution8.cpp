@@ -71,8 +71,16 @@ bool findPath(int G[nr][nc], int path[nr], int s, int t) {
 }
 
 template <int nr, int nc>
-int fordFulkerson(int G[nr][nc], int s, int t) {
-    auto Gr = G;
+int fordFulkerson(int G[nr][nc], int s, int t, int flow[nr][nc]) {
+    int Gr[nr][nc];        
+
+    for (int i = 0; i < nr; i++) {
+        for (int j = 0; j < nc; j++) {
+            Gr[i][j] = G[i][j];
+            flow[i][j] = 0;
+        }
+    }
+
     int path[nr];
     memset(path, 0, nr * sizeof(int));
     int totalFlow = 0;
@@ -85,6 +93,9 @@ int fordFulkerson(int G[nr][nc], int s, int t) {
         } while (idx);
         idx = t;
         do {
+            flow[path[idx]][idx] += minFlow;
+            flow[idx][path[idx]] -= minFlow;
+
             Gr[path[idx]][idx] -= minFlow;
             Gr[idx][path[idx]] += minFlow;
             idx = path[idx];
@@ -95,25 +106,94 @@ int fordFulkerson(int G[nr][nc], int s, int t) {
 }
 
 template <int nr, int nc>
-int maxBipartile(int G[nr][nc]) {
-    int nG[nr+2][nc+2];
-    for (int i = 1; i < nr + 1; i++) {
-        for (int j = 1; j < nc + 1; j++) {
-            nG[i][j] = G[i - 1][j - 1];
+int maxBipartile(int G[nr][nc], int resultGraph[nr][nc]) {
+    const int N = nr * 2 + 2;
+    int nG[N][N];
+    int nResultGraph[N][N];
+     for (int i = 0; i < N; i++) {
+        //nG[i] = new int [N];
+        memset(nG[i], 0, sizeof(int) * N);
+       /* for (int j = 0; j < N; j++) {
+            std::cout << nG[i][j] << " ";
+        }*/
+    }
+    for (int i = 0; i < nr; i++) {
+        memcpy(nG[i+1] + (N - nr - 1), G[i], nr * sizeof(int));         
+    }
+    for (int i = 0; i < nr; i++) {
+        nG[0][i+1] = 1;
+        nG[nr + i + 1][N - 1] = 1;
+    }
+
+    std::cout << std::endl;
+    for (int i = 0; i < N; i++) {
+        for (int j = 0; j < N; j++) {
+            std::cout << nG[i][j] << " ";
+        }
+        std::cout << std::endl;
+    }
+    int r = fordFulkerson<N, N>(nG, 0, N - 1, nResultGraph);
+    for (int i = 0; i < nr; i++) {
+        memcpy(resultGraph[i], nResultGraph[i + 1] + (N - nr - 1), nr * sizeof(int));
+    }
+    return r;
+}
+
+template<int nr, int nc>
+void alternatings(int z, int G[nr][nc], int maxMatching[nr][nc], int visited[nr][nc]) {
+    for (int i = 0; i < nc; i++) {
+        if (G[z][i] && !visited[z][i]) {
+            visited[z][i] = 1;
+            for (int j = 0; j < nr; j++) {
+                if (maxMatching[j][i] && !visited[j][i]) {
+                    visited[j][i] = 1;
+                    alternatings<nr, nc>(j, G, maxMatching, visited);
+                }
+             }
         }
     }
-    
-    for (int i = 0; i < nr+2; i++) {
-        nG[i][0] = 0;  nG[0][i] = 0;
-        nG[i][nr + 1] = 0; nG[nr + 1][i] = 0;
+}
+
+template<int nr, int nc>
+std::vector<int> minVertexCover(int G[nr][nc], int maxMatching[nr][nc]) {
+    std::vector<int> result;
+
+    std::vector <int> zeros;
+    for (int i = 0; i < nr; i++) {
+        bool iszero = true;
+        for (int j = 0; j < nc && iszero; j++) {
+            if (maxMatching[i][j]) {
+                iszero = false;
+            }
+        }
+        if (iszero) {
+            zeros.push_back(i);
+        }
     }
-    return 0;
+
+
+    int visited[nr][nc];
+    for (int i = 0; i < nr; i++) {
+        for (int j = 0; j < nc; j++) {
+            visited[i][j] = 0;
+        }
+    }
+    for (int i = 0; i < zeros.size(); i++) {
+        alternatings<nr, nc>(zeros[i], G, maxMatching, visited);
+    }
+
+
+    return result;
 }
 
 template<int nr, int nc>
 //ROWS are games, COLS are value of a game at J position
 void hungarian(int m [nr][nc]) {
-    auto mc = m;
+    int mc[nr][nc];
+    for (int i = 0; i < nr; i++) 
+        for (int j = 0; j < nc; j++) {
+            mc[i][j] = m[i][j];
+        }
    /* int nr = 13;
     int nc = 13;*/
     for (int i = 0; i < nr; i++) {
@@ -142,7 +222,39 @@ void hungarian(int m [nr][nc]) {
         }
     }
 
+    //loop
+    int mc0[nr][nc];
+    
+    for (int i = 0; i < nr; i++) {
+        for (int j = 0; j < nc; j++)
+        {
+            if (m[i][j]) {
+                mc0[i][j] = mc[i][j] ? 0 : 1;
+            }
+            else {
+                mc0[i][j] = 0;
+            }
+        }
+    }
 
+    int bpMatching[nr][nc];
+    //Find the maximum matching using only 0-weight edges
+    int mbp = maxBipartile<nr, nc>(mc0, bpMatching);
+    if (mbp == nr) {
+        //If it is perfect, then the problem is solved. Otherwise find the minimum vertex cover V (for the subgraph with 0-weight edges only)
+
+    }
+    else {
+        int D = 0;
+        std::vector <int> mvc = minVertexCover<nr, nc>(mc0, bpMatching);
+        for (int i = 0; i < nr; i++)
+            for (int i = 0; i < nr; i++) {
+                {
+
+                }
+            }
+    }
+    
 }
 
 void solve(int game[13][5]) {
@@ -205,7 +317,7 @@ void clear(int game[13][5]) {
 }
 int main(int arch, char **argv) {
 
-    int graph[6][6] = { {0, 16, 13, 0, 0, 0},
+    /*int graph[6][6] = { {0, 16, 13, 0, 0, 0},
                         {0, 0, 10, 12, 0, 0},
                         {0, 4, 0, 0, 14, 0},
                         {0, 0, 9, 0, 0, 20},
@@ -213,6 +325,14 @@ int main(int arch, char **argv) {
                         {0, 0, 0, 0, 0, 0}
     };
     std::cout << fordFulkerson<6,6>(graph, 0, 5);
+
+    int graphBp3[3][3] = { {1, 1, 1},
+                          {1, 0, 0},
+                          {0, 1, 1},
+    };
+    std::cout << maxBipartile<3, 3>(graphBp3);
+
+
     int graphBp[6][6] = { {0, 1, 1, 0, 0, 0},
                         {0, 0, 0, 0, 0, 0},
                         {1, 0, 0, 1, 0, 0},
@@ -220,9 +340,9 @@ int main(int arch, char **argv) {
                         {0, 0, 1, 1, 0, 0},
                         {0, 0, 0, 0, 0, 1}
     };
-    std::cout << maxBipartile<6, 6>(graphBp);
+    std::cout << maxBipartile<6, 6>(graphBp);*/
 
-    return 0;
+    
     int tt[3][3];
     tt[0][0] = 1;
     tt[0][1] = 4;
@@ -234,6 +354,28 @@ int main(int arch, char **argv) {
     tt[2][1] = 8;
     tt[2][2] = 8;
     hungarian<3, 3>(tt);
+
+    //konig_test
+    int graph[5][5] = { {1, 0, 1, 0, 0},
+                        {0, 0, 1, 0, 0},
+                        {0, 1, 1, 1, 0},
+                        {0, 0, 1, 0, 0},
+                        {0, 1, 1, 0, 1}
+    };
+    int graphM[5][5] ={ {1, 0, 0, 0, 0},
+                        {0, 0, 1, 0, 0},
+                        {0, 1, 0, 0, 0},
+                        {0, 0, 0, 0, 0},
+                        {0, 0, 0, 0, 1}
+    };
+
+    int graphT[5][5] = { {0, 0, 0, 0, 0},
+                        {0, 0, 0, 0, 0},
+                        {0, 0, 0, 0, 0},
+                        {0, 0, 0, 0, 0},
+                        {0, 0, 0, 0, 0}
+    };
+    minVertexCover<5,5>(graph, graphM);
 
 #if __GNUC__
     std::istream &istr = std::cin;
