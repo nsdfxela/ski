@@ -158,8 +158,8 @@ void alternatings(int z, int G[nr][nc], int maxMatching[nr][nc], int visited[nr]
 #include <set>
 #include <iterator>
 template<int nr, int nc>
-std::vector<int> minVertexCover(int G[nr][nc], int maxMatching[nr][nc]) {
-    std::vector<int> result;
+std::set<int> minVertexCover(int G[nr][nc], int maxMatching[nr][nc]) {
+    std::set<int> result;
 
     std::vector <int> zeros;
     for (int i = 0; i < nr; i++) {
@@ -203,8 +203,8 @@ std::vector<int> minVertexCover(int G[nr][nc], int maxMatching[nr][nc]) {
     std::set<int> p1, p2, p;
     std::set_difference(L.begin(), L.end(), Z.begin(), Z.end(), std::inserter(p1, p1.begin()));
     std::set_intersection(R.begin(), R.end(), Z.begin(), Z.end(), std::inserter( p2, p2.begin()));
-    std::set_union(p1.begin(), p1.end(), p2.begin(), p2.end(), std::inserter(p, p.begin()));
-    
+    std::set_union(p1.begin(), p1.end(), p2.begin(), p2.end(), std::inserter(result, result.begin()));
+    //std::transform(p.begin(), p.end(), std::inserter(result, result.begin()), [](int idx)->int { return idx >= nr ? idx - nr : idx; });
     return result;
 }
 
@@ -267,12 +267,38 @@ void hungarian(int m [nr][nc]) {
 
     }
     else {
-        int D = 0;
-        std::vector <int> mvc = minVertexCover<nr, nc>(mc0, bpMatching);
-        for (int i = 0; i < nr; i++)
-            for (int i = 0; i < nr; i++) {
-                {
+        int D = INT_MAX;
+        
+        std::set <int> mvc = minVertexCover<nr, nc>(mc0, bpMatching);
 
+        for (int i = 0; i < nr; i++) {
+            for (int j = 0; j < nc; j++) {
+                int _j = j + nc;
+                bool ifound = (std::find(mvc.begin(), mvc.end(), i) != mvc.end());
+                bool jfound = (std::find(mvc.begin(), mvc.end(), _j) != mvc.end());
+                if (ifound || jfound) { continue; }
+                if (mc[i][j] < D) {
+                    D = mc[i][j];
+                }
+            }
+        }
+
+        for (int i = 0; i < nr; i++)
+            for (int j = 0; j < nc; j++) {
+                {
+                    int _j = j + nc;
+                    bool ifound = (std::find(mvc.begin(), mvc.end(), i)!=mvc.end());
+                    bool jfound = (std::find(mvc.begin(), mvc.end(), _j) != mvc.end());
+                    if (!ifound && !jfound) {
+                        mc[i][j] -= D;
+                    }
+                    else if (ifound && jfound) {
+                        mc[i][j] += D;
+                    }
+                    else if (ifound || jfound) {
+
+                    }
+                    
                 }
             }
     }
