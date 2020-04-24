@@ -1,4 +1,4 @@
-#include <iostream>
+﻿#include <iostream>
 #include <fstream>
 #include <string>
 #include <sstream>
@@ -210,11 +210,12 @@ std::set<int> minVertexCover(int G[nr][nc], int maxMatching[nr][nc]) {
 
 template<int nr, int nc>
 //ROWS are games, COLS are value of a game at J position
-void hungarian(int m [nr][nc]) {
+void hungarian(int m [nr][nc], int solution[nr][nc]) {
     int mc[nr][nc];
     for (int i = 0; i < nr; i++) 
         for (int j = 0; j < nc; j++) {
             mc[i][j] = m[i][j];
+            solution[i][j] = 0;
         }
    /* int nr = 13;
     int nc = 13;*/
@@ -245,64 +246,71 @@ void hungarian(int m [nr][nc]) {
     }
 
     //loop
-    int mc0[nr][nc];
-    
-    for (int i = 0; i < nr; i++) {
-        for (int j = 0; j < nc; j++)
-        {
-            if (m[i][j]) {
-                mc0[i][j] = mc[i][j] ? 0 : 1;
-            }
-            else {
-                mc0[i][j] = 0;
-            }
-        }
-    }
-
-    int bpMatching[nr][nc];
-    //Find the maximum matching using only 0-weight edges
-    int mbp = maxBipartile<nr, nc>(mc0, bpMatching);
-    if (mbp == nr) {
-        //If it is perfect, then the problem is solved. Otherwise find the minimum vertex cover V (for the subgraph with 0-weight edges only)
-
-    }
-    else {
-        int D = INT_MAX;
-        
-        std::set <int> mvc = minVertexCover<nr, nc>(mc0, bpMatching);
+    bool solved = false;
+    do {
+        int mc0[nr][nc];
 
         for (int i = 0; i < nr; i++) {
-            for (int j = 0; j < nc; j++) {
-                int _j = j + nc;
-                bool ifound = (std::find(mvc.begin(), mvc.end(), i) != mvc.end());
-                bool jfound = (std::find(mvc.begin(), mvc.end(), _j) != mvc.end());
-                if (ifound || jfound) { continue; }
-                if (mc[i][j] < D) {
-                    D = mc[i][j];
+            for (int j = 0; j < nc; j++)
+            {
+                if (mc[i][j]) {
+                    mc0[i][j] = 0;
+                }
+                else {
+                    mc0[i][j] = 1;
                 }
             }
         }
 
-        for (int i = 0; i < nr; i++)
-            for (int j = 0; j < nc; j++) {
-                {
-                    int _j = j + nc;
-                    bool ifound = (std::find(mvc.begin(), mvc.end(), i)!=mvc.end());
-                    bool jfound = (std::find(mvc.begin(), mvc.end(), _j) != mvc.end());
-                    if (!ifound && !jfound) {
-                        mc[i][j] -= D;
-                    }
-                    else if (ifound && jfound) {
-                        mc[i][j] += D;
-                    }
-                    else if (ifound || jfound) {
+        int bpMatching[nr][nc];
+        //Find the maximum matching using only 0-weight edges
+        int mbp = maxBipartile<nr, nc>(mc0, bpMatching);
+        if (mbp == nr) {
+            //If it is perfect, then the problem is solved. Otherwise find the minimum vertex cover V (for the subgraph with 0-weight edges only)
+            solved = true;
+            for (int i = 0; i < nr; i++)
+                for (int j = 0; j < nc; j++) {                 
+                    solution[i][j] = bpMatching[i][j];
+                }
+        }
+        else {
+            int D = INT_MAX;
 
+            std::set <int> mvc = minVertexCover<nr, nc>(mc0, bpMatching);
+            //searching for min delta
+            for (int i = 0; i < nr; i++) {
+                for (int j = 0; j < nc; j++) {
+                    int _j = j + nc;
+                    bool ifound = (std::find(mvc.begin(), mvc.end(), i) != mvc.end());
+                    bool jfound = (std::find(mvc.begin(), mvc.end(), _j) != mvc.end());
+                    if (ifound || jfound) { continue; }
+                    if (mc[i][j] < D) {
+                        D = mc[i][j];
                     }
-                    
                 }
             }
-    }
-    
+
+            for (int i = 0; i < nr; i++)
+                for (int j = 0; j < nc; j++) {
+                    {
+                        int _j = j + nc;
+                        bool ifound = (std::find(mvc.begin(), mvc.end(), i) != mvc.end());
+                        bool jfound = (std::find(mvc.begin(), mvc.end(), _j) != mvc.end());
+                        if (!ifound && !jfound) {
+                            mc[i][j] -= D;
+                        }
+                        else if (ifound && jfound) {
+                            mc[i][j] += D;
+                        }
+                        else if (ifound || jfound) {
+
+                        }
+
+                    }
+                }
+        }
+    } while (!solved);
+    std::cout << "Solved!";
 }
 
 void solve(int game[13][5]) {
@@ -349,7 +357,8 @@ void solve(int game[13][5]) {
 
 
     std::cout << "done";
-    hungarian<13, 13>(table);
+    int solution[13][13];
+    hungarian<13, 13>(table, solution);
     /*for (int i = 0; i < 13; i++) {
         traverse(i, -1);
     }*/
@@ -401,10 +410,11 @@ int main(int arch, char **argv) {
     tt[2][0] = 5;
     tt[2][1] = 8;
     tt[2][2] = 8;
-    hungarian<3, 3>(tt);
+    int sol[3][3];
+    hungarian<3, 3>(tt, sol);
 
     //konig_test
-    int graph[5][5] = { {1, 0, 1, 0, 0},
+    /*int graph[5][5] = { {1, 0, 1, 0, 0},
                         {0, 0, 1, 0, 0},
                         {0, 1, 1, 1, 0},
                         {0, 0, 1, 0, 0},
@@ -423,7 +433,7 @@ int main(int arch, char **argv) {
                         {0, 0, 0, 0, 0},
                         {0, 0, 0, 0, 0}
     };
-    minVertexCover<5,5>(graph, graphM);
+    minVertexCover<5,5>(graph, graphM);*/
 
 #if __GNUC__
     std::istream &istr = std::cin;
