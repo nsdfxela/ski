@@ -302,10 +302,6 @@ void recGen(std::vector<std::vector<int>> &res, int fix, int n, int k, std::vect
     current.push_back(fix);
 
     if (current.size() == k) {
-        //for (int i = 0; i < current.size(); i++) {
-        //    std::cout << current[i] << " ";
-        //}
-        //std::cout << std::endl;
         res.push_back(current);
         return;
     }
@@ -364,8 +360,8 @@ void solve(int game[13][5]) {
     
     //handling fines
     //searching for all combinations for 1st 6 possible categories
-    
-    auto res = generateCombination(13, 6);
+    auto com6 = generateCombination(13, 6);
+
     std::cout << "done";
     int solution[13][13];
     hungarian<13, 13>(table, solution);
