@@ -297,6 +297,33 @@ void hungarian(int m [nr][nc], int solution[nr][nc]) {
     std::cout << "Solved!";
 }
 
+void recGen(std::vector<std::vector<int>> &res, int fix, int n, int k, std::vector<int> current) {
+    
+    current.push_back(fix);
+
+    if (current.size() == k) {
+        //for (int i = 0; i < current.size(); i++) {
+        //    std::cout << current[i] << " ";
+        //}
+        //std::cout << std::endl;
+        res.push_back(current);
+        return;
+    }
+
+    for (int i = fix+1; i < n; i++) {
+        recGen(res, i, n, k, current);
+    }
+}
+std::vector<std::vector<int>> generateCombination(int n, int k)
+{
+    std::vector<std::vector<int>> result;
+    for (int i = 0; i < n - k + 1; i++)
+    {
+        recGen(result, i, n, k, std::vector<int>());
+    }
+    return result;
+}
+
 void solve(int game[13][5]) {
     int table[13][13];
     for (int i = 0; i < 13; i++) { //iterate over throws
@@ -334,12 +361,14 @@ void solve(int game[13][5]) {
             table[i][12] = 0;
         }
     }
-
-
+    
+    //handling fines
+    //searching for all combinations for 1st 6 possible categories
+    
+    auto res = generateCombination(13, 6);
     std::cout << "done";
     int solution[13][13];
     hungarian<13, 13>(table, solution);
-    
 }
 
 
@@ -350,7 +379,7 @@ void clear(int game[13][5]) {
     }
 }
 int main(int arch, char **argv) {
-
+    
     /*int graph[6][6] = { {0, 16, 13, 0, 0, 0},
                         {0, 0, 10, 12, 0, 0},
                         {0, 4, 0, 0, 14, 0},
