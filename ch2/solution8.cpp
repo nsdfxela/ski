@@ -25,10 +25,8 @@ void traverse(int idx, int counter) {
     static int n = 0;
     std::cout << n++ << std::endl;
     if (counter == 12) {
-        //std::cout << std::endl;
         return;
     }
-    //std::cout << idx << " ";
     for (int i = 0; i < 13; i++) {
         traverse(i, counter+1);
 
@@ -61,13 +59,6 @@ bool findPath(int G[nr][nc], int path[nr], int s, int t) {
         
     }
     return true;
-    /*int idx = nr - 1;
-    std::cout << "Path is : " << idx << " ";
-    do {
-        
-        idx = path[idx];
-        std::cout << idx << " ";
-    } while (idx);*/    
 }
 
 template <int nr, int nc>
@@ -111,11 +102,7 @@ int maxBipartile(int G[nr][nc], int resultGraph[nr][nc]) {
     int nG[N][N];
     int nResultGraph[N][N];
      for (int i = 0; i < N; i++) {
-        //nG[i] = new int [N];
         memset(nG[i], 0, sizeof(int) * N);
-       /* for (int j = 0; j < N; j++) {
-            std::cout << nG[i][j] << " ";
-        }*/
     }
     for (int i = 0; i < nr; i++) {
         memcpy(nG[i+1] + (N - nr - 1), G[i], nr * sizeof(int));         
@@ -204,7 +191,6 @@ std::set<int> minVertexCover(int G[nr][nc], int maxMatching[nr][nc]) {
     std::set_difference(L.begin(), L.end(), Z.begin(), Z.end(), std::inserter(p1, p1.begin()));
     std::set_intersection(R.begin(), R.end(), Z.begin(), Z.end(), std::inserter( p2, p2.begin()));
     std::set_union(p1.begin(), p1.end(), p2.begin(), p2.end(), std::inserter(result, result.begin()));
-    //std::transform(p.begin(), p.end(), std::inserter(result, result.begin()), [](int idx)->int { return idx >= nr ? idx - nr : idx; });
     return result;
 }
 
@@ -217,8 +203,6 @@ void hungarian(int m [nr][nc], int solution[nr][nc]) {
             mc[i][j] = m[i][j];
             solution[i][j] = 0;
         }
-   /* int nr = 13;
-    int nc = 13;*/
     for (int i = 0; i < nr; i++) {
         int min = INT_MAX;
         //searching for min
@@ -329,8 +313,6 @@ void solve(int game[13][5]) {
         table[i][9] = u5 ? 50 : 0;
 
         std::vector<int> street{1,2,3,4,5,6};
-        /*std::sort(std::begin(game[i]), std::end(game[i]));        */
-
         int str_cnt = std::count(table[i], table[i]+5, 1);
         if (str_cnt == 4) { 
             table[i][10] = 25; 
@@ -351,17 +333,12 @@ void solve(int game[13][5]) {
         else {
             table[i][12] = 0;
         }
-        
-        //std::sort(table[i], table[i] + 13);
     }
 
 
     std::cout << "done";
     int solution[13][13];
     hungarian<13, 13>(table, solution);
-    /*for (int i = 0; i < 13; i++) {
-        traverse(i, -1);
-    }*/
     
 }
 
@@ -399,8 +376,9 @@ int main(int arch, char **argv) {
     };
     std::cout << maxBipartile<6, 6>(graphBp);*/
 
-    
-    int tt[3][3];
+
+    //simple hungarian test
+    /*int tt[3][3];
     tt[0][0] = 1;
     tt[0][1] = 4;
     tt[0][2] = 5;
@@ -411,7 +389,7 @@ int main(int arch, char **argv) {
     tt[2][1] = 8;
     tt[2][2] = 8;
     int sol[3][3];
-    hungarian<3, 3>(tt, sol);
+    hungarian<3, 3>(tt, sol);*/
 
     //konig_test
     /*int graph[5][5] = { {1, 0, 1, 0, 0},
@@ -438,10 +416,7 @@ int main(int arch, char **argv) {
 #if __GNUC__
     std::istream &istr = std::cin;
 #else 
-	//std::fstream istr(R"(C:\FUNHOUSE\Skiena-20191022\solutions\ch2\test.txt)");
-    //std::ifstream istr(R"(D:\study\ski\ch2\test.txt)");
     std::fstream istr(R"(C:\fedosin\repos\ski\ch2\test.txt)");
-
 #endif
 
     int game[13][5];
@@ -464,7 +439,5 @@ int main(int arch, char **argv) {
             clear(game);
         }
     }
-
-
     return 0;
 }
