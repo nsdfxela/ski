@@ -552,10 +552,11 @@ int main(int arch, char **argv) {
 
         ++iter;
         iter %= 13;
-        if (!first) {
-            std::cout << std::endl;
-        }
+        
         if (!iter) {
+            if (!first) {
+                std::cout << std::endl;
+            }
             std::vector<int> theSolution;
             solve(game, theSolution);
             for (int i = 0; i < theSolution.size(); i++) {
