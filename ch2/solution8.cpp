@@ -7,6 +7,10 @@
 #include <map>
 #include <vector>
 
+#if __GNUC__
+    #include <cstring>
+    #include <climits>
+#endif
 /*2.8.8 Uva 10149 Yahtzee*/
 
 int GAME[13][13]; //The Game
@@ -532,7 +536,7 @@ int main(int arch, char **argv) {
 #else 
     std::fstream istr(R"(C:\fedosin\repos\ski\ch2\test.txt)");
 #endif
-
+    int first = true;
     int game[13][5];
     clear(game);
     std::string buf;
@@ -548,6 +552,9 @@ int main(int arch, char **argv) {
 
         ++iter;
         iter %= 13;
+        if (!first) {
+            std::cout << std::endl;
+        }
         if (!iter) {
             std::vector<int> theSolution;
             solve(game, theSolution);
@@ -557,7 +564,7 @@ int main(int arch, char **argv) {
                     std::cout << " ";
                 }
             }
-            std::cout << std::endl;
+            first = false;
             clear(game);
         }
     }
