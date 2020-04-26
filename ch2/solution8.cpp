@@ -9,6 +9,8 @@
 
 /*2.8.8 Uva 10149 Yahtzee*/
 
+int GAME[13][13]; //The Game
+
 int uniques(int *arr, int val) {
     std::map<int, int> mp;
     for (int i = 0; i < 5; i++)
@@ -112,13 +114,13 @@ int maxBipartile(int G[nr][nc], int resultGraph[nr][nc]) {
         nG[nr + i + 1][N - 1] = 1;
     }
 
-    std::cout << std::endl;
+    /*std::cout << std::endl;
     for (int i = 0; i < N; i++) {
         for (int j = 0; j < N; j++) {
             std::cout << nG[i][j] << " ";
         }
         std::cout << std::endl;
-    }
+    }*/
     int r = fordFulkerson<N, N>(nG, 0, N - 1, nResultGraph);
     for (int i = 0; i < nr; i++) {
         memcpy(resultGraph[i], nResultGraph[i + 1] + (N - nr - 1), nr * sizeof(int));
@@ -196,19 +198,29 @@ std::set<int> minVertexCover(int G[nr][nc], int maxMatching[nr][nc]) {
 
 template<int nr, int nc>
 //ROWS are games, COLS are value of a game at J position
-void hungarian(int m [nr][nc], int solution[nr][nc]) {
+void hungarian(int m [nr][nc], int solution[nr][nc], int offset=0) {
     int mc[nr][nc];
+    int MAX_M = INT_MIN;
+
+    //generating MAX task from MIN
+    for (int i = offset; i < nr; i++)
+        for (int j = offset; j < nc; j++) {
+            if (m[i][j] > MAX_M) {
+                MAX_M = m[i][j];
+            }
+        }
+
     for (int i = 0; i < nr; i++) 
         for (int j = 0; j < nc; j++) {
-            mc[i][j] = m[i][j];
+            mc[i][j] = MAX_M - m[i][j];
             solution[i][j] = 0;
         }
     for (int i = 0; i < nr; i++) {
         int min = INT_MAX;
         //searching for min
         for (int j = 0; j < nc; j++) {
-            if (m[i][j] < min) {
-                min = m[i][j];
+            if (m[i + offset][j + offset] < min) {
+                min = m[i + offset][j + offset];
             }
         }
         for (int j = 0; j < nc; j++) {
@@ -294,7 +306,7 @@ void hungarian(int m [nr][nc], int solution[nr][nc]) {
                 }
         }
     } while (!solved);
-    std::cout << "Solved!";
+    //std::cout << "Solved!";
 }
 
 void recGen(std::vector<std::vector<int>> &res, int fix, int n, int k, std::vector<int> current) {
@@ -320,51 +332,125 @@ std::vector<std::vector<int>> generateCombination(int n, int k)
     return result;
 }
 
-void solve(int game[13][5]) {
-    int table[13][13];
+template <int nc>
+void getResult(int res[nc], int offset = 0, std::vector<int> *order = nullptr) {
+    int solution[nc][nc];
+    int tc[nc][nc];
+    if (order) {        
+        for (int i = 0; i < order->size(); i++) {
+            memcpy(tc[i], GAME[order->operator[](i)] + offset, nc * sizeof(int));
+        }
+        hungarian<nc, nc>(tc, solution);
+    }
+    else {
+        for (int i = 0; i < nc; i++) {
+            memcpy(tc[i], GAME[i]+offset, nc * sizeof(int));
+        }
+        hungarian<nc, nc>(tc, solution);
+    }
+        
+    for (int i = 0; i < nc; i++) {
+        for (int j = 0; j < nc; j++) {
+            if (solution[i][j]) {
+                res[j] = tc[i][j];
+                break;
+            }
+        }
+    }
+}
+
+void solve(int game[13][5], std::vector<int> &finalSolution) {    
     for (int i = 0; i < 13; i++) { //iterate over throws
-        table[i][0] = std::count(std::begin(game[i]), std::end(game[i]), 1);
-        table[i][1] = std::count(std::begin(game[i]), std::end(game[i]), 2);
-        table[i][2] = std::count(std::begin(game[i]), std::end(game[i]), 3);
-        table[i][3] = std::count(std::begin(game[i]), std::end(game[i]), 4);
-        table[i][4] = std::count(std::begin(game[i]), std::end(game[i]), 5);
-        table[i][5] = std::count(std::begin(game[i]), std::end(game[i]), 6);
-        table[i][6] = std::accumulate(std::begin(game[i]), std::end(game[i]), 0);
-        table[i][7] = uniques(game[i], 3);
-        table[i][8] = uniques(game[i], 4);
+        GAME[i][0] = std::count(std::begin(game[i]), std::end(game[i]), 1) * 1;
+        GAME[i][1] = std::count(std::begin(game[i]), std::end(game[i]), 2) * 2;
+        GAME[i][2] = std::count(std::begin(game[i]), std::end(game[i]), 3) * 3;
+        GAME[i][3] = std::count(std::begin(game[i]), std::end(game[i]), 4) * 4;
+        GAME[i][4] = std::count(std::begin(game[i]), std::end(game[i]), 5) * 5;
+        GAME[i][5] = std::count(std::begin(game[i]), std::end(game[i]), 6) * 6;
+        GAME[i][6] = std::accumulate(std::begin(game[i]), std::end(game[i]), 0);
+        GAME[i][7] = uniques(game[i], 3);
+        GAME[i][8] = uniques(game[i], 4);
         int u5 = uniques(game[i], 4);
-        table[i][9] = u5 ? 50 : 0;
+        GAME[i][9] = u5 ? 50 : 0;
 
         std::vector<int> street{1,2,3,4,5,6};
-        int str_cnt = std::count(table[i], table[i]+5, 1);
+        int str_cnt = std::count(GAME[i], GAME[i]+5, 1);
         if (str_cnt == 4) { 
-            table[i][10] = 25; 
-            table[i][11] = 0;
+            GAME[i][10] = 25; 
+            GAME[i][11] = 0;
         }
         else if (str_cnt == 5) {
-            table[i][10] = 25;
-            table[i][11] = 35;
+            GAME[i][10] = 25;
+            GAME[i][11] = 35;
         }
         else {
-            table[i][10] = 0;
-            table[i][11] = 0;
+            GAME[i][10] = 0;
+            GAME[i][11] = 0;
         }
 
         if (uniques(game[i], 3) && uniques(game[i], 2)) {
-            table[i][12] = 40;
+            GAME[i][12] = 40;
         }
         else {
-            table[i][12] = 0;
+            GAME[i][12] = 0;
         }
     }
     
-    //handling fines
-    //searching for all combinations for 1st 6 possible categories
-    auto com6 = generateCombination(13, 6);
-
-    std::cout << "done";
     int solution[13][13];
-    hungarian<13, 13>(table, solution);
+    int res1[13];
+    getResult<13>(res1, 0);
+    int first6 = std::accumulate(res1, res1 + 6, 0);
+    int sum13 = std::accumulate(res1, res1 + 13, 0);
+
+    if (first6 >= 63) {
+        //we are done!
+        std::copy(res1, res1 + 13, std::back_inserter(finalSolution));
+        finalSolution.push_back(35);
+        finalSolution.push_back(sum13);
+    }
+    else
+    {
+        std::vector<int> betterSolution;
+        //handling fines
+        //searching for all combinations for 1st 6 possible categories
+        auto com6 = generateCombination(13, 6);
+        int results[1716][6];
+        
+        std::set<int> all;
+        for (int i = 0; i < 13; i++) { all.insert(i); }
+        for (int i = 0; i < com6.size(); i++) {
+            getResult<6>(results[i], 0, &com6[i]);
+            int sum6 = std::accumulate(results[i], results[i] + 6, 0);
+            if (sum6 >= 63) {
+                std::set<int> f1;
+                std::copy(com6[i].begin(), com6[i].end(), std::inserter(f1, f1.begin()));
+                std::vector<int> inv;
+                std::set_difference(all.begin(), all.end(), f1.begin(), f1.end(), std::back_inserter(inv));
+                int invRes[7];
+                getResult<7>(invRes, 6, &inv);
+                int sum7 = std::accumulate(invRes, invRes + 7, 0);
+                if (sum6 + sum7 + 35 > sum13) {
+                    sum13 = sum6 + sum7 + 35;
+                    betterSolution.clear();
+                    std::copy(results[i], results[i] + 6, std::back_inserter(betterSolution));
+                    std::copy(invRes, invRes + 7, std::back_inserter(betterSolution));
+                }
+            }
+        }
+
+        if(!betterSolution.empty()) { 
+            std::swap(finalSolution, betterSolution);
+            finalSolution.push_back(35);
+            finalSolution.push_back(sum13);
+        }
+        else {
+            std::copy(res1, res1 + 13, std::back_inserter(finalSolution));
+            finalSolution.push_back(sum13);
+        }
+    }
+    std::cout << "done";
+    
+    
 }
 
 
@@ -460,7 +546,8 @@ int main(int arch, char **argv) {
         ++iter;
         iter %= 13;
         if (!iter) {
-            solve(game);
+            std::vector<int> theSolution;
+            solve(game, theSolution);
             clear(game);
         }
     }
