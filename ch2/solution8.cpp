@@ -571,5 +571,6 @@ int main(int arch, char **argv) {
             clear(game);
         }
     }
+    std::cout << std::endl;
     return 0;
 }
