@@ -379,8 +379,9 @@ void solve(int game[13][5], std::vector<int> &finalSolution) {
 
         std::vector<int> street{1,2,3,4,5,6};
         int streetChecker[4];
+        std::sort(game[i], game[i] + 5);
         for (int k = 1; k < 5; k++) {
-            streetChecker[k-1] = GAME[i][k] - GAME[i][k - 1];
+            streetChecker[k-1] = game[i][k] - game[i][k - 1];
 
         }
         int str_cnt = std::count(streetChecker, streetChecker +4, 1);
@@ -454,6 +455,7 @@ void solve(int game[13][5], std::vector<int> &finalSolution) {
         }
         else {
             std::copy(res1, res1 + 13, std::back_inserter(finalSolution));
+            finalSolution.push_back(0);
             finalSolution.push_back(sum13);
         }
     }
