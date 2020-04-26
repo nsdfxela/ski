@@ -374,12 +374,17 @@ void solve(int game[13][5], std::vector<int> &finalSolution) {
         GAME[i][9] = u5 ? 50 : 0;
 
         std::vector<int> street{1,2,3,4,5,6};
-        int str_cnt = std::count(GAME[i], GAME[i]+5, 1);
-        if (str_cnt == 4) { 
+        int streetChecker[4];
+        for (int k = 1; k < 5; k++) {
+            streetChecker[k-1] = GAME[i][k] - GAME[i][k - 1];
+
+        }
+        int str_cnt = std::count(streetChecker, streetChecker +4, 1);
+        if (str_cnt == 3) { 
             GAME[i][10] = 25; 
             GAME[i][11] = 0;
         }
-        else if (str_cnt == 5) {
+        else if (str_cnt == 4) {
             GAME[i][10] = 25;
             GAME[i][11] = 35;
         }
