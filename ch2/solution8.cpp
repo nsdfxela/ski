@@ -370,7 +370,7 @@ void solve(int game[13][5], std::vector<int> &finalSolution) {
         GAME[i][6] = std::accumulate(std::begin(game[i]), std::end(game[i]), 0);
         GAME[i][7] = uniques(game[i], 3);
         GAME[i][8] = uniques(game[i], 4);
-        int u5 = uniques(game[i], 4);
+        int u5 = uniques(game[i], 5);
         GAME[i][9] = u5 ? 50 : 0;
 
         std::vector<int> street{1,2,3,4,5,6};
@@ -411,7 +411,7 @@ void solve(int game[13][5], std::vector<int> &finalSolution) {
         //we are done!
         std::copy(res1, res1 + 13, std::back_inserter(finalSolution));
         finalSolution.push_back(35);
-        finalSolution.push_back(sum13);
+        finalSolution.push_back(sum13 + 35);
     }
     else
     {
@@ -453,9 +453,7 @@ void solve(int game[13][5], std::vector<int> &finalSolution) {
             finalSolution.push_back(sum13);
         }
     }
-    std::cout << "done";
-    
-    
+    //std::cout << "done";
 }
 
 
@@ -553,6 +551,13 @@ int main(int arch, char **argv) {
         if (!iter) {
             std::vector<int> theSolution;
             solve(game, theSolution);
+            for (int i = 0; i < theSolution.size(); i++) {
+                std::cout << theSolution[i];
+                if (i != theSolution.size() - 1) {
+                    std::cout << " ";
+                }
+            }
+            std::cout << std::endl;
             clear(game);
         }
     }
