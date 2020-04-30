@@ -2,6 +2,35 @@
 #include <fstream>
 #include <string>
 
+std::string hor[50];
+std::string rhor[50];
+std::string vert[50];
+std::string rvert[50];
+
+std::string mdiag[50];
+std::string rmdiag[50];
+
+std::string sdiag[50];
+std::string rsdiag[50];
+
+#define N 50
+void form(std::string grid[50], int R, int C ) {
+    for (int i = 0; i < N; i++) {
+        rhor[i].resize(C);
+        std::copy(grid[i].rbegin(), grid[i].rend(), rhor[i].begin());
+    }
+    
+    for (int i = 0; i < C; i++) {
+        vert[i].resize(R);
+        rvert[i].resize(R);
+        for (int j = 0; j < R; j++) {
+            vert[i][j] = grid[j][i];
+        }
+        std::copy(vert[i].rbegin(), vert[i].rend(), rvert[i].begin());
+    }
+
+}
+
 int main(void) {
 #if __GNUC__
     std::istream& istr = std::cin;
@@ -15,11 +44,12 @@ int main(void) {
         int m, n;
         istr >> m >> n;
         istr.ignore(1);
-        std::string grid[50];
+        //std::string grid[50];
         for (int i = 0; i < m; i++) {
             std::string buffer;
-            std::getline(istr, grid[i]);
+            std::getline(istr, hor[i]);
         }
+        form(hor, m, n);
         int k;
         istr >> k;
         std::string words[20];
