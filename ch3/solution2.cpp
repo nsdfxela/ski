@@ -10,8 +10,8 @@ int main(void) {
 #endif
     int tc;
     istr >> tc;
+    istr.ignore(1);
     for (int i = 0; i < tc; i++) {
-        istr.ignore(1);
         int m, n;
         istr >> m >> n;
         istr.ignore(1);
@@ -19,6 +19,13 @@ int main(void) {
         for (int i = 0; i < m; i++) {
             std::string buffer;
             std::getline(istr, grid[i]);
+        }
+        int k;
+        istr >> k;
+        std::string words[20];
+        istr.ignore(1);
+        for (int i = 0; i < k; i++) {
+            std::getline(istr, words[i]);
         }
     }
     
