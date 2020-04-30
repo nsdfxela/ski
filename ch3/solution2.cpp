@@ -29,6 +29,26 @@ void form(std::string grid[50], int R, int C ) {
         std::copy(vert[i].rbegin(), vert[i].rend(), rvert[i].begin());
     }
 
+    int Mn = R < C ? R : C;
+
+    int mdc = 0;
+    for (int offset = C-1; offset >=0; offset--) {
+        int cc = 0;
+        mdiag[mdc].resize(Mn);
+        for (int i = 0, j = 0; (i < R) && (j + offset < C); i++, j++) {
+            mdiag[mdc][cc++] = grid[i][j+offset];
+        }
+        mdc++;
+        
+    }
+    for (int offset = 1; offset < R; offset++) {
+        int cc = 0;
+        mdiag[mdc].resize(Mn);
+        for (int i = 0, j = 0; (i < R) && (j + offset < R); i++, j++) {
+            mdiag[mdc][cc++] = grid[i + offset][j];
+        }
+        mdc++;
+    }
 }
 
 int main(void) {
