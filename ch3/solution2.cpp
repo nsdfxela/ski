@@ -17,7 +17,7 @@ std::string mdiag[50]; point _mdiag[50][20];
 std::string rmdiag[50]; point _rmdiag[50][20];
 
 std::string sdiag[50]; point _sdiag[50][20];
-std::string rsdiag[50]; point _rsmdiag[50][20];
+std::string rsdiag[50]; point _rsdiag[50][20];
 
 #define N 50
 
@@ -35,6 +35,9 @@ std::vector<point> search(const std::string& str) {
         if (pos != std::string::npos) { res.push_back(point{ (int)(rvert[i].size() - pos), i }); }
         pos = mdiag[i].find(str);
         if(pos != std::string::npos) { res.push_back( _mdiag[i][pos] ); }
+
+        pos = sdiag[i].find(str);
+        if (pos != std::string::npos) { res.push_back(_sdiag[i][pos]); }
     }
     return res;
 }
@@ -60,6 +63,8 @@ void form(std::string grid[50], int R, int C ) {
         int cc = 0;
         for (int i = 0, j = 0; (i < R) && (j + offset < C); i++, j++) {
             ss << grid[i][j+offset];
+            point p{ i , j + offset };
+            _mdiag[mdc][cc++] = p;
             
         }
         mdiag[mdc].assign(ss.str());
@@ -80,8 +85,14 @@ void form(std::string grid[50], int R, int C ) {
 
     for (int i = 0; i < mdc; i++) {
         rmdiag[i].resize(mdiag[i].size());
-        std::copy(mdiag[i].rbegin(), mdiag[i].rend(), rmdiag[i].begin());
+        int cc = 0;
+        for (int j = mdiag[i].size() - 1; j >= 0; j--) {
+            _rmdiag[i][cc] = _mdiag[i][j];
+            rmdiag[i][cc++] = mdiag[i][j];
+        }
     }
+
+    //sdiag
     mdc = 0;
     for (int offset = 0; offset < R; offset++) {
         std::stringstream ss;
@@ -89,22 +100,30 @@ void form(std::string grid[50], int R, int C ) {
         for (int i = 0, j = C-1; (i + offset < R) && (j >= 0); i++, j--) {
             ss << grid[i + offset][j];
             point p{ i + offset , j };
-            _mdiag[mdc][cc++] = p;
+            _sdiag[mdc][cc++] = p;
         }
         sdiag[mdc].assign(ss.str());
         mdc++;
     }
     for (int offset = 1; offset < C; offset++) {
         std::stringstream ss;
+        int cc = 0;
+
         for (int i = 0, j = C - 1; (i < R) && (j - offset >= 0); i++, j--) {
             ss << grid[i][j - offset];
+            point p{ i , j - offset };
+            _sdiag[mdc][cc++] = p;
         }
         sdiag[mdc].assign(ss.str());
         mdc++;
     }
     for (int i = 0; i < mdc; i++) {
         rsdiag[i].resize(sdiag[i].size());
-        std::copy(sdiag[i].rbegin(), sdiag[i].rend(), rsdiag[i].begin());
+        int cc = 0;
+        for (int j = sdiag[i].size() - 1; j >= 0; j--) {
+            _rsdiag[i][cc] = _sdiag[i][j];
+            rsdiag[i][cc++] = sdiag[i][j];
+        }
     }
 
 }
