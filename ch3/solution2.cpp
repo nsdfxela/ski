@@ -50,7 +50,7 @@ std::vector<point> search(const std::string& istr) {
 }
 
 void form(std::string grid[50], int R, int C ) {
-    for (int i = 0; i < N; i++) {
+    for (int i = 0; i < R; i++) {
         rhor[i].resize(C);
         std::copy(grid[i].rbegin(), grid[i].rend(), rhor[i].begin());
     }
@@ -82,7 +82,7 @@ void form(std::string grid[50], int R, int C ) {
     for (int offset = 1; offset < R; offset++) {
         int cc = 0;
         std::stringstream ss;
-        for (int i = 0, j = 0; (i < R) && (j + offset < R); i++, j++) {
+        for (int i = 0, j = 0; (i < C) && (j + offset < R); i++, j++) {
             ss << grid[i + offset][j];
             point p{ i + offset , j};
             _mdiag[mdc][cc++] = p;
