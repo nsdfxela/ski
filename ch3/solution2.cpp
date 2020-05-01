@@ -1,9 +1,9 @@
-#include <iostream>
+﻿#include <iostream>
 #include <fstream>
 #include <string>
 #include <sstream>
 #include <vector>
-
+#include <algorithm>
 
 std::string hor[50]; 
 
@@ -21,23 +21,30 @@ std::string rsdiag[50]; point _rsdiag[50][20];
 
 #define N 50
 
-std::vector<point> search(const std::string& str) {
+std::vector<point> search(const std::string& istr) {
+    std::string str;
+    str.resize(istr.size());
+    std::transform(istr.begin(), istr.end(), str.begin(), [](char c) { return std::toupper(c); });
     std::vector<point> res;
     size_t pos;
     for (int i = 0; i < 50; i++) {
         pos = hor[i].find(str); 
         if (pos != std::string::npos) { res.push_back(point{ i, (int)pos }); }
         pos = rhor[i].find(str);
-        if (pos != std::string::npos) { res.push_back(point{ i, (int)(rhor->size() - pos) }); }
+        if (pos != std::string::npos) { 
+            res.push_back(point{ i, (int)(rhor->size() - pos - 1) }); }
         pos = vert[i].find(str);
         if (pos != std::string::npos) { res.push_back(point{ (int)pos, i }); }
         pos = rvert[i].find(str);
-        if (pos != std::string::npos) { res.push_back(point{ (int)(rvert[i].size() - pos), i }); }
+        if (pos != std::string::npos) { res.push_back(point{ (int)(rvert[i].size() - pos -1), i }); }
         pos = mdiag[i].find(str);
         if(pos != std::string::npos) { res.push_back( _mdiag[i][pos] ); }
-
+        pos = rmdiag[i].find(str);
+        if (pos != std::string::npos) { res.push_back(_rmdiag[i][pos]); }
         pos = sdiag[i].find(str);
         if (pos != std::string::npos) { res.push_back(_sdiag[i][pos]); }
+        pos = rsdiag[i].find(str);
+        if (pos != std::string::npos) { res.push_back(_rsdiag[i][pos]); }
     }
     return res;
 }
@@ -71,6 +78,7 @@ void form(std::string grid[50], int R, int C ) {
         mdc++;
         
     }
+    //mdiag
     for (int offset = 1; offset < R; offset++) {
         int cc = 0;
         std::stringstream ss;
@@ -142,8 +150,8 @@ int main(void) {
         istr.ignore(1);
         //std::string grid[50];
         for (int i = 0; i < m; i++) {
-            std::string buffer;
             std::getline(istr, hor[i]);
+            std::transform(std::begin(hor[i]), std::end(hor[i]), std::begin(hor[i]), [](char c) { return std::toupper(c); });
         }
         form(hor, m, n);
         
@@ -154,7 +162,24 @@ int main(void) {
         for (int i = 0; i < k; i++) {
             std::getline(istr, words[i]);
             std::vector<point> found = search(words[i]);
+            std::sort(found.begin(), found.end(),
+                [](const point& a, const point& b) {
+                    if (a.r < b.r) {
+                        return a.r < b.r;
+                    }
+                    else {
+                        return a.c < b.c;
+                    }
+                });
+            if (!found.empty()) {
+                std::cout << found[0].r + 1 << " " << found[0].c + 1;
+                if (i != k - 1) {
+                    std::cout << std::endl;
+                }
+            }
         }
+        std::cout << std::endl;
+        
     }
     
     return 0;
