@@ -4,6 +4,7 @@
 #include <sstream>
 #include <vector>
 #include <algorithm>
+#include <assert.h>
 
 std::string hor[50]; 
 
@@ -13,11 +14,11 @@ std::string rvert[50];
 
 struct point { int r; int c; };
 
-std::string mdiag[50]; point _mdiag[50][20];
-std::string rmdiag[50]; point _rmdiag[50][20];
+std::string mdiag[150]; point _mdiag[150][120];
+std::string rmdiag[150]; point _rmdiag[150][120];
 
-std::string sdiag[50]; point _sdiag[50][20];
-std::string rsdiag[50]; point _rsdiag[50][20];
+std::string sdiag[150]; point _sdiag[150][120];
+std::string rsdiag[150]; point _rsdiag[150][120];
 
 #define N 50
 
@@ -32,7 +33,7 @@ std::vector<point> search(const std::string& istr) {
         if (pos != std::string::npos) { res.push_back(point{ i, (int)pos }); }
         pos = rhor[i].find(str);
         if (pos != std::string::npos) { 
-            res.push_back(point{ i, (int)(rhor->size() - pos - 1) }); }
+            res.push_back(point{ i, (int)(rhor[i].size() - pos - 1) }); }
         pos = vert[i].find(str);
         if (pos != std::string::npos) { res.push_back(point{ (int)pos, i }); }
         pos = rvert[i].find(str);
@@ -45,7 +46,13 @@ std::vector<point> search(const std::string& istr) {
         if (pos != std::string::npos) { res.push_back(_sdiag[i][pos]); }
         pos = rsdiag[i].find(str);
         if (pos != std::string::npos) { res.push_back(_rsdiag[i][pos]); }
+
     }
+
+    /*bool any = std::any_of(res.begin(), res.end(), [](point i) { return i.r < 0 || i.c < 0; });
+    if (any) {
+        std::cout << "bad";
+    }*/
     return res;
 }
 
@@ -63,6 +70,7 @@ void form(std::string grid[50], int R, int C ) {
         }
         std::copy(vert[i].rbegin(), vert[i].rend(), rvert[i].begin());
     }
+    //mdiag
     int Mn = R < C ? R : C;
     int mdc = 0;
     for (int offset = C-1; offset >=0; offset--) {
@@ -78,11 +86,12 @@ void form(std::string grid[50], int R, int C ) {
         mdc++;
         
     }
-    //mdiag
+
+    //error here \/
     for (int offset = 1; offset < R; offset++) {
         int cc = 0;
         std::stringstream ss;
-        for (int i = 0, j = 0; (i < C) && (j + offset < R); i++, j++) {
+        for (int i = 0, j = 0; (i + offset < R) && (j < C); i++, j++) {
             ss << grid[i + offset][j];
             point p{ i + offset , j};
             _mdiag[mdc][cc++] = p;
@@ -90,7 +99,8 @@ void form(std::string grid[50], int R, int C ) {
         mdiag[mdc].assign(ss.str());
         mdc++;
     }
-
+    //error here /\/
+    
     for (int i = 0; i < mdc; i++) {
         rmdiag[i].resize(mdiag[i].size());
         int cc = 0;
@@ -145,6 +155,9 @@ int main(void) {
     istr >> tc;
     istr.ignore(1);
     for (int i = 0; i < tc; i++) {
+        if (i) {
+            std::cout << std::endl;
+        }
         int m, n;
         istr >> m >> n;
         istr.ignore(1);
@@ -163,11 +176,12 @@ int main(void) {
             std::getline(istr, words[i]);
             std::vector<point> found = search(words[i]);
             std::sort(found.begin(), found.end(),
-                [](const point& a, const point& b) {
+                [](point a, point b) {
                     if (a.r < b.r) {
-                        return a.r < b.r;
-                    }
-                    else {
+                        return true;
+                    } else if(a.r > b.r){
+                        return false;
+                    } else {
                         return a.c < b.c;
                     }
                 });
