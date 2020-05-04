@@ -1,58 +1,35 @@
-13
-
-vtz ud xnm xugm itr pyy jttk gmv xt otgm xt xnm puk ti xnm fprxq
-xnm ceuob lrtzv ita hegfd tsmr xnm ypwq ktj
-frtjrpgguvj otvxmdxd prm iev prmvx xnmq
-
-the quick brown fox jumps over the lazy dog
-
-now is the time for all good men to come to the aid of the party
-xnm ceuob lrtzv ita hegfd tsmr xnm ypwq ktj
-the quick brown fox jumps over the lazy dog
-programming contests are fun arent they
-
-now is the time for all good men to come to the aid of the party
-the quick brown fox jumps over the lazy dog
-xnm ceuob lrtzv ita hegfd tsmr xnm ypwq ktj
-programming contests are fun arent they
-
-hetquicktbrowntfoxtjumpstovert hetlazytdog
-the quick brown fox jumps over the lazy dog
-
-vtz ud xnm xugm itr pyy jttk gmv xt otgm xt xnm puk ti xnm fprxq
-xnm ceuob lrtzv ita hegfd tsmr xnm ypwq ktj
-frtjrpgguvj otvxmdxd prm iev prmvx xnmq
-
-the quick brown fox jumps over the lazy dog
-
-now is the time for all good men to come to the aid of the party
-xnm ceuob lrtzv ita hegfd tsmr xnm ypwq ktj
-the quick brown fox jumps over the lazy dog
-programming contests are fun arent they
-
-now is the time for all good men to come to the aid of the party
-the quick brown fox jumps over the lazy dog
-xnm ceuob lrtzv ita hegfd tsmr xnm ypwq ktj
-programming contests are fun arent they
-
-vtz ud xnm xugm itr pyy jttk gmv xt otgm xt xnm puk ti xnm fprxq
-xnm ceuob lrtzv ita hegfd tsmr xnm ypwq ktj
-frtjrpgguvj otvxmdxd prm iev prmvx xnmq
-
-vtz ud xnm xugm itr pyy jttk gmv xt otgm xt xnm puk ti xnm fprxq
-xnm ceuob lrtzv ita hegfd tsmr znm ypwq ktj
-frtjrpgguvj otvxmdxd prm iev prmvx xnmq
-vtz ud xnm xugm itr pyy jttk gmv xt otgm xt xnm puk ti xnm fprxq
-
-vtz ud xnm xugm itr pyy jttk gmv xt otgm xt xnm puk ti xnm fprxq
-xnm ceuob lrtzv ita hegfd tsmr znm ypwq ktj
-frtjrpgguvj otvxmdxd prm iev prmvx xnmq
-xnm ceuob lrtzv ita hegfd tsmr xnm ypwq ktj
-vtz ud xnm xugm itr pyy jttk gmv xt otgm xt xnm puk ti xnm fprxq
-frtjrpgguvj otvxmdxd prm iev prmvx xnmq
-
-now is the time for all good men to come to the aid of the party
-oju yifqd krczh pct gieav cnur oju bxwl scm
-xnm ceuob lrtzv ita hegfd tsmr xnm ypwq ktj
-the quick brown fox jumps over the lazy dog
-programming contests are fun arent they
+2
+The answer is: 10
+The answer is: 5
+2
+The answer is: 10
+The answer is: 5
+2
+The answer is: 10
+The answer is: 5
+2
+The answer is: 10
+The answer is: 15
+2
+The answer is: 10
+The answer is: 5
+2
+The answer is: 10
+The answer is: 5
+3
+Input Set #1: YES
+Input Set #2: NO
+Input Set #3: NO
+3
+Input Set #0: YES
+Input Set #1: NO
+Input Set #2: NO
+1
+1 0 1 0
+1
+1010
+1
+The judges are mean!
+1
+The judges are good!
+0
