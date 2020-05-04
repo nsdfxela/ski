@@ -32,4 +32,8 @@ Input Set #2: NO
 The judges are mean!
 1
 The judges are good!
+1
+0 dfsdf
+1
+0 asdas
 0
