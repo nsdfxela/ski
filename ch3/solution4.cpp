@@ -42,7 +42,8 @@ void solve(std::vector<std::string>& tc) {
         }
     }
     if (dct.size() != 27) {
-        std::cout << "No solution." << std::endl;
+        std::cout << "No solution.";
+        return;
     }
     for (int i = 0; i < tc.size(); i++) {
         if (i) std::cout << std::endl;
@@ -77,6 +78,6 @@ int main(void) {
             std::cout << std::endl << std::endl;
         solve(testcase);
     }
-
+    std::cout << std::endl;
     return 0;
 }
