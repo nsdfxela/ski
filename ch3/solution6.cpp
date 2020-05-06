@@ -2,8 +2,24 @@
 #include <string>
 #include <vector>
 #include <fstream>
+#include <map>
 
-
+void solve(std::string files[144], int c) {
+    int totalLetters = 0;
+    int letters = 0;
+    int linksNeed = c / 2;
+    std::map<int, std::vector<int>> mp;
+    int bitmap[144];
+    memset(bitmap, 0, sizeof(int) * 144);
+    for (int i = 0; i < c; i++) {
+        mp[files[i].size()].push_back(c);
+        totalLetters += files[i].size();
+    }
+    letters = totalLetters / c * 2;
+    std::map<int, int> mtch;
+    for (int i = 0; i < c; i++) {
+    }
+}
 
 int main(void) {
 #if __GNUC__
@@ -15,7 +31,7 @@ int main(void) {
     istr >> tb;
     istr.ignore(2);
     for (int i = 0; i < tb; i++) {
-        std::vector<int> files[144];
+        std::string files[144];
         std::string buffer;
         int c = 0;
         while (1) {
@@ -23,13 +39,12 @@ int main(void) {
             if (!istr.good() || buffer.empty()) {
                 break;
             }
-            for (int j = 0; j < buffer.size(); j++) {
-                if (buffer[j] == '1') files[c].push_back(1);
-                else if (buffer[j] == '0') files[c].push_back(0);
-                else break;
-            }
+            files[c] = buffer;
             c++;
-
+            
+        }
+        if (c) {
+            solve(files, c);
         }
     }
     return 0;
