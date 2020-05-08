@@ -44,15 +44,12 @@ bool check(const std::string& var, const std::string &str, std::map<std::string,
 void solve(std::string files[144], int c) {
     int totalLetters = 0;
     int letters = 0;
-    int linksNeed = c / 2;
     std::map<int, std::vector<int>> mp;
-    std::vector<bool> bm(c);
     for (int i = 0; i < c; i++) {
         mp[files[i].size()].push_back(i);
         totalLetters += files[i].size();
     }
     letters = totalLetters / (c / 2);
-    std::map<int, int> mtch;
     std::set<std::string> vars;
 
     for (int i = 0; i < c; i++) {
