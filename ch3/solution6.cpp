@@ -9,7 +9,7 @@ bool check(const std::string& var, const std::string &str, std::map<std::string,
     if (var.find(str) != 0) {
         return false;
     } else {
-        auto &it = visited.find(str);
+        auto it = visited.find(str);
         if (it == visited.end() || !it->second) {
             return false;
         } else {
@@ -17,7 +17,7 @@ bool check(const std::string& var, const std::string &str, std::map<std::string,
             //err here
 
             std::string complement = var.substr(str.size(), std::string::npos);
-            auto& it2 = visited.find(complement);
+            auto it2 = visited.find(complement);
             if (it2 != visited.end() && it2->second > 0) {
                 it2->second--;
                 bool allchecked = true;
@@ -91,9 +91,9 @@ int main(void) {
         std::string files[144];
         std::string buffer;
         int c = 0;
-        while (1) {
+        while (istr.good()) {
             std::getline(istr, buffer);
-            if (!istr.good() || buffer.empty()) {
+            if (buffer.empty()) {
                 break;
             }
             files[c] = buffer;
