@@ -16,7 +16,7 @@ bool check(const std::string& var, const std::string &str, std::map<std::string,
             it->second --;
             //err here
 
-            std::string complement = var.substr(var.rfind(str), std::string::npos);
+            std::string complement = var.substr(str.size(), std::string::npos);
             auto& it2 = visited.find(complement);
             if (it2 != visited.end() && it2->second > 0) {
                 it2->second--;
@@ -26,7 +26,7 @@ bool check(const std::string& var, const std::string &str, std::map<std::string,
                         allchecked = false;
                         bool good = check(var, it3->first, visited);
                         if (good) {
-                            std::cout << it->first << " " << it->second << std::endl;
+                            //std::cout << it->first << " " << it->second << std::endl;
                             return good;
                         }
                     }
@@ -51,7 +51,7 @@ void solve(std::string files[144], int c) {
         mp[files[i].size()].push_back(i);
         totalLetters += files[i].size();
     }
-    letters = totalLetters / c * 2;
+    letters = totalLetters / (c / 2);
     std::map<int, int> mtch;
     std::set<std::string> vars;
 
