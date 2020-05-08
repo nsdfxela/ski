@@ -21,7 +21,7 @@ bool check(const std::string& var, const std::string &str, std::map<std::string,
             if (it2 != visited.end() && it2->second > 0) {
                 it2->second--;
                 bool allchecked = true;
-                for (auto& it3 = visited.begin(); it3 != visited.end(); it3++) {
+                for (auto it3 = visited.begin(); it3 != visited.end(); it3++) {
                     if (it3->second) {
                         allchecked = false;
                         bool good = check(var, it3->first, visited);
