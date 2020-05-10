@@ -2,42 +2,46 @@
 #include <string>
 #include <fstream>
 #include <vector>
+#include <cstring>
 
-int distance(const std::string& str1, const std::string& str2) {
-    int sz = str1.size() < str2.size() ? str1.size() : str2.size();
+bool doublets(const std::string& str1, const std::string& str2) {
+    if (str1.size() != str2.size()) {
+        return false;
+    }
     int res = 0;
-    for (int i = 0; i < sz; i++) {
+    for (int i = 0; i < str1.size(); i++) {
         if (str1[i] != str2[i]) {
             res++;
+            if (res > 1) {
+                return false;
+            }
         } 
-        if (res > 1) {
-            res = 100;
-        }
     }
-    return res;
+    return res == 1;
 }
-std::vector<std::string> dict;
-void solve(const std::string& str1, const std::string& str2) {
-    int ds = dict.size();
-    int** tbl;
-    tbl = new int* [ds];
-    for (int i = 0; i < ds; i++) {
-        tbl[i] = new int[ds];
-        memset(tbl[i], 0, ds * sizeof(int));
-    }
-    for (int i = 0; i < ds; i++) {
-        for (int j = 0; j < ds; j++) {
-            tbl[i][j] = distance(dict[i], dict[j]);
-            std::cout << tbl[i][j] << "   ";
+
+#include <queue>
+#include <set>
+bool bfs(int a, int b, int *path, std::vector<std::string> dict) {
+    std::queue<int> q;
+    q.push(a);
+    std::set<int> visited;
+    while (!q.empty()) {
+        int e = q.front();
+        q.pop();
+        if (e == b) {
+            return true;
         }
-
-        std::cout << std::endl;
+        visited.insert(e);
+        for (int i = 0; i < dict.size(); i++) {
+            if (doublets(dict[i], dict[e]) && visited.find(i) == visited.end()) {
+                q.push(i);
+                visited.insert(i);
+                path[i] = e;
+            }
+        }
     }
-
-    for (int i = 0; i < ds; i++) {
-        delete [] tbl[i];
-    }
-    delete[] tbl;
+    return false;
 }
 
 int main(void) {
@@ -47,19 +51,47 @@ int main(void) {
 #else
     std::ifstream istr(R"(C:\fedosin\repos\ski\ch3\test.txt)");
 #endif
+    std::vector<std::string> odict, dict;
     while (1) {
         std::string buf;
         std::getline(istr, buf);
         if (!istr.good() || buf.empty()) {
             break;
         }
-        dict.push_back(buf);
+        odict.push_back(buf);
     }
     std::string str1, str2;
+    int tc = 0;
     while (istr.good()) {
+        dict = odict;
         istr >> str1 >> str2;
+        dict.push_back(str1);
+        dict.push_back(str2);
         if (istr.good()) {
-            solve(str1, str2);
+            if (tc++) {
+                std::cout << std::endl;
+            }
+            int* path = new int[dict.size()];
+            memset(path, -1, dict.size() * sizeof(int));
+            int s = dict.size() - 2;
+            int t = dict.size() - 1;
+            bool foundPath = bfs(s, t, path, dict);
+            if (!foundPath) {
+                std::cout << "No solution." << std::endl;
+                continue;
+            }
+            int cur = path[t];
+            std::vector<int> vpath;
+            vpath.push_back(t);
+
+            do {
+                vpath.push_back(cur);
+                cur = path[cur];
+            } while (cur > 0);
+            for (auto it = vpath.rbegin(); it != vpath.rend(); it++) {
+                std::cout << dict[*it] << std::endl;
+            }
+            
         }
     }
 
