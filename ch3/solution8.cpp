@@ -9,25 +9,42 @@ void solve(const std::vector<std::string>& data, const std::vector<int> canDelet
     std::ostringstream oss;
     int ossSize = 0;
     for (int i = 0; i < data.size(); i++) {
-        std::istringstream sstr(data[i]);
+        std::string s;
+        int l = data[i].find_first_not_of(' ');
+        if (l != std::string::npos) {
+            s = data[i].substr(l);
+        }
+        else {
+            s = data[i];
+        }
+        std::istringstream sstr(s);
         std::string buffer;
         while (1) {
-            std::getline(sstr, buffer, ' ');
-            if (!sstr.good()) {
+            if (!sstr.good()) { //this is line end
+                if (!canDeleteEndl[i]) {
+                    std::cout << oss.str() << std::endl;
+                    std::swap(oss, std::ostringstream());
+                    ossSize = 0;
+                }
                 break;
             }
-            if (!buffer.empty() && ossSize + buffer.size() < 72) {
+            std::getline(sstr, buffer, ' ');
+            if (buffer.empty()) {
+                continue;
+            }
+            
+            if (ossSize + buffer.size() < 72) {
                 if (ossSize) {
                     oss << ' ';
                     ossSize++;
                 }
                 oss << buffer;
                 ossSize += buffer.size();
-            }
-            else {
+            } else {
                 std::cout << oss.str() << std::endl;
                 oss.swap(std::ostringstream());
-                ossSize = 0;
+                oss << buffer;
+                ossSize = buffer.size();
             }
             
         }
@@ -36,10 +53,10 @@ void solve(const std::vector<std::string>& data, const std::vector<int> canDelet
 
 void checkEndl(const std::vector<std::string>& data, std::vector<int> &canDeleteEndl) {
     for (int i = 0; i < data.size(); i++) {
-        int result = 1;
+        int result = 0;
         for (int j = 0; j < data[i].size(); j++) {
             if (data[i][j] != ' ') {
-                result = 0;
+                result = 1;
                 break;
             }
         }
