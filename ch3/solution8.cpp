@@ -10,16 +10,33 @@ void solve(const std::vector<std::string>& data, const std::vector<int> canDelet
     int ossSize = 0;
     for (int i = 0; i < data.size(); i++) {
         std::string s;
-        int l = data[i].find_first_not_of(' ');
-        if (l != std::string::npos) {
-            s = data[i].substr(l);
-        }
-        else {
-            s = data[i];
-        }
+        s = data[i];
+
         std::istringstream sstr(s);
         std::string buffer;
+        int leadingSpaces = 0;
+        auto lpc = -1;
+        for (int c = 0; c < s.size(); c++) {
+            if (s[c] == ' ') {
+                lpc++;
+                continue;
+            }
+            break;
+        }
+
         while (1) {
+            if (lpc) {
+                for (int i = 0; i < lpc; i++) {
+                    if (oss.str().size() > 72) {
+                        std::cout << oss.str() << std::endl;
+                        std::swap(oss, std::ostringstream());
+                        ossSize = 0;
+                    }
+                    oss << ' ';
+                    ossSize++;
+                }
+                lpc = 0;
+            }
             if (!sstr.good()) { //this is line end
                 if (!canDeleteEndl[i]) {
                     std::cout << oss.str() << std::endl;
