@@ -4,32 +4,62 @@
 #include <vector>
 #include <sstream>
 
-void solve(const std::vector<std::string>& data, const std::vector<int> canDeleteEndl) {
+std::ostringstream oss;
 
-    int ossSize = 0;
-    std::ostringstream oss;
+std::string trim(const std::string& str, int tr = 1) {
+    if (!tr) {
+        return str;
+    }
+    int idx = 0;
+    while (idx < str.size() && str[idx] == ' ') {
+        idx++;
+    }
+    return str.substr(idx);
+}
+void append(std::ostringstream &str, int tr = 1) {
+    if (trim(oss.str(), tr).size() + str.str().size() >= 72) {
+        std::cout << trim(oss.str(), tr) << std::endl;
+        oss.swap(std::ostringstream());
+    }
+    oss << str.str();
+    str.swap(std::ostringstream());
+}
+
+void append(char c, int tr = 1) {
+    if (trim(oss.str(), tr).size() + 1 >= 72) {
+        std::cout << trim(oss.str(), tr) << std::endl;
+        oss.swap(std::ostringstream());
+    }
+    oss << c;
+}
+
+void solve(const std::vector<std::string>& data, const std::vector<int> canDeleteEndl) {
+    int prevLineCanDelete = 0;
     for (int i = 0; i < data.size(); i++) {
         std::ostringstream word;
         for (int j = 0; j < data[i].size(); j++) {
             if (data[i][j] == ' ' ) {
                 if (word.str().size()) {
-                    if (oss.str().size() + word.str().size() >= 72) {
-                        std::cout << oss.str() << std::endl;
-                        oss.swap(std::ostringstream());
-                    }
-                    oss << word.str();
-                    word.swap(std::ostringstream());
+                    append(word, prevLineCanDelete);
                 }
-                if (oss.str().size() + 1 >= 72) {
-                    std::cout << oss.str() << std::endl;
-                    oss.swap(std::ostringstream());
-                }
-                oss << ' ';
-            }
-            else {
+                append(' ', prevLineCanDelete);
+            } else {
                 word << data[i][j];
             }
         }
+        if (canDeleteEndl[i]) {
+            if (word.str().size()) {
+                append(word, prevLineCanDelete);
+                append(' ', prevLineCanDelete);
+            }
+        } else {
+            if (word.str().size()) {
+                append(word, prevLineCanDelete);
+            }
+            std::cout << oss.str() << std::endl;
+            oss.swap(std::ostringstream());
+        }
+        prevLineCanDelete = canDeleteEndl[i];
     }    
 }
 
