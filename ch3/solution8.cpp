@@ -4,9 +4,8 @@
 #include <vector>
 #include <sstream>
 
-std::ostringstream oss;
 
-std::string trim(const std::string& str, int tr = 1) {
+std::string trim(const std::string& str, int leftTrim = 1) {
     std::string res = str;
     int idx = res.size()-1;
     while (idx >= 0 && res[idx] == ' ') {
@@ -14,7 +13,7 @@ std::string trim(const std::string& str, int tr = 1) {
     }
     res = res.substr(0, idx+1);
 
-    if (!tr) {
+    if (!leftTrim) {
         return res;
     }
     idx = 0;
@@ -24,8 +23,62 @@ std::string trim(const std::string& str, int tr = 1) {
     return res.substr(idx);
 }
 
-void solve(const std::vector<std::string>& data, const std::vector<int> canDeleteEndl) {
+std::ostringstream oss;
+std::vector<int> canDeleteEndl;
+bool fits(int s) {
+    return (oss.str().size() + s <= 72);
+}
 
+void dump(int tr = 0) {
+    auto s = trim(oss.str(), tr);
+    std::cout << s << std::endl;
+    std::swap(oss, std::ostringstream());
+}
+void handleWord(std::ostringstream &word, int idx) {
+    std::string w = word.str();
+    if (w.size()) {
+        if (w.size() >= 72) { //one long word per line rule
+            dump();
+            oss << w;
+            std::swap(word, std::ostringstream());
+            return;
+        }
+        if (!fits(w.size())) {
+            dump();
+        }
+        oss << word.str();
+        std::swap(word, std::ostringstream());
+    }
+}
+
+void solve(std::vector<std::string>& data) {
+    std::ostringstream word;
+    for (int i = 0; i < data.size(); i++) {
+        data[i] = trim(data[i], 0);
+        for (int j = 0; j < data[i].size(); j++) {
+            if (data[i][j] == ' ') {
+                handleWord(word, i);
+                if (fits(1)) {
+                    oss << ' ';
+                } else {
+                    dump();
+                }
+            } else {
+                word << data[i][j];
+            }
+        }
+        //line finished 
+        if (!canDeleteEndl[i]) {
+            handleWord(word, i);
+            dump(1);
+        } else {
+            handleWord(word, i);
+            if (fits(1)) {
+                oss << ' ';
+            }
+        }
+        ////
+    }
 }
 
 void checkEndl(const std::vector<std::string>& data, std::vector<int>& canDeleteEndl) {
@@ -56,7 +109,6 @@ int main(void){
     std::ifstream istr(R"(C:\fedosin\repos\ski\ch3\test.txt)");
 #endif
     std::vector<std::string> data;
-    std::vector<int> canDeleteEndl;
     while (1) {
         std::string buffer;
         std::getline(istr, buffer);
@@ -66,6 +118,6 @@ int main(void){
         data.push_back(buffer);
     }
     checkEndl(data, canDeleteEndl);
-    solve(data, canDeleteEndl);
+    solve(data);
     return 0;
 }
