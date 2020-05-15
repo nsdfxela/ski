@@ -28,7 +28,17 @@ std::string trim(const std::string& str, int leftTrim = 1) {
 std::ostringstream oss;
 std::vector<int> canDeleteEndl;
 bool fits(int s) {
-    return (oss.str().size() + s <= 72);
+    std::string st = oss.str();
+    int lzer = 0;
+    for (int i = 0; i < st.size(); i++) {
+        if (st[i] == ' ') {
+            lzer++;
+        }
+        else {
+            break;
+        }
+    }
+    return (oss.str().size() + s - lzer <= 72);
 }
 
 void dump(int tr = 1) {
