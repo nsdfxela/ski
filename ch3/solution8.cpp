@@ -31,14 +31,14 @@ bool fits(int s) {
     return (oss.str().size() + s <= 72);
 }
 
-void dump(int tr = 0) {
+void dump(int tr = 1) {
     auto s = trim(oss.str(), tr);
     for (int i = 0; i < s.size(); i++) {
         if (s[i] == '\t') {
             s[i] = ' ';
         }
     }
-    std::cout << s << std::endl;
+    std::cout << trim(s, 0) << std::endl;
     oss.str("");
     oss.clear();
 }
