@@ -17,9 +17,11 @@ std::string trim(const std::string& str, int leftTrim = 1) {
         return res;
     }
     idx = 0;
+    
     while (idx < res.size() && res[idx] == ' ') {
         idx++;
     }
+    
     return res.substr(idx);
 }
 
@@ -31,8 +33,14 @@ bool fits(int s) {
 
 void dump(int tr = 0) {
     auto s = trim(oss.str(), tr);
+    for (int i = 0; i < s.size(); i++) {
+        if (s[i] == '\t') {
+            s[i] = ' ';
+        }
+    }
     std::cout << s << std::endl;
-    std::swap(oss, std::ostringstream());
+    oss.str("");
+    oss.clear();
 }
 void handleWord(std::ostringstream &word, int idx) {
     std::string w = word.str();
@@ -40,14 +48,16 @@ void handleWord(std::ostringstream &word, int idx) {
         if (w.size() >= 72) { //one long word per line rule
             dump();
             oss << w;
-            std::swap(word, std::ostringstream());
+            word.str("");
+            word.clear();
             return;
         }
         if (!fits(w.size())) {
             dump();
         }
         oss << word.str();
-        std::swap(word, std::ostringstream());
+        word.str("");
+        word.clear();
     }
 }
 
@@ -55,15 +65,17 @@ void solve(std::vector<std::string>& data) {
     std::ostringstream word;
     for (int i = 0; i < data.size(); i++) {
         data[i] = trim(data[i], 0);
+        bool leadingSpaces = true;
         for (int j = 0; j < data[i].size(); j++) {
             if (data[i][j] == ' ') {
                 handleWord(word, i);
                 if (fits(1)) {
-                    oss << ' ';
+                    oss << (leadingSpaces ? '\t' : ' ');
                 } else {
                     dump();
                 }
             } else {
+                leadingSpaces = false;
                 word << data[i][j];
             }
         }
@@ -112,12 +124,14 @@ int main(void){
     while (1) {
         std::string buffer;
         std::getline(istr, buffer);
+        data.push_back(buffer);
         if (!istr.good()) {
             break;
         }
-        data.push_back(buffer);
+        
     }
     checkEndl(data, canDeleteEndl);
     solve(data);
+    dump();
     return 0;
 }
