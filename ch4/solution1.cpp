@@ -24,14 +24,13 @@ int main(void) {
         std::string buf;
         std::getline(istr, buf);
         std::stringstream ss(buf);
+        int num;
+        ss >> num;
         std::vector<int> tcase;
-        while (1) {
-            int val;
-            ss >> val;
-            tcase.push_back(val);
-            if (!ss.good()) {
-                break;
-            }
+        for (int j = 0; j < num; j++) {
+            int r;
+            ss >> r;
+            tcase.push_back(r);
         }
         solve(tcase);
         
