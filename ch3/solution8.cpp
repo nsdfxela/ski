@@ -138,14 +138,18 @@ int main(void){
     while (1) {
         std::string buffer;
         std::getline(istr, buffer);
-        data.push_back(buffer);
         if (!istr.good()) {
+            if (!buffer.empty()) {
+                data.push_back(buffer);
+            }
             break;
         }
-        
+        data.push_back(buffer);
     }
     checkEndl(data, canDeleteEndl);
     solve(data);
-    dump();
+    if (oss.str().size()) {
+        dump();
+    }
     return 0;
 }
