@@ -3,11 +3,23 @@
 #include <fstream>
 #include <sstream>
 #include <vector>
-
+#include <algorithm>
 
 void solve(std::vector<int>& v) {
-
-
+    int res = 0;
+    std::sort(v.begin(), v.end());
+    if (v.size() % 2 == 0) {
+        res = v[v.size() / 2];
+    }
+    else {
+        int i = v.size() / 2;
+        res = v[i];
+    }
+    int sum = 0;
+    for (int i = 0; i < v.size(); i++) {
+        sum += std::abs(v[i] - res);
+    }
+    std::cout << sum << std::endl;
 }
 
 int main(void) {
