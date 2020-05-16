@@ -38,6 +38,7 @@ bool fits(int s) {
             break;
         }
     }
+
     return (oss.str().size() + s - lzer <= 72);
 }
 
@@ -56,7 +57,9 @@ void handleWord(std::ostringstream &word, int idx) {
     std::string w = word.str();
     if (w.size()) {
         if (w.size() >= 72) { //one long word per line rule
-            dump();
+            if (oss.str().size()) {
+                dump();
+            }
             oss << w;
             word.str("");
             word.clear();
@@ -82,6 +85,7 @@ void solve(std::vector<std::string>& data) {
                 if (fits(1)) {
                     oss << (leadingSpaces ? '\t' : ' ');
                 } else {
+                    leadingSpaces = false;
                     dump();
                 }
             } else {
