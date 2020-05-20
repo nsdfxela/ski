@@ -4,8 +4,25 @@
 #include <vector>
 #include <sstream>
 
-void solve(std::vector<int> &stk) {
 
+//3 1 2 5 5
+//1 3 2 5 5
+//2 3 1 5 5
+//3 2 1 5 5
+//1 2 3 5 5
+//
+//3 1 2 5 5
+//2 1 3 5 5
+//1 2 3 5 5
+
+void flip(std::vector<int>& stk, int idx) {
+    std::reverse(stk.begin(), stk.begin() + (stk.size() - idx + 1));
+}
+
+
+
+void solve(std::vector<int> &stk) {
+    flip(stk, 1);
 }
 
 int main(void) {
