@@ -5,10 +5,15 @@
 #include <vector>
 
 void solve(std::vector<int> &vec) {
-
+    std::sort(vec.begin(), vec.end());
 
 }
 
+//1
+//3
+//4
+//15
+//99
 
 int main(void) {
 
