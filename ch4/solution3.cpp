@@ -4,6 +4,7 @@
 #include <algorithm>
 #include <vector>
 #include <sstream>
+#include <climits>
 
 
 void solve(std::vector<int> &vec) {
