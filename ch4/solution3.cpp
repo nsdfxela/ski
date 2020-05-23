@@ -9,53 +9,53 @@
 
 void solve(std::vector<int> &vec) {
     std::sort(vec.begin(), vec.end());
-    std::vector<int> otherSide;
     std::stringstream ss;
     int sum = 0;
-    int min = vec.front();
-    int c1 = 0; int c2 = 0;
-    while (!vec.empty()) {
-        if (!otherSide.empty()) {
-            auto ob = otherSide.begin();
-            vec.push_back(*ob);
-            ss << *ob << std::endl;
-            sum += *(ob);
-            otherSide.erase(ob);
-
-            auto c1i = std::find(vec.begin(), vec.end(), c1);
-            if (c1i != vec.end() && vec.size() > 3) {
-                auto c2i = std::find(vec.begin(), vec.end(), c2);
-                if (c2i != vec.end()) {
-                    sum += *c1i;
-                    otherSide.push_back(*c2i);
-                    sum += *c2i;
-                    ss << c1 << ' ' << c2 << std::endl << c1 << std::endl;
-                    vec.erase(c2i);
-                }
-            }
+    while (vec.size() >= 4) {
+        auto A = vec.begin();
+        auto B = A + 1;
+        auto a = vec.end()-1;
+        auto b = a - 1;
+        // A + a, A, A + b, A
+        int str1 = *a + *A + *b + *A;
+        //A + B, A, a + b, B
+        int str2 = *B + *A + *b + *B;
+        if (str1 < str2) {
+            ss << *A << ' ' << *a << std::endl;
+            ss << *A << std::endl;
+            ss << *A << ' ' << *b << std::endl;
+            vec.erase(a);
+            vec.erase(b);
+            sum += str1;
+        } else {
+            ss << *A << ' ' << *B << std::endl;
+            ss << *A << std::endl;
+            ss << *a << ' ' << *b << std::endl;
+            ss << *B << std::endl;
+            vec.erase(a);
+            vec.erase(b);
+            sum += str2;
         }
-        auto iter = vec.begin();
-        if (!c1) { c1 = *iter; }
-        otherSide.push_back(*iter);
-        int s1 = INT_MIN, s2 = INT_MIN;
-        ss << *(iter); 
-        s1 = *(iter);
-        if (iter + 1 != vec.end()) {
-            ss << ' ' << *(iter + 1);
-            s2 = *(iter + 1);
-            if (!c2) { c2 = *(iter + 1); }
-            otherSide.push_back(*(iter + 1));
-            vec.erase(iter + 1);
-            vec.erase(iter);
-        }
-        else {
-            vec.erase(iter);
-        }
-        sum += std::max(s1, s2);
-        ss << std::endl;
-        std::sort(otherSide.begin(), otherSide.end());        
     }
-    std::cout << sum << '\n' << ss.str();
+    switch (vec.size()) {
+    case 3:
+        sum += vec[2];
+        sum += vec[0];
+        sum += vec[1];
+        ss << vec[0] << ' ' << vec[2] << std::endl << vec[0] << std::endl;
+        ss << vec[0] << ' ' << vec[1] << std::endl;
+        break;
+    case 2:
+        sum += vec[1];
+        ss << vec[0] << ' ' << vec[1] << std::endl;
+        break;
+    case 1:
+        sum += vec[0];
+        ss << vec[0] << std::endl;
+        break;
+    }
+
+    std::cout << sum << std::endl << ss.str();
 }
 
 //1
