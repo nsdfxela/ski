@@ -13,6 +13,7 @@ void solve(std::vector<int> &vec) {
     std::stringstream ss;
     int sum = 0;
     int min = vec.front();
+    int c1 = 0; int c2 = 0;
     while (!vec.empty()) {
         if (!otherSide.empty()) {
             auto ob = otherSide.begin();
@@ -20,8 +21,21 @@ void solve(std::vector<int> &vec) {
             ss << *ob << std::endl;
             sum += *(ob);
             otherSide.erase(ob);
+
+            auto c1i = std::find(vec.begin(), vec.end(), c1);
+            if (c1i != vec.end() && vec.size() > 3) {
+                auto c2i = std::find(vec.begin(), vec.end(), c2);
+                if (c2i != vec.end()) {
+                    sum += *c1i;
+                    otherSide.push_back(*c2i);
+                    sum += *c2i;
+                    ss << c1 << ' ' << c2 << std::endl << c1 << std::endl;
+                    vec.erase(c2i);
+                }
+            }
         }
         auto iter = vec.begin();
+        if (!c1) { c1 = *iter; }
         otherSide.push_back(*iter);
         int s1 = INT_MIN, s2 = INT_MIN;
         ss << *(iter); 
@@ -29,6 +43,7 @@ void solve(std::vector<int> &vec) {
         if (iter + 1 != vec.end()) {
             ss << ' ' << *(iter + 1);
             s2 = *(iter + 1);
+            if (!c2) { c2 = *(iter + 1); }
             otherSide.push_back(*(iter + 1));
             vec.erase(iter + 1);
             vec.erase(iter);
@@ -38,7 +53,7 @@ void solve(std::vector<int> &vec) {
         }
         sum += std::max(s1, s2);
         ss << std::endl;
-        std::sort(otherSide.begin(), otherSide.end());
+        std::sort(otherSide.begin(), otherSide.end());        
     }
     std::cout << sum << '\n' << ss.str();
 }
