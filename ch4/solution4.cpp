@@ -14,6 +14,27 @@ struct hour {
         ss >> res.m;
         return res;
     }
+    std::string print2() {
+        std::stringstream ss;
+        if (h) {
+            ss << h << " hours and ";
+        }
+        ss << m << " minutes";
+
+        return ss.str();
+    }
+    std::string print() {
+        std::stringstream ss;
+        if (h < 10) {
+            ss << '0';
+        }
+        ss << h << ':';
+        if (m < 10) {
+            ss << '0';
+        }
+        ss << m;
+        return ss.str();
+    }
     hour(int hour, int minute) : h{ hour }, m{ minute } {
 
     }
@@ -55,6 +76,7 @@ hour operator - (const hour &h1, const hour& h2) {
 
 typedef std::vector<app> day;
 
+int day_number = 1;
 void solve(day &d) {
     std::sort(d.begin(), d.end());
 
@@ -62,13 +84,20 @@ void solve(day &d) {
     hour s{ 18, 0 };
 
     hour diff{ 0,0 };
+    hour nap_start;
     for (int i = d.size()-1; i >=0 ; i--) {
         auto ndiff = e - d[i].end;
         if (diff < ndiff) {
             diff = ndiff;
+            nap_start = d[i].end;
         }
         e = d[i].start;
     }
+    std::stringstream ss;
+    ss << "Day #" << day_number++ << 
+        ": the longest nap starts at " << nap_start.print() 
+        << " and will last for " << diff.print2() << '.';
+    std::cout << ss.str() << std::endl;
 }
 
 int main(void) {
