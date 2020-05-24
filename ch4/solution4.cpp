@@ -3,7 +3,7 @@
 #include <iostream>
 #include <vector>
 #include <sstream>
-
+#include <algorithm>
 
 struct hour {
     static hour parse(const std::string& str) {
@@ -14,9 +14,23 @@ struct hour {
         ss >> res.m;
         return res;
     }
+    hour(int hour, int minute) : h{ hour }, m{ minute } {
+
+    }
+    hour() {
+
+    }
     int h;
     int m;
 };
+bool operator <(const hour& h1, const hour& h2) {
+    if (h1.h == h2.h) {
+        return (h1.m < h2.m);
+    }
+    else {
+        return h1.h < h2.h;
+    }
+}
 
 struct app {
     hour start;
@@ -24,10 +38,37 @@ struct app {
     std::string val;
 };
 
+bool operator < (const app& a1, const app& a2) {
+    return a1.end < a2.end;
+}
+
+hour operator - (const hour &h1, const hour& h2) {
+    hour result;
+    result.m = h1.m - h2.m;
+    result.h = h1.h - h2.h;
+    if (result.m < 0) {
+        result.h--;
+        result.m += 60;
+    }
+    return result;
+}
+
 typedef std::vector<app> day;
 
 void solve(day &d) {
+    std::sort(d.begin(), d.end());
 
+    hour e{ 18, 0 };
+    hour s{ 18, 0 };
+
+    hour diff{ 0,0 };
+    for (int i = d.size()-1; i >=0 ; i--) {
+        auto ndiff = e - d[i].end;
+        if (diff < ndiff) {
+            diff = ndiff;
+        }
+        e = d[i].start;
+    }
 }
 
 int main(void) {
