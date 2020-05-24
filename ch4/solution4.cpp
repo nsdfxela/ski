@@ -96,7 +96,7 @@ void merge(day& d) {
             start = d[i].start;
             end = d[i].end;
         }
-        if (d[i + 1].start < end) {
+        if (d[i + 1].start < end || d[i + 1].start == end) {
             if (end < d[i+1].end) {
                 end = d[i+1].end;
             }
