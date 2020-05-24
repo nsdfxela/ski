@@ -14,8 +14,8 @@ void solve(std::vector<int> &vec) {
     while (vec.size() >= 4) {
         auto A = vec.begin();
         auto B = A + 1;
-        auto a = vec.end()-1;
-        auto b = a - 1;
+        auto b = vec.end() - 1;
+        auto a = b-1;
         // A + a, A, A + b, A
         int str1 = *a + *A + *b + *A;
         //A + B, A, a + b, B
@@ -24,16 +24,17 @@ void solve(std::vector<int> &vec) {
             ss << *A << ' ' << *a << std::endl;
             ss << *A << std::endl;
             ss << *A << ' ' << *b << std::endl;
-            vec.erase(a);
+            ss << *A << std::endl;
             vec.erase(b);
+            vec.erase(a);
             sum += str1;
         } else {
             ss << *A << ' ' << *B << std::endl;
             ss << *A << std::endl;
             ss << *a << ' ' << *b << std::endl;
             ss << *B << std::endl;
-            vec.erase(a);
             vec.erase(b);
+            vec.erase(a);
             sum += str2;
         }
     }
