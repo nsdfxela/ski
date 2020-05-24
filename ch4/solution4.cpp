@@ -38,8 +38,11 @@ struct hour {
     hour(int hour, int minute) : h{ hour }, m{ minute } {
 
     }
-    hour() {
-
+    hour() : h{ 0 }, m{ 0 } {
+         
+    }
+    bool isempty() {
+        return !h && !m;
     }
     int h;
     int m;
@@ -53,6 +56,10 @@ bool operator <(const hour& h1, const hour& h2) {
     }
 }
 
+bool operator ==(const hour& h1, const hour& h2) {
+    return h1.h == h2.h && h1.m == h2.m;
+}
+
 struct app {
     hour start;
     hour end;
@@ -60,7 +67,7 @@ struct app {
 };
 
 bool operator < (const app& a1, const app& a2) {
-    return a1.end < a2.end;
+    return a1.start < a2.start;
 }
 
 hour operator - (const hour &h1, const hour& h2) {
@@ -77,21 +84,79 @@ hour operator - (const hour &h1, const hour& h2) {
 typedef std::vector<app> day;
 
 int day_number = 1;
-void solve(day &d) {
+void merge(day& d) {
+    if (d.size() <= 1) {
+        return;
+    }
     std::sort(d.begin(), d.end());
-
+    hour start, end;
+    day joint;
+    for (int i = 0; i < d.size() - 1; i++) {
+        if (start.isempty()) {
+            start = d[i].start;
+            end = d[i].end;
+        }
+        if (d[i + 1].start < end) {
+            if (end < d[i+1].end) {
+                end = d[i+1].end;
+            }
+        }
+        else {
+            app jap;
+            jap.start = start;
+            jap.end = end.isempty() ? d[i].end : end;
+            joint.push_back(jap);
+            start = hour();
+            end = hour();
+        }
+    }
+    if (!start.isempty() && !end.isempty()) {
+        app jap;
+        jap.start = start;
+        jap.end = end;
+        joint.push_back(jap);
+    }
+    if (joint.back().end < d[d.size() - 1].start) {
+        joint.push_back(d[d.size() - 1]);
+    }
+    std::swap(d, joint);
+}
+void solve(day &d) {
+  
+    merge(d);
     hour e{ 18, 0 };
     hour s{ 18, 0 };
 
     hour diff{ 0,0 };
     hour nap_start;
+    
     for (int i = d.size()-1; i >=0 ; i--) {
         auto ndiff = e - d[i].end;
         if (diff < ndiff) {
             diff = ndiff;
             nap_start = d[i].end;
         }
+        else if (diff == ndiff) {
+            if (d[i].end < nap_start) {
+                nap_start = d[i].end;
+            }
+        }
         e = d[i].start;
+    }
+
+    if (d.empty()) {
+        diff = hour{8,0};
+        nap_start = hour{ 10,0 };
+    }
+    else {
+        hour zero_diff = d.front().start - hour{ 10,0 };
+        if (diff < zero_diff) {
+            diff = zero_diff;
+            nap_start = hour{ 10,0 };
+        }
+        else if (diff == zero_diff) {
+            nap_start = hour{ 10,0 };
+        }
     }
     std::stringstream ss;
     ss << "Day #" << day_number++ << 
@@ -120,13 +185,18 @@ int main(void) {
             std::getline(istr, buffer);
             std::string stime = buffer.substr(0, 5);
             std::string etime = buffer.substr(6, 5);
-            std::string app_str = buffer.substr(12);
+            std::string app_str = "";
+            if (buffer.size() > 11) {
+                app_str = buffer.substr(12);
+            }
+            
             app a;
             a.start = hour::parse(stime);
             a.end = hour::parse(etime);
             a.val = app_str;
             apps.push_back(a);
         }
+        
         solve(apps);
     }
     return 0;
