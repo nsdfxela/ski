@@ -64,6 +64,9 @@ int main(void) {
     istr >> tc;
     istr.ignore();
     for (int i = 0; i < tc; i++) {
+        if (i) {
+            std::cout << std::endl;
+        }
         int nords;
         istr >> nords;
         ords o;
