@@ -2,11 +2,15 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
-
+#include <algorithm>
 #include <sstream>
 
 
 struct tme {
+    int get_min() const {
+        return min + h * 60 + d * 24 * 60;
+    }
+  
     static tme parse(const std::string &str) {
         tme t;
         std::stringstream ss(str);
@@ -33,9 +37,7 @@ struct photo {
         np.time = tme::parse(buf);
         std::getline(ss, buf, ' ');
         np.type = buf;
-        
         ss >> np.pos;
-
         return np;
     }
     std::string plt;
@@ -43,10 +45,35 @@ struct photo {
     std::string type;
     int pos;
 };
+
+
+bool operator < (const tme& t1, const tme& t2) {
+    return t1.get_min() < t2.get_min();
+}
+
+bool operator < (const photo &p1, const photo &p2) {
+    if (p1.plt < p2.plt) {
+        return true;
+    } else if (p1.plt > p2.plt) {
+        return false;
+    }
+    else {
+        return p1.time < p2.time;
+    }
+}
+
 typedef std::vector<photo> photos;
 
-void solve(photos& ph) {
-
+void solve(std::vector<int> &pr, photos& ph) {
+    std::sort(ph.begin(), ph.end());
+    for (int i = 0; i < ph.size()-1; i+=2) {
+        auto fp = ph[i];
+        auto sp = ph[i+1];
+        int distance = sp.pos - fp.pos;
+        int price = pr[sp.time.h];
+        int total = price * distance + 100 + 200;
+        std::cout << fp.plt << ' ' << '$' << total / 100 << '.' << total % 100 << std::endl;
+    }
 }
 
 int main(void) {
@@ -77,7 +104,7 @@ int main(void) {
             }
             ph.push_back(photo::parse(buffer));
         }
-        solve(ph);
+        solve(pr, ph);
 
     }
 
