@@ -68,10 +68,36 @@ typedef std::vector<photo> photos;
 void solve(std::vector<int> &pr, photos& ph) {
     std::sort(ph.begin(), ph.end());
     for (auto it = ph.begin(); it!=ph.end(); it++) {
-        
-        auto fp = *it;
-        
-        
+        if (it->visisted) {
+            continue;
+        }
+        auto fp = it;
+        if (fp->type == "exit") {
+            fp->visisted = true;
+            continue;
+        }
+        for (; fp != ph.end() && 
+               fp->plt == it->plt && 
+               fp->type != "enter" && 
+               !fp->visisted; fp++) { }
+        if (fp == ph.end() || fp->plt != it->plt) {
+            continue;
+        }
+        auto sp = it;
+        for (; sp != ph.end() && 
+               sp->plt == it->plt && 
+               sp->type != "exit" && 
+               !sp->visisted; sp++) {}
+        if (sp == ph.end() || sp->plt != it->plt) {
+            continue;
+        }
+
+        fp->visisted = true;
+        sp->visisted = true;
+        int distance = sp->pos - fp->pos;
+        int price = pr[fp->time.h];
+        int total = price * distance + 100 + 200;
+        std::cout << fp->plt << ' ' << '$' << total / 100 << '.' << total % 100 << std::endl; 
         /*auto sp = ph[i+1];
         int distance = sp.pos - fp.pos;
         int price = pr[fp.time.h];
@@ -91,6 +117,9 @@ int main(void) {
     istr.ignore();
 
     for (int i = 0; i < tc; i++) {
+        if (i) {
+            std::cout << std::endl;
+        }
         std::vector<int> pr;
         photos ph;
         pr.reserve(24);
