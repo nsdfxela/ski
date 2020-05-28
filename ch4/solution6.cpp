@@ -27,6 +27,7 @@ struct tme {
 };
 
 struct photo {
+    bool visisted = false;
     static photo parse(const std::string str) {
         photo np;
         std::stringstream ss(str);
@@ -66,13 +67,16 @@ typedef std::vector<photo> photos;
 
 void solve(std::vector<int> &pr, photos& ph) {
     std::sort(ph.begin(), ph.end());
-    for (int i = 0; i < ph.size()-1; i+=2) {
-        auto fp = ph[i];
-        auto sp = ph[i+1];
+    for (auto it = ph.begin(); it!=ph.end(); it++) {
+        
+        auto fp = *it;
+        
+        
+        /*auto sp = ph[i+1];
         int distance = sp.pos - fp.pos;
-        int price = pr[sp.time.h];
+        int price = pr[fp.time.h];
         int total = price * distance + 100 + 200;
-        std::cout << fp.plt << ' ' << '$' << total / 100 << '.' << total % 100 << std::endl;
+        std::cout << fp.plt << ' ' << '$' << total / 100 << '.' << total % 100 << std::endl;*/
     }
 }
 
