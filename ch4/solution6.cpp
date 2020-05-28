@@ -97,7 +97,13 @@ void solve(std::vector<int> &pr, photos& ph) {
         int distance = sp->pos - fp->pos;
         int price = pr[fp->time.h];
         int total = price * distance + 100 + 200;
-        std::cout << fp->plt << ' ' << '$' << total / 100 << '.' << total % 100 << std::endl; 
+        int cents = total % 100;
+        std::string s_cents;
+        if (cents < 10) {
+            s_cents = '0';
+        }
+        s_cents += std::to_string(cents);
+        std::cout << fp->plt << ' ' << '$' << total / 100 << '.' << s_cents << std::endl; 
         /*auto sp = ph[i+1];
         int distance = sp.pos - fp.pos;
         int price = pr[fp.time.h];
