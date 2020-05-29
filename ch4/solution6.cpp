@@ -76,18 +76,14 @@ void solve(std::vector<int> &pr, photos& ph) {
             fp->visisted = true;
             continue;
         }
-        for (; fp != ph.end() && 
-               fp->plt == it->plt && 
-               fp->type != "enter" && 
-               !fp->visisted; fp++) { }
+        for (; fp != ph.end() && fp->plt == it->plt 
+            && (fp->type != "enter" || fp->visisted); fp++) { }
         if (fp == ph.end() || fp->plt != it->plt) {
             continue;
         }
         auto sp = it;
-        for (; sp != ph.end() && 
-               sp->plt == it->plt && 
-               sp->type != "exit" && 
-               !sp->visisted; sp++) {}
+        for (; sp != ph.end() && sp->plt == it->plt
+            && (sp->type != "exit" || sp->visisted); sp++) {}
         if (sp == ph.end() || sp->plt != it->plt) {
             continue;
         }
