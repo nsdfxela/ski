@@ -5,14 +5,16 @@
 #include <algorithm>
 #include <sstream>
 
+/*Uv 10138*/
 
 struct tme {
     int get_min() const {
         return min + h * 60 + d * 24 * 60;
     }
-  
+    std::string _str;
     static tme parse(const std::string &str) {
         tme t;
+        t._str = str;
         std::stringstream ss(str);
         ss >> t.M; 
         ss.ignore();
@@ -42,8 +44,8 @@ struct photo {
         return np;
     }
     std::string plt;
-    tme time;
     std::string type;
+    tme time;
     int pos;
 };
 
@@ -68,34 +70,37 @@ typedef std::vector<photo> photos;
 std::map<std::string, int> M;
 void solve(std::vector<int> &pr, photos& ph) {
     std::sort(ph.begin(), ph.end());
-    for (auto it = ph.begin(); it!=ph.end(); it++) {
-        if (it->visisted) {
+    for (int i = 0; i < ph.size(); i++) {
+        if (ph[i].visisted) {
             continue;
         }
-        auto fp = it;
-        if (fp->type == "exit") {
-            fp->visisted = true;
+        auto sp = i;
+        if (ph[sp].type == "enter") {
             continue;
         }
-        for (; fp != ph.end() && fp->plt == it->plt 
-            && (fp->type != "enter" || fp->visisted); fp++) { }
-        if (fp == ph.end() || fp->plt != it->plt) {
+        int fp = -1;
+        for (int j = sp-1; j >= 0; j--) {
+            if (ph[j].plt == ph[sp].plt &&
+                ph[j].type == "enter") {
+                fp = j;
+                ph[j].visisted = true;
+                break;
+            }
+            else if (ph[j].plt != ph[sp].plt) {
+                break;
+            }
+            else if (ph[j].type == "exit") {
+                break;
+            }
+        }
+        if (fp < 0) {
             continue;
         }
-        auto sp = it;
-        for (; sp != ph.end() && sp->plt == it->plt
-            && (sp->type != "exit" || sp->visisted); sp++) {}
-        if (sp == ph.end() || sp->plt != it->plt) {
-            continue;
-        }
-
-        fp->visisted = true;
-        sp->visisted = true;
-        int distance = std::abs(sp->pos - fp->pos);
-        int price = pr[fp->time.h];
+        int distance = std::abs(ph[sp].pos - ph[fp].pos);
+        int price = pr[ph[fp].time.h];
         int total = price * distance + 100;
         
-        M[fp->plt] += total;
+        M[ph[fp].plt] += total;
     }
     for (auto it = M.begin(); it != M.end(); it++) {
         int total = it->second + 200;
@@ -107,6 +112,7 @@ void solve(std::vector<int> &pr, photos& ph) {
         s_cents += std::to_string(cents);
         std::cout << it->first << ' ' << '$' << total / 100 << '.' << s_cents << std::endl;
     }
+    M.clear();
     
 }
 
