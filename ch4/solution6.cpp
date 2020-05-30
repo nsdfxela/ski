@@ -64,7 +64,8 @@ bool operator < (const photo &p1, const photo &p2) {
 }
 
 typedef std::vector<photo> photos;
-
+#include <map>
+std::map<std::string, int> M;
 void solve(std::vector<int> &pr, photos& ph) {
     std::sort(ph.begin(), ph.end());
     for (auto it = ph.begin(); it!=ph.end(); it++) {
@@ -90,22 +91,23 @@ void solve(std::vector<int> &pr, photos& ph) {
 
         fp->visisted = true;
         sp->visisted = true;
-        int distance = sp->pos - fp->pos;
+        int distance = std::abs(sp->pos - fp->pos);
         int price = pr[fp->time.h];
-        int total = price * distance + 100 + 200;
+        int total = price * distance + 100;
+        
+        M[fp->plt] += total;
+    }
+    for (auto it = M.begin(); it != M.end(); it++) {
+        int total = it->second + 200;
         int cents = total % 100;
         std::string s_cents;
         if (cents < 10) {
             s_cents = '0';
         }
         s_cents += std::to_string(cents);
-        std::cout << fp->plt << ' ' << '$' << total / 100 << '.' << s_cents << std::endl; 
-        /*auto sp = ph[i+1];
-        int distance = sp.pos - fp.pos;
-        int price = pr[fp.time.h];
-        int total = price * distance + 100 + 200;
-        std::cout << fp.plt << ' ' << '$' << total / 100 << '.' << total % 100 << std::endl;*/
+        std::cout << it->first << ' ' << '$' << total / 100 << '.' << s_cents << std::endl;
     }
+    
 }
 
 int main(void) {
@@ -134,13 +136,15 @@ int main(void) {
         istr.ignore();
         while (1) {
             std::getline(istr, buffer);
-            if (!istr.good() || buffer.empty()) {
+            if (buffer.empty()) {
                 break;
             }
             ph.push_back(photo::parse(buffer));
+            if (!istr.good()) {
+                break;
+            }
         }
         solve(pr, ph);
-
     }
 
     return 0;
