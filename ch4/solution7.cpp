@@ -13,6 +13,17 @@ struct turt {
 };
 
 struct turtles {
+    void clear(turt* t) {
+        if (!t) {
+            return;
+        }
+        auto prev = t->prev;
+        delete t;
+        clear(prev);
+    }
+    ~turtles() {
+        clear(tail);
+    }
     turt* head = nullptr;
     turt* tail = nullptr;
     turt* find(int order) {
@@ -57,15 +68,15 @@ struct turtles {
 };
 
 void resort(turtles& T, turt* t, std::vector<std::string> &moved) {
-    T.print();
-    for (int i = t->order; i >= 0; i--) {
+    //T.print();
+    for (int i = t->order-1; i >= 0; i--) {
         auto found = T.find(i);
         if (found != T.head) {
             T.go_head(found);
             moved.push_back(found->name);
         }
     }
-    T.print();
+    //T.print();
 }
 
 void solve(turtles& o, turtles &w) {
@@ -97,6 +108,9 @@ int main(void) {
     int tc;
     istr >> tc;
     for (int i = 0; i < tc; i++) {
+        if (tc) {
+            std::cout << std::endl;
+        }
         int num;
         std::map<std::string, turt*> tmap;
         istr >> num;
