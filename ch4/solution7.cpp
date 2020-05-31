@@ -49,7 +49,11 @@ struct turtles {
             return;
         }
         t->prev->next = t->next;
-        t->next->prev = t->prev;
+        if (t == tail) {
+            tail = t->prev;
+        } else {
+            t->next->prev = t->prev;
+        }
         t->prev = nullptr;
         t->next = head;
         head->prev = t;
@@ -107,8 +111,9 @@ int main(void) {
 #endif
     int tc;
     istr >> tc;
+
     for (int i = 0; i < tc; i++) {
-        if (tc) {
+        if (i) {
             std::cout << std::endl;
         }
         int num;
@@ -130,6 +135,7 @@ int main(void) {
             Twanna.push_back(t);
         }
         solve(Torigin, Twanna);
+        tmap.clear();
     }
 
     return 0;
