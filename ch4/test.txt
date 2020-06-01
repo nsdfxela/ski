@@ -1,37 +1,27 @@
+2
+World Cup 1998 - Group A
 4
-3
-Yertle
-Duke of Earl
-Sir Lancelot
-Duke of Earl
-Yertle
-Sir Lancelot
-9
-Yertle
-Duke of Earl
-Sir Lancelot
-Elizabeth Windsor
-Michael Eisner
-Richard M. Nixon
-Mr. Rogers
-Ford Perfect
-Mack
-Yertle
-Richard M. Nixon
-Sir Lancelot
-Duke of Earl
-Elizabeth Windsor
-Michael Eisner
-Mr. Rogers
-Ford Perfect
-Mack
-1
-Jopa
-Jopa
-3
-Phil collinz
-Joe Satriani
-Syd Barett
-Syd Barett
-Joe Satriani
-Phil collinz
+Brazil
+Norway
+Morocco
+Scotland
+6
+Brazil#2@1#Scotland
+Norway#2@2#Morocco
+Scotland#1@1#Norway
+Brazil#3@0#Morocco
+Morocco#3@0#Scotland
+Brazil#1@2#Norway
+Some strange tournament
+5
+Team A
+Team B
+Team C
+Team D
+Team E
+5
+Team A#1@1#Team B
+Team A#2@2#Team C
+Team A#0@0#Team D
+Team E#2@1#Team C
+Team E#1@2#Team D
