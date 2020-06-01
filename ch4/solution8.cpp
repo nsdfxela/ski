@@ -26,6 +26,11 @@ struct tournament {
     std::vector<std::string> teams;
     std::vector<game> games;
 };
+
+void solve(tournament& t) {
+
+}
+
 int main(void) {
 #if __GNUC__
     std::istream& istr = std::cin;
@@ -54,6 +59,7 @@ int main(void) {
             std::getline(istr, buffer);
             t.games.push_back(game::parse(buffer));
         }
+        solve(t);
     }
     return 0;
 }
