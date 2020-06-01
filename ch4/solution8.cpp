@@ -9,7 +9,13 @@ struct game {
         game g;
         g.t1 = str.substr(0, p1);
         auto p2 = str.find('@', p1);
-        g.t2 = str.substr(p1, p2);
+        std::string s1 = str.substr(p1+1, p2 - p1-1);
+        auto p3 = str.find('#', p2);
+        std::string s2 = str.substr(p2 + 1, p3 - p2 - 1);
+        g.t2 = str.substr(p3+1);
+        
+        g.s1 = atoi(s1.c_str());
+        g.s2 = atoi(s2.c_str());
         return g;
     }
     std::string t1, t2;
