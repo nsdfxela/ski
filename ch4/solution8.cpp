@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 #include <map>
+#include <algorithm>
 
 struct total_result {
     int w = 0;
@@ -11,6 +12,10 @@ struct total_result {
 
     int scored = 0;
     int missed = 0;
+    int points = 0;
+    std::string team_name;
+    int ssdiff = 0;
+    int total_games = 0;
 };
 struct game {
     static game parse(const std::string& str) {
@@ -37,8 +42,41 @@ struct tournament {
 
 };
 
+bool lessLex(const std::string &s1, const std::string &s2) {
+    std::string s1u, s2u;
+    s1u.resize(s1.size());
+    s2u.resize(s2.size());
+
+    std::transform(s1.begin(), s1.end(), s1u.begin(), std::toupper);
+    std::transform(s2.begin(), s2.end(), s2u.begin(), std::toupper);
+
+    return s1u < s2u;
+}
+
+bool operator < (total_result &t1, total_result& t2) {
+    if (t1.points == t2.points) {
+        if (t1.w == t2.w) {
+            if (t1.ssdiff == t2.ssdiff) {
+                if (t1.scored == t2.scored) {
+                    if (t1.total_games == t2.total_games) {
+                        return lessLex(t1.team_name, t2.team_name);
+                    }
+                    else { return t1.total_games > t2.total_games; }
+                }
+                else { return t1.scored < t2.scored; }
+            }
+            else { return t1.ssdiff < t2.ssdiff; }
+        }
+        else { return t1.w < t2.w; }
+    } 
+    else { return t1.points < t2.points; }
+}
+
 void solve(tournament& t) {
     for (int i = 0; i < t.games.size(); i++) {
+        t.teams[t.games[i].t1].total_games++;
+        t.teams[t.games[i].t2].total_games++;
+
         t.teams[t.games[i].t1].scored += t.games[i].s1;
         t.teams[t.games[i].t2].scored += t.games[i].s2;
         t.teams[t.games[i].t1].missed += t.games[i].s2;
@@ -50,8 +88,20 @@ void solve(tournament& t) {
         t.teams[t.games[i].t2].l += (int)(t.games[i].s2 < t.games[i].s1);
         t.teams[t.games[i].t1].t += (int)(t.games[i].s1 == t.games[i].s2);
         t.teams[t.games[i].t2].t += (int)(t.games[i].s2 == t.games[i].s1);
+    }
 
-
+    std::vector<total_result> tr;
+    tr.reserve(t.teams.size());
+    for (auto it = t.teams.begin(); it != t.teams.end(); it++){
+        it->second.points = it->second.w * 3 + it->second.t;
+        it->second.ssdiff = it->second.scored - it->second.missed;
+        tr.push_back(it->second);
+    }
+    std::sort(tr.begin(), tr.end());
+    for (int i = 0; i < tr.size(); i++) {
+        std::cout << i + 1 << ') '
+            << tr[i].team_name
+            << ' ' << tr[i].points << "p " << tr[i].total_games << "g ";
     }
 }
 
@@ -74,6 +124,7 @@ int main(void) {
             std::string buffer;
             std::getline(istr, buffer);
             t.teams[buffer] = total_result{};
+            t.teams[buffer].team_name = buffer;
         }
         int ng;
         istr >> ng;
