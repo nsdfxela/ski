@@ -5,6 +5,8 @@
 #include <map>
 #include <algorithm>
 
+/*10194	Football (aka Soccer)*/
+
 struct total_result {
     int w = 0;
     int t = 0;
@@ -50,7 +52,7 @@ bool lessLex(const std::string &s1, const std::string &s2) {
     std::transform(s1.begin(), s1.end(), s1u.begin(), ::toupper);
     std::transform(s2.begin(), s2.end(), s2u.begin(), ::toupper);
 
-    return s1u < s2u;
+    return s1u > s2u;
 }
 
 bool operator < (total_result &t1, total_result& t2) {
@@ -99,9 +101,9 @@ void solve(tournament& t) {
     }
     std::sort(tr.begin(), tr.end());
     int rank = 1;
+    printf("%s\n", t.name.c_str());
     for (int i = tr.size()-1; i >= 0; i--) {
         total_result& R = tr[i];
-        printf("%s\n", t.name.c_str());
         printf("%d) %s %dp, %dg (%d-%d-%d), %dgd (%d-%d)\n", rank++, R.team_name.c_str(), R.points, R.total_games, R.w, R.t, R.l, R.ssdiff, R.scored, R.missed);
     }
 }
