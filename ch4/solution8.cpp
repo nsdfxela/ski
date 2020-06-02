@@ -47,8 +47,8 @@ bool lessLex(const std::string &s1, const std::string &s2) {
     s1u.resize(s1.size());
     s2u.resize(s2.size());
 
-    std::transform(s1.begin(), s1.end(), s1u.begin(), std::toupper);
-    std::transform(s2.begin(), s2.end(), s2u.begin(), std::toupper);
+    std::transform(s1.begin(), s1.end(), s1u.begin(), ::toupper);
+    std::transform(s2.begin(), s2.end(), s2u.begin(), ::toupper);
 
     return s1u < s2u;
 }
@@ -98,10 +98,11 @@ void solve(tournament& t) {
         tr.push_back(it->second);
     }
     std::sort(tr.begin(), tr.end());
-    for (int i = 0; i < tr.size(); i++) {
-        std::cout << i + 1 << ') '
-            << tr[i].team_name
-            << ' ' << tr[i].points << "p " << tr[i].total_games << "g ";
+    int rank = 1;
+    for (int i = tr.size()-1; i >= 0; i--) {
+        total_result& R = tr[i];
+        printf("%s\n", t.name.c_str());
+        printf("%d) %s %dp, %dg (%d-%d-%d), %dgd (%d-%d)\n", rank++, R.team_name.c_str(), R.points, R.total_games, R.w, R.t, R.l, R.ssdiff, R.scored, R.missed);
     }
 }
 
@@ -115,12 +116,15 @@ int main(void) {
     istr >> tc;
     istr.ignore();
     for (int i = 0; i < tc; i++) {
+        if (i) {
+            printf("\n");
+        }
         tournament t;
         std::getline(istr, t.name);
         int nt;
         istr >> nt;
         istr.ignore();
-        for (int j = 0; j < nt; j++) {
+        for (int j = 0; j < nt; j++) {            
             std::string buffer;
             std::getline(istr, buffer);
             t.teams[buffer] = total_result{};
