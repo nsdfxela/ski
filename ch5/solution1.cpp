@@ -1,7 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
-
+//10035	Primary Arithmetic
 
 using namespace std;
 void solve(const string& d1, const string& d2) {
