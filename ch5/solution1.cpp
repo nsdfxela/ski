@@ -4,8 +4,30 @@
 
 
 using namespace std;
-void solve(const string& d1, const string& s2) {
-
+void solve(const string& d1, const string& d2) {
+    int o = 0;
+    int res = 0;
+    for (int i = 0; ; i++) {
+        int i1 = d1.size() - 1 - i;
+        int i2 = d2.size() - 1 - i;
+        if (i1 < 0 && i2 < 0) {
+            break;
+        }
+        int v1 = i1 < 0 ? 0: d1[i1] - '0';
+        int v2 = i2 < 0 ? 0: d2[i2] - '0';
+        int sum = v1 + v2 + o;
+        o = sum / 10;
+        if (o) { res++; }
+    }
+    if (!res) {
+        std::cout << "No carry operation.\n";
+    }
+    else if (res == 1) {
+        std::cout << "1 carry operation.\n";
+    }
+    else {
+        std::cout << res << " carry operations.\n";
+    }
 }
 int main(void) {
 #if __GNUC__
