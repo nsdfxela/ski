@@ -2,6 +2,10 @@
 #include <string>
 #include <fstream>
 #include <sstream>
+#include <algorithm>
+
+//10018	Reverse and Add
+
 using namespace std;
 string strfy(unsigned long v) {
     stringstream ss;
@@ -31,13 +35,14 @@ bool ispoly(unsigned long v) {
     return true;
 }
 
-string reverse(string& str) {
+string reverse_s(string& str) {
     string res = str;
     std::reverse(res.begin(), res.end());
     return res;
 }
-long reverse(unsigned long n) {
-    return destrfy(reverse(strfy(n)));
+long reverse_l(unsigned long n) {
+    string s = strfy(n);
+    return destrfy(reverse_s(s));
 }
 
 void solve(unsigned long v) {
@@ -49,7 +54,7 @@ void solve(unsigned long v) {
         return;
     }
     for (int i = 0; i < 1000; i++) {
-        unsigned long v2 = reverse(v1);
+        unsigned long v2 = reverse_l(v1);
         unsigned long p = v1 + v2;
         counter++;
         if (!ispoly(p)) {
