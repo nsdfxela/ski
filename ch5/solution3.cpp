@@ -35,11 +35,11 @@ int main(void) {
     int n;
     while (1) {
         istr >> n;
-        
-        solve(n);
         if (!istr.good()) {
             break;
         }
+        solve(n);
+        
     }
     return 0;
 
