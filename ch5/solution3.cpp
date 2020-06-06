@@ -4,8 +4,8 @@
 #include <cmath>
 
 using namespace std;
-int countd(int n) {
-    int d = n, c = 0;
+int countd(long long int n) {
+    long long int d = n, c = 0;
     do {
         d = d / 10;
         c++;
@@ -31,6 +31,10 @@ void solve(int n) {
         else {
             p = p << 1;
             E++;
+            if (E == 64) {
+                cout << "no power of 2\n";
+                return;
+            }
         }
     }
 
