@@ -4,7 +4,7 @@
 #include <fstream>
 
 using namespace std;
-const string winners[2] = {"Stan wins","Ollie wins"};
+const string winners[2] = {"Stan wins.","Ollie wins."};
 void solve(int n) {
     long long t = 1;
     int step = 0;
