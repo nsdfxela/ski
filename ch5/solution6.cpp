@@ -32,10 +32,29 @@ val operator *(val &v1, val&v2) {
     v.coeff = v1.coeff * v2.coeff;
     return v;
 }
+typedef map<string, val> P;
+void mult() {
 
+}
+
+P operator * (P& p1, P& p2) {
+    P p;
+    for (auto it = p1.begin(); it != p1.end(); it++) {
+        for (auto it2 = p2.begin(); it2 != p2.end(); it2++) {
+            auto v = it->second * it2->second;
+            if (p.find(v.to_str()) == p.end()) {
+                p[v.to_str()] = v;
+            }
+            else {
+                p[v.to_str()].coeff += v.coeff;
+            }
+        }
+    }
+    return p;
+}
 
 void solve(const vector<int>&poly, int n) {
-    map<string, val> m;
+    P m;
     for (int i = 0; i < poly.size(); i++) {
         val v;
         v.powers[i] = 1;
@@ -43,18 +62,12 @@ void solve(const vector<int>&poly, int n) {
         m[v.to_str()] = v;
     }
 
-    map<string, val> m2;
-    for (auto it = m.begin(); it != m.end(); it++) {
-        for (auto it2 = m.begin(); it2 != m.end(); it2++) {
-            auto v = it->second * it2->second;
-            if (m2.find(v.to_str()) == m2.end()) {
-                m2[v.to_str()] = v;
-            }
-            else {
-                m2[v.to_str()].coeff += v.coeff;
-            }
-        }
+    for (int i = 0; i < n-1; i++) {
+        m = m * m;
     }
+
+    map<string, val> m2;
+    
 }
 
 int main(void) {
