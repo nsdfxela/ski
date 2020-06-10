@@ -53,21 +53,26 @@ P operator * (P& p1, P& p2) {
     return p;
 }
 
-void solve(const vector<int>&poly, int n) {
+void solve(const vector<int>&monom, int n) {
     P m;
-    for (int i = 0; i < poly.size(); i++) {
+    for (int i = 0; i < monom.size(); i++) {
         val v;
         v.powers[i] = 1;
         v.coeff = 1;
         m[v.to_str()] = v;
     }
-
+    P res = m;
     for (int i = 0; i < n-1; i++) {
-        m = m * m;
+        res = res * m;
     }
 
-    map<string, val> m2;
-    
+    val monom_val;
+    for (int i = 0; i < monom.size(); i++) {
+        if (monom[i]) {
+            monom_val.powers[i] = monom[i];
+        }
+    }
+    std::cout << res[monom_val.to_str()].coeff << std::endl;
 }
 
 int main(void) {
