@@ -10,43 +10,47 @@
 using namespace std;
 
 struct val {
-    map<int, int> powers;
-    int coeff = 0;
-    string to_str() {
-        std::stringstream ss;
-        for (auto it = powers.begin(); it != powers.end(); it++) {
-            ss << "x" << it->first << "^(" << it->second << ")";
-        }
-        return ss.str();
+    int powers[12];
+    long long int hash = 0;
+    val() {
+        memset(powers, 0, sizeof(int) * 12);
     }
+    val(int s) {
+        memset(powers, 0, sizeof(int) * 12);
+        for (int i = 0; i < s; i++) {
+            hash += pow((long long int)10, (long long int)i);
+            powers[i] = 1;
+        }
+    }
+    int coeff = 0;
+    
 };
 
 val operator *(val &v1, val&v2) {
     val v;
-    for (auto it = v1.powers.begin(); it != v1.powers.end(); it++) {
-        v.powers[it->first] = it->second;
+    memcpy(v.powers, v1.powers, sizeof(int) * 12);
+    for(int i = 0; i < 12; i++){
+        v.powers[i] += v2.powers[i];
     }
-    for (auto it = v2.powers.begin(); it != v2.powers.end(); it++) {
-        v.powers[it->first] += it->second;
-    }
+    v.hash = v1.hash + v2.hash;
     v.coeff = v1.coeff * v2.coeff;
     return v;
 }
-typedef map<string, val> P;
-void mult() {
+typedef map<long long int, val> P;
 
-}
-
+#include <cassert>
 P operator * (P& p1, P& p2) {
     P p;
     for (auto it = p1.begin(); it != p1.end(); it++) {
         for (auto it2 = p2.begin(); it2 != p2.end(); it2++) {
             auto v = it->second * it2->second;
-            if (p.find(v.to_str()) == p.end()) {
-                p[v.to_str()] = v;
+            long long key = v.hash;
+            assert(v.hash > 0);
+            if (p.find(key) == p.end()) {
+                p[key] = v;
             }
             else {
-                p[v.to_str()].coeff += v.coeff;
+                p[key].coeff += v.coeff;
             }
         }
     }
@@ -55,24 +59,27 @@ P operator * (P& p1, P& p2) {
 
 void solve(const vector<int>&monom, int n) {
     P m;
+
     for (int i = 0; i < monom.size(); i++) {
         val v;
         v.powers[i] = 1;
+        v.hash = pow(10, i);
         v.coeff = 1;
-        m[v.to_str()] = v;
+        m[v.hash] = v;
     }
     P res = m;
     for (int i = 0; i < n-1; i++) {
         res = res * m;
     }
 
-    val monom_val;
+    long long int searching_monom_val=0;
     for (int i = 0; i < monom.size(); i++) {
         if (monom[i]) {
-            monom_val.powers[i] = monom[i];
+            searching_monom_val += monom[i] * pow(10, i);
         }
+        
     }
-    std::cout << res[monom_val.to_str()].coeff << std::endl;
+    std::cout << res[searching_monom_val].coeff << std::endl;
 }
 
 int main(void) {
