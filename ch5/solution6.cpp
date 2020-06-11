@@ -7,6 +7,8 @@
 #include <map>
 #include <sstream>
 #include <algorithm>
+#include <cstring>
+#include <unordered_map>
 using namespace std;
 
 struct val {
@@ -36,7 +38,7 @@ val operator *(val &v1, val&v2) {
     v.coeff = v1.coeff * v2.coeff;
     return v;
 }
-typedef map<long long int, val> P;
+typedef unordered_map<long long int, val> P;
 
 #include <cassert>
 P operator * (P& p1, P& p2) {
@@ -46,12 +48,17 @@ P operator * (P& p1, P& p2) {
             auto v = it->second * it2->second;
             long long key = v.hash;
             assert(v.hash > 0);
-            if (p.find(key) == p.end()) {
+            
+            val &vf = p[key];
+            v.coeff += vf.coeff;
+            swap(vf, v);
+
+            /*if (pv == p.end()) {
                 p[key] = v;
             }
             else {
                 p[key].coeff += v.coeff;
-            }
+            }*/
         }
     }
     return p;
@@ -102,6 +109,5 @@ int main(void) {
         }
         solve(poly, n);
     }
-
     return 0;
 }
