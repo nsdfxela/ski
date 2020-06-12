@@ -11,7 +11,7 @@
 #include <unordered_map>
 using namespace std;
 
-struct val {
+struct val {  
     int powers[12];
     long long int hash = 0;
     val() {
@@ -27,7 +27,7 @@ struct val {
     int coeff = 0;
     
 };
-
+int S[12];
 val operator *(val &v1, val&v2) {
     val v;
     memcpy(v.powers, v1.powers, sizeof(int) * 12);
@@ -41,11 +41,21 @@ val operator *(val &v1, val&v2) {
 typedef unordered_map<long long int, val> P;
 
 #include <cassert>
-P operator * (P& p1, P& p2) {
+P multiply (P& p1, P& p2, vector<int> monom) {
     P p;
     for (auto it = p1.begin(); it != p1.end(); it++) {
         for (auto it2 = p2.begin(); it2 != p2.end(); it2++) {
             auto v = it->second * it2->second;
+            bool omit = false;
+            for (int k = 0; k < monom.size(); k++) {
+                if (v.powers[k] > monom[k]) {
+                    omit = true;
+                    break;
+                }
+            }
+            if (omit) { 
+                continue;
+            }
             long long key = v.hash;
             assert(v.hash > 0);
             
@@ -76,7 +86,7 @@ void solve(const vector<int>&monom, int n) {
     }
     P res = m;
     for (int i = 0; i < n-1; i++) {
-        res = res * m;
+        res = multiply(res, m, monom);
     }
 
     long long int searching_monom_val=0;
