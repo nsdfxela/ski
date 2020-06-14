@@ -14,17 +14,19 @@ struct sum {
     int idx1, idx2;
 };
 
-bool check(vector<sum> &vvec, int idx, vector<int> terms) {
+bool check(vector<sum> &vvec, int idx, vector<int> terms, int n) {
     if (idx >= vvec.size()) {
         return true;
     }
     if (vvec[idx].val != (terms[vvec[idx].idx1] + terms[vvec[idx].idx2])) {
         return false;
     }
-    if (idx < vvec.size() - 2) {
+    
+    if (terms.size() < n) {
         terms.push_back(vvec[idx + 1].val - terms[vvec[idx + 1].idx1]);
     }
-    return check(vvec, idx+1, terms);
+    
+    return check(vvec, idx+1, terms, n);
 }
 
 void solve(vector<sum> vvec, int n) {
@@ -37,13 +39,13 @@ void solve(vector<sum> vvec, int n) {
         }
     }
     int num = vvec[0].val / 2 + 1;
-    for (int i = 1; i < num; i++) {
+    for (int i = 1; i <= num; i++) {
         int a = i;
         int b = vvec[0].val - a;
         vector<int> terms;
         terms.push_back(a);
         terms.push_back(b);
-        if (check(vvec, 0, terms)) {
+        if (check(vvec, 0, terms, n)) {
             
         }
     }
