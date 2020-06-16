@@ -7,46 +7,55 @@
 #include <map>
 
 using namespace std;
- 
 
-struct sum {
-    int val;
-    int idx1, idx2;
-};
-
-bool check(vector<sum> &vvec, int idx, vector<int> terms, int n) {
-    if (idx >= vvec.size()) {
-        return true;
-    }
-    if (vvec[idx].val != (terms[vvec[idx].idx1] + terms[vvec[idx].idx2])) {
+typedef vector<int> inp;
+bool check(inp cvvec, vector<int> &terms, int i, int j, int n) {
+    auto found = std::find(cvvec.begin(), cvvec.end(), terms[i] + terms[j]);
+    if (found == cvvec.end()) {
         return false;
     }
-    
-    if (terms.size() < n) {
-        terms.push_back(vvec[idx + 1].val - terms[vvec[idx + 1].idx1]);
+    if (i == n - 2 && j == n - 1) {
+        return true;
     }
+    cvvec.erase(found);
     
-    return check(vvec, idx+1, terms, n);
+    if (++j >= n) {
+        i++;
+        j = i + 1;
+    }
+
+    if (terms.size() < n) {
+        for (int _i = 0; _i < cvvec.size(); _i++) {
+            auto t = terms;
+            t.push_back(cvvec[_i] - terms[i]);
+            if (check(cvvec, t, i, j, n)) {
+                return true;
+            }
+        }
+    } else {
+        return check(cvvec, terms, i, j, n);
+    }
+    return false;
 }
 
-void solve(vector<sum> vvec, int n) {
-    std::sort(vvec.begin(), vvec.end(), [](sum& s1, sum& s2) {return s1.val < s2.val; });
+void solve(inp vvec, int n) {
+    std::sort(vvec.begin(), vvec.end());
     int k = 0;
-    for (int i = 0; i < n; i++) {
-        for (int j = i+1; j < n; j++) {
-            vvec[k].idx1 = i;
-            vvec[k++].idx2 = j;
-        }
-    }
-    int num = vvec[0].val / 2 + 1;
+    
+    int num = vvec[0] / 2 + 1;
+    int a, b, c;
     for (int i = 1; i <= num; i++) {
-        int a = i;
-        int b = vvec[0].val - a;
+        a = i;
+        b = vvec[0] - a;
+        c = vvec[1] - a;
         vector<int> terms;
         terms.push_back(a);
         terms.push_back(b);
-        if (check(vvec, 0, terms, n)) {
-            
+        terms.push_back(c);
+        inp cvvec;
+        std::copy(vvec.begin() + 1, vvec.end(), std::back_inserter(cvvec));
+        if (check(cvvec, terms, 0, 2, n)) {
+
         }
     }
 }
@@ -64,13 +73,11 @@ int main(void) {
             break;
         }
         int N = n * (n - 1) / 2;
-        vector<sum> vvec;
+        inp vvec;
         for (int i = 0; i < N; i++) {
             int buf;
             istr >> buf;
-            sum s;
-            s.val = buf;
-            vvec.push_back(s);
+            vvec.push_back(buf);
         }
     
         solve(vvec, n);
@@ -78,3 +85,5 @@ int main(void) {
 
     return 0;
 }
+
+
