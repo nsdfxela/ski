@@ -47,9 +47,15 @@ void solve(inp vvec, int n) {
     std::sort(vvec.begin(), vvec.end());
     int k = 0;
     
-    int num = vvec[0] / 2 + 1;
+    int num = vvec[0] / 2;
+    
+    if (!num) num = vvec[0];
+    num = num < 0 ? num - 1 : num + 1;
+    
     int a, b, c;
-    for (int i = 1; i <= num; i++) {
+    bool res = false;
+    
+    for (int i = abs(num); i >= -abs(num); i--) {
         a = i;
         b = vvec[0] - a;
         
@@ -64,8 +70,12 @@ void solve(inp vvec, int n) {
         inp cvvec;
         std::copy(vvec.begin() + (terms.size()-2), vvec.end(), std::back_inserter(cvvec));
         if (check(cvvec, terms, 0, terms.size() - 1, n)) {
-
+            res = true;
+            break;
         }
+    }
+    if (!res) {
+        std::cout << "Impossible\n";
     }
 }
 int main(void) {
