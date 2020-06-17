@@ -15,6 +15,11 @@ bool check(inp cvvec, vector<int> &terms, int i, int j, int n) {
         return false;
     }
     if (i == n - 2 && j == n - 1) {
+        for (int l = 0; l < terms.size(); l++) {
+            if (l) std::cout << " ";
+            std::cout << terms[l];
+        }
+        std::cout << "\n";
         return true;
     }
     cvvec.erase(found);
@@ -47,14 +52,18 @@ void solve(inp vvec, int n) {
     for (int i = 1; i <= num; i++) {
         a = i;
         b = vvec[0] - a;
-        c = vvec[1] - a;
+        
         vector<int> terms;
         terms.push_back(a);
         terms.push_back(b);
-        terms.push_back(c);
+        for (int j = 0; j < n - 3; j++) {
+            terms.push_back(vvec[1 + j] - a);
+        }
+        
+        
         inp cvvec;
-        std::copy(vvec.begin() + 1, vvec.end(), std::back_inserter(cvvec));
-        if (check(cvvec, terms, 0, 2, n)) {
+        std::copy(vvec.begin() + (terms.size()-2), vvec.end(), std::back_inserter(cvvec));
+        if (check(cvvec, terms, 0, terms.size() - 1, n)) {
 
         }
     }
