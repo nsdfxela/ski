@@ -10,9 +10,21 @@
 using namespace std;
 
 typedef vector<int> inp;
+int find_sorted(inp &in, int val) {
+    for (int i = 0; i < in.size(); i++) {
+        if (in[i] == val) {
+            return i;
+        }
+        else if (in[i] > val) {
+            return -1;
+        }
+    }
+    return -1;
+}
 bool check(inp cvvec, vector<int> &terms, int i, int j, int n) {
-    auto found = std::find(cvvec.begin(), cvvec.end(), terms[i] + terms[j]);
-    if (found == cvvec.end()) {
+    //auto found = std::find(cvvec.begin(), cvvec.end(), terms[i] + terms[j]);
+    int found = find_sorted(cvvec, terms[i] + terms[j]);
+    if (found < 0) {
         return false;
     }
     if (i == n - 2 && j == n - 1) {
@@ -23,7 +35,7 @@ bool check(inp cvvec, vector<int> &terms, int i, int j, int n) {
         std::cout << "\n";
         return true;
     }
-    cvvec.erase(found);
+    cvvec.erase(cvvec.begin() + found);
     
     if (++j >= n) {
         i++;
@@ -59,14 +71,14 @@ void solve(inp vvec, int n) {
     for (int i = abs(num); i >= -abs(num); i--) {
         a = i;
         b = vvec[0] - a;
-        
+        c = vvec[1] - a;
         vector<int> terms;
+        terms.reserve(n);
         terms.push_back(a);
         terms.push_back(b);
-        for (int j = 0; j < n - 3; j++) {
-            terms.push_back(vvec[1 + j] - a);
-        }
-        
+        terms.push_back(c);
+
+        std::sort(terms.begin(), terms.end());
         
         inp cvvec;
         std::copy(vvec.begin() + (terms.size()-2), vvec.end(), std::back_inserter(cvvec));
