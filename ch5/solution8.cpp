@@ -6,7 +6,7 @@
 #include <set>
 #include <map>
 #include <cmath>
-
+//10202	Pairsumonious Numbers	Accepted
 using namespace std;
 
 typedef vector<int> inp;
@@ -21,20 +21,36 @@ int find_sorted(inp &in, int val) {
     }
     return -1;
 }
-bool check(inp cvvec, vector<int> &terms, int i, int j, int n) {
-    //auto found = std::find(cvvec.begin(), cvvec.end(), terms[i] + terms[j]);
-    int found = find_sorted(cvvec, terms[i] + terms[j]);
-    if (found < 0) {
+
+bool check(inp cvvec, vector<int>& terms) {
+    for (int i = 0; i < terms.size(); i++) {
+        for (int j = i+1; j < terms.size(); j++) {
+            int f = find_sorted(cvvec, terms[i] + terms[j]);
+            if (f < 0) 
+                return false;
+            cvvec.erase(cvvec.begin() + f);
+        }
+    }
+    return true;
+}
+bool check(inp cvvec, vector<int> &terms, int i, int j, int n, inp &origin) {
+    if (check(origin, terms)) {
+        if (terms.size() == n) {
+            for (int l = 0; l < terms.size(); l++) {
+                if (l) std::cout << " ";
+                std::cout << terms[l];
+            }
+            std::cout << "\n";
+            return true;
+        }
+    }
+    else {
         return false;
     }
-    if (i == n - 2 && j == n - 1) {
-        for (int l = 0; l < terms.size(); l++) {
-            if (l) std::cout << " ";
-            std::cout << terms[l];
-        }
-        std::cout << "\n";
-        return true;
-    }
+    //auto found = std::find(cvvec.begin(), cvvec.end(), terms[i] + terms[j]);
+    int found = find_sorted(cvvec, terms[i] + terms[j]);
+    if (found < 0) { return false; }
+    
     cvvec.erase(cvvec.begin() + found);
     
     if (++j >= n) {
@@ -44,14 +60,16 @@ bool check(inp cvvec, vector<int> &terms, int i, int j, int n) {
 
     if (terms.size() < n) {
         for (int _i = 0; _i < cvvec.size(); _i++) {
+            int newVal = cvvec[_i] - terms[i];
+           
             auto t = terms;
-            t.push_back(cvvec[_i] - terms[i]);
-            if (check(cvvec, t, i, j, n)) {
+            t.push_back(newVal);
+            if (check(cvvec, t, i, j, n, origin)) {
                 return true;
             }
         }
     } else {
-        return check(cvvec, terms, i, j, n);
+        return check(origin, terms);
     }
     return false;
 }
@@ -68,7 +86,7 @@ void solve(inp vvec, int n) {
     int a, b, c;
     bool res = false;
     
-    for (int i = abs(num); i >= -abs(num); i--) {
+    for (int i = abs(vvec[0]); i >= -abs(vvec[0]); i--) {
         a = i;
         b = vvec[0] - a;
         c = vvec[1] - a;
@@ -78,11 +96,12 @@ void solve(inp vvec, int n) {
         terms.push_back(b);
         terms.push_back(c);
 
-        std::sort(terms.begin(), terms.end());
+        //std::sort(terms.begin(), terms.end());
         
         inp cvvec;
+        set <int>ch;
         std::copy(vvec.begin() + (terms.size()-2), vvec.end(), std::back_inserter(cvvec));
-        if (check(cvvec, terms, 0, terms.size() - 1, n)) {
+        if (check(cvvec, terms, 0, terms.size() - 1, n, vvec)) {
             res = true;
             break;
         }
