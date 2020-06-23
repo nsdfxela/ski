@@ -14,7 +14,7 @@ bool _less(string& a, string& b) {
         return false;
     }
     else {
-        for (int i = a.size() - 1; i >= 0; i --) {
+        for (int i = 0; i < a.size(); i++) {
             if (a[i] - '0' < b[i] - '0') {
                 return true;
             }
@@ -54,18 +54,36 @@ void inc(string& a) {
 }
 
 #include <set>
+bool _lessOrEq(string& a, string& b) {
+    return (_less(a, b) || a == b);
+}
 void solve(string &a, string &b) {
-    set<string> S;
+    vector<string> S;
     string na = "1";
-    string nb = "1";
-    string nc = sum(na, nb);
-    while (_less(nc, b)) {
+    string nb = "2";
+    if (!_less(na, a) && _lessOrEq(na, b)) { S.push_back(na); }
+    if (!_less(nb, a) && _lessOrEq(nb, b)) { S.push_back(nb); }
 
-        S.insert(nc);
+    string nc = sum(na, nb);
+    bool started = false;
+    while (_less(nc, b)) {
+        if (!started) {
+            started = !_less(nc, a);
+        }
+        if (started) {
+            S.push_back(nc);
+        }
+
         na = nb;
         nb = nc;
         nc = sum(na, nb);
     };
+    if (nc == b) {
+        S.push_back(nc);
+    }
+    
+    
+    std::cout << S.size() << endl;
 }
 
 int main(void) {
