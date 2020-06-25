@@ -41,12 +41,12 @@ string mult(string a, string b)
         int rem = 0;
         for (int i = a.length() - 1; i >= 0; i--) {
             r = (a[i] - '0') * (b[j] - '0');
-            char rc = ((r % 10) + rem + '0');
-            rem = r / 10;
+            char rc = ((r + rem) % 10  + '0');
+            rem = (r + rem) / 10;
             sr.push_back(rc);
         }
         if (rem) {
-            sr.push_back(rem);
+            sr.push_back(rem + '0');
         }
         std::reverse(sr.begin(), sr.end());
         for (int k = 0; k < zeros; k++) {
