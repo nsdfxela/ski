@@ -140,6 +140,9 @@ string trimz(string a) {
         return a.substr(pos);
     }
 }
+
+
+
 longint div(longint a, longint b) {
     string d = "";
     string res;
@@ -154,13 +157,12 @@ longint div(longint a, longint b) {
             } while (!long_less(v, b));
             res.push_back(n+'0');
             d.clear();
-            v.val = trimz(v.val);
-            if (v.val != "0") {
-                d = d + trimz(v.val);
-            }
+            d = v.val;
         }
     }
-    res = res + d;
+    for (int i = 0; i < d.size()-1; i++) {
+        res.push_back('0');
+    }
     return res;
 }
 longint Cnk(longint n, int k) {
@@ -179,8 +181,8 @@ void solve(const string &v) {
 }
 
 int main(void) {
-    longint a = "1050";
-    longint b ("15", 1);
+    longint a = "40041001";
+    longint b ("187", 1);
     longint c = div(a, b);
 #if __GNUC__
     istream& istr = cin;
