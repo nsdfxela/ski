@@ -6,6 +6,17 @@
 
 
 using namespace std;
+
+string trimz(string a) {
+    auto pos = a.find_first_not_of('0');
+    if (pos == string::npos) {
+        return "0";
+    }
+    else {
+        return a.substr(pos);
+    }
+}
+
 struct longint {
 public:
     string val = "";
@@ -39,12 +50,14 @@ longint add(longint a, longint b) {
         res.push_back(c % 10 + '0');
         rem = c / 10;
     }
+    res.push_back(rem + '0');
     reverse(res.begin(), res.end());
     res.push_back('\0');
+
     
     longint result;
     result.val = res.data();
-    return result;
+    return trimz(result.val);
 }
 
 bool long_less(longint a, longint b) {
@@ -131,17 +144,6 @@ longint fact(longint x) {
     res = mult(res, sp);
     return res;
 }
-string trimz(string a) {
-    auto pos = a.find_first_not_of('0');
-    if (pos == string::npos) {
-        return "0";
-    }
-    else {
-        return a.substr(pos);
-    }
-}
-
-
 
 longint div(longint a, longint b) {
     string d = "";
@@ -165,14 +167,14 @@ longint div(longint a, longint b) {
     }
     return res;
 }
-longint Cnk(longint n, int k) {
+longint Cnk(longint n, longint k) {
 
-    return "";
+    return div(fact(n), mult(fact(k), fact(sub(n, k))));
 }
 
 void solve(const string &v) {
-    longint cn2 = Cnk(v, 2);
-    longint cn4 = Cnk(v, 4);
+    longint cn2 = Cnk(v, longint("2"));
+    longint cn4 = Cnk(v, longint("4"));
     longint one ("1");
 
     longint result = add(one, cn2);
@@ -181,9 +183,10 @@ void solve(const string &v) {
 }
 
 int main(void) {
-    longint a = "40041001";
-    longint b ("187", 1);
-    longint c = div(a, b);
+    longint a = "199";
+    longint b ("2", 1);
+    longint c = add(a, b);
+    longint d = Cnk(longint("120"), longint("4"));
 #if __GNUC__
     istream& istr = cin;
 #else
