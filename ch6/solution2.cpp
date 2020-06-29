@@ -132,6 +132,7 @@ longint mult(longint a, longint b)
 longint fact(longint x) {
     if(x.val == "0") return longint( "1");
     if (x.val == "1") return longint("1");
+    if (x.val == "2") return longint("2");
 
     
     longint sp ("2");
@@ -173,20 +174,33 @@ longint Cnk(longint n, longint k) {
 }
 
 void solve(const string &v) {
+    if (v == "1") {
+        cout << v << endl;
+        return;
+    }
+    if (v == "2") {
+        cout << v << endl;
+        return;
+    }
+    if (v == "3") {
+        cout << "4" << endl;
+        return;
+    }
+
     longint cn2 = Cnk(v, longint("2"));
     longint cn4 = Cnk(v, longint("4"));
     longint one ("1");
 
     longint result = add(one, cn2);
     result = add(result, cn4);
-    cout << result.val;
+    cout << result.val << endl;
 }
 
 int main(void) {
-    longint a = "199";
+   /* longint a = "199";
     longint b ("2", 1);
     longint c = add(a, b);
-    longint d = Cnk(longint("120"), longint("4"));
+    longint d = Cnk(longint("120"), longint("4"));*/
 #if __GNUC__
     istream& istr = cin;
 #else
