@@ -95,7 +95,7 @@ longint sub(longint a, longint b) {
     reverse(resstr.begin(), resstr.end());
     auto pos = resstr.find_first_not_of('0');
     if (pos == string::npos) {
-        return "0";
+        return longint("0");
     }
     return longint(resstr.substr(pos));
 }
