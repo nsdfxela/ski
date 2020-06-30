@@ -154,6 +154,10 @@ longint div(longint a, longint b) {
     string d = "";
     string res;
     for (int i = 0; i < a.length(); i++) {
+        if (d.empty() && a.val[i] == '0') {
+            res.push_back('0');
+            continue;
+        }
         d.push_back(a.val[i]);
         if (!long_less(d, b)) {
             longint v = d;
@@ -163,18 +167,19 @@ longint div(longint a, longint b) {
                 n++;
             } while (!long_less(v, b));
             res.push_back(n+'0');
-            d.clear();
+            d.clear();    
             d = v.val;
+        } else {
+            res.push_back('0');
         }
     }
-    for (int i = 0; i < d.size()-1; i++) {
-        res.push_back('0');
-    }
-    return res;
+    
+    return trimz(res);
 }
 
 longint fact(longint from, longint to) {
     longint res("1");
+    from = add(from, longint("1"));
     while (from.val != to.val) {
         res = mult(res, from);
         from = add(from, longint("1"));
@@ -185,7 +190,7 @@ longint fact(longint from, longint to) {
 
 longint Cnk(longint n, longint k) {
     
-    return div(fact(sub(n,k), n), fact(k));
+    return  div(fact(sub(n,k), n), fact(k));
     //return div(fact(n), mult(fact(k), fact(sub(n, k))));
 }
 
@@ -213,7 +218,19 @@ void solve(const string &v) {
 }
 
 int main(void) {
-    
+
+    /*longint a = "15015";
+    longint b("15", 1);
+    longint c = div(a, b);*/
+
+   /* longint a = "20";
+    longint b("2", 1);
+    longint c = div(a, b);*/
+
+    /*longint a = "2798944";
+    longint b("188", 1);
+    longint c = div(a, b);*/
+   
    /* longint a = "199";
     longint b ("2", 1);
     longint c = add(a, b);
