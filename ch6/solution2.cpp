@@ -61,6 +61,8 @@ longint add(longint a, longint b) {
 }
 
 bool long_less(longint a, longint b) {
+    a = trimz(a.val);
+    b = trimz(b.val);
     if (a.length() < b.length()) {
         return true;
     } else if (b.length() < a.length()) {
@@ -129,13 +131,15 @@ longint mult(longint a, longint b)
     return total;
 
 }
+
+
 longint fact(longint x) {
     if(x.val == "0") return longint( "1");
     if (x.val == "1") return longint("1");
     if (x.val == "2") return longint("2");
 
     
-    longint sp ("2");
+    longint sp ("1");
     longint one ("1");
     longint res ("1");
     do {
@@ -168,9 +172,21 @@ longint div(longint a, longint b) {
     }
     return res;
 }
-longint Cnk(longint n, longint k) {
 
-    return div(fact(n), mult(fact(k), fact(sub(n, k))));
+longint fact(longint from, longint to) {
+    longint res("1");
+    while (from.val != to.val) {
+        res = mult(res, from);
+        from = add(from, longint("1"));
+    }
+    res = mult(res, from);
+    return res;
+}
+
+longint Cnk(longint n, longint k) {
+    
+    return div(fact(sub(n,k), n), fact(k));
+    //return div(fact(n), mult(fact(k), fact(sub(n, k))));
 }
 
 void solve(const string &v) {
@@ -197,6 +213,7 @@ void solve(const string &v) {
 }
 
 int main(void) {
+    
    /* longint a = "199";
     longint b ("2", 1);
     longint c = add(a, b);
