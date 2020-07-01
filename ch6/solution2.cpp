@@ -196,7 +196,7 @@ longint Cnk(longint n, longint k) {
 
 void solve(const string &v) {
     if (v == "0") {
-        cout << v << endl;
+        cout << "1" << endl;
         return;
     }
     if (v == "1") {
