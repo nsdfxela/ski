@@ -137,24 +137,6 @@ longint mult(longint a, longint b)
 
 }
 
-
-longint fact(longint x) {
-    if (x.val == "0") return longint("1");
-    if (x.val == "1") return longint("1");
-    if (x.val == "2") return longint("2");
-
-
-    longint sp("1");
-    longint one("1");
-    longint res("1");
-    do {
-        res = mult(res, sp);
-        sp = add(sp, one);
-    } while (sp.val != x.val);
-    res = mult(res, sp);
-    return res;
-}
-
 longint div(longint a, longint b) {
     string d = "";
     string res;
@@ -183,24 +165,6 @@ longint div(longint a, longint b) {
     return trimz(res);
 }
 
-longint fact(longint from, longint to) {
-    longint res("1");
-    from = add(from, longint("1"));
-    while (from.val != to.val) {
-        res = mult(res, from);
-        from = add(from, longint("1"));
-    }
-    res = mult(res, from);
-    return res;
-}
-
-longint Cnk(longint n, longint k) {
-
-    return  div(fact(sub(n, k), n), fact(k));
-    //return div(fact(n), mult(fact(k), fact(sub(n, k))));
-}
-
-
 longint operator+(longint& a, longint& b) {
     longint res = add(a, b);
     return res;
@@ -212,9 +176,8 @@ void fill() {
     vec.emplace_back("2");
     vec.emplace_back("5");
     vec.emplace_back("13");
-    vec.emplace_back("2");
     for (int i = vec.size(); i < 1001; i++) {
-        longint nv = vec[i - 4] + vec[i - 3];
+        longint nv = vec[i - 1] + vec[i - 3];
         nv = nv + vec[i - 2];
         nv = nv + vec[i - 1];
         vec.push_back(nv);
@@ -238,10 +201,11 @@ int main(void) {
     {
         int n;
         istr >> n;
-        solve(n);
         if (!istr.good()) {
             break;
         }
+        solve(n);
+        
     }
     return 0;
 }
