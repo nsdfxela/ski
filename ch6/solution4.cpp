@@ -4,22 +4,25 @@
 #include <string>
 #include <algorithm>
 #include <sstream>
+#include <unordered_map>
 
 
 using namespace std;
-int countCatalans(int n, int d, int maxd) {
+unordered_map<int, int> mem;
+int countCatalans(int n) {
     const int c0 = 1;
-    if (!n || d >= maxd) { return c0; }
+    if (!n ) { return c0; }
+    if (mem.find(n) != mem.end()) 
+    {
+        return mem[n];
+    }
     int res = 0;
     for (int k = 0; k <= n - 1; k++) {
-        int a=1, b=1;
-        if (d < maxd-1)
-        {
-            a = countCatalans(k, d + 1, maxd);
-            b = countCatalans(n - 1 - k, d + 1, maxd);
-        }
+        int a = countCatalans(k);
+        int b = countCatalans(n-1-k);
         res += a * b;
     }
+    mem[n] = res;
     return res;
 }
 void solve(int n, int d) {
@@ -29,7 +32,7 @@ void solve(int n, int d) {
 
 }
 int main(void) {
-    std::cout << countCatalans(300, 0, 150) << "\n";
+    std::cout << countCatalans(300) << "\n";
 #if __GNUC__
     istream& istr = cin;
 #else
