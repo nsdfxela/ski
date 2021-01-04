@@ -194,6 +194,10 @@ longint operator+(longint& a, longint& b) {
 
 unordered_map<int, longint> mem;
 longint countCatalans(int n, int d, int maxd) {
+    for (int i = 0; i < d; i++) {
+        std::cout << " ";
+    }
+    std::cout << "countCatalans " << n << " d=" << d << " \n";
     const int c0 = 1;
     if (n==0  || d >= maxd-1) { return c0; }
     if (mem.find(n) != mem.end()) 
@@ -201,11 +205,12 @@ longint countCatalans(int n, int d, int maxd) {
         return mem[n];
     }
     longint res = 0;
-    for (int k = 0; k <= n - 1; k++) {
-        longint a = countCatalans(k, d++, maxd);
-        longint b = countCatalans(n-1-k, d++, maxd);
+    d++;
+    for (int k = 0; k < n - 1; k++) {
+        longint a = countCatalans(k, d, maxd);
+        longint b = countCatalans(n-1-k, d, maxd);
         res = add(res, mult(a , b));
-        //std::cout << res << "\n";
+        //std::cout << res.val << "\n";
     }
     mem[n] = res;
     return res;
