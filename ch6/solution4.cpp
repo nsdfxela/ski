@@ -192,15 +192,28 @@ longint operator+(longint& a, longint& b) {
 ////// Long arithmetics ends here /\
 //////////////////////////////////////////
 
-unordered_map<int, longint> mem;
+//std::vector<std::vector<longint>> mem;
+longint mem[300][300];
+void resetMem() 
+{
+    //mem.clear();
+    const int sz = 300;
+    //mem.resize(sz);
+    for (int i = 0; i < sz; i++) {
+        //mem[i].resize(sz);
+        for (int j = 0; j < sz; j++) {
+            mem[i][j].val = "";
+        }
+    }
+}
 longint countCatalans(int n, int d) {
-    std::cout << "countCatalans " << n << " d=" << d << " \n";
+    //std::cout << "countCatalans " << n << " d=" << d << " \n";
     const int c0 = 1;
     if (n <= 1) { return c0; }
     if (d <= 1) { return c0; }
-    if (mem.find(n) != mem.end()) 
+    if (mem[n][d].val.size()) 
     {
-        //return mem[n];
+        return mem[n][d];
     }
     longint res = 0;
     for (int k = 0; k < n; k++) {
@@ -209,11 +222,11 @@ longint countCatalans(int n, int d) {
         res = add(res, mult(a , b));
         //std::cout << res.val << "\n";
     }
-    mem[n] = res;
+    mem[n][d] = res;
     return res;
 }
 void solve(int n, int d) {
-    mem.clear();
+    resetMem();
     int nr = n % 2;
     if (nr) 
     {
