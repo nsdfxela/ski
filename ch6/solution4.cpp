@@ -196,14 +196,14 @@ unordered_map<int, longint> mem;
 longint countCatalans(int n, int d) {
     std::cout << "countCatalans " << n << " d=" << d << " \n";
     const int c0 = 1;
-    if (n==0 || n==1) { return c0; }
-    if (!d) { return 0; }
+    if (n <= 1) { return c0; }
+    if (d <= 1) { return c0; }
     if (mem.find(n) != mem.end()) 
     {
-        return mem[n];
+        //return mem[n];
     }
     longint res = 0;
-    for (int k = 0; k < n - 1; k++) {
+    for (int k = 0; k < n; k++) {
         longint a = countCatalans(k, d-1);
         longint b = countCatalans(n-1-k, d);
         res = add(res, mult(a , b));
