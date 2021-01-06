@@ -29,7 +29,7 @@ struct longint {
 public:
     string val = "";
     int sign = 1;
-    int length() {
+    int length() const {
         return val.length();
     }
     longint() {
@@ -56,7 +56,7 @@ public:
     }
 };
 
-longint add(longint a, longint b) {
+longint add(const longint &a, const longint &b) {
     int s = a.length() > b.length() ? a.length() : b.length();
     vector<char> res;
     int rem = 0;
@@ -127,8 +127,17 @@ longint sub(longint a, longint b) {
     return longint(resstr.substr(pos));
 }
 
-longint mult(longint a, longint b)
+std::unordered_map<std::string, longint> m;
+
+longint mult(const longint &a, const longint &b)
 {
+    string k1 = a.val + " " + b.val;
+    string k2 = b.val + " " + a.val;
+    if (m.find(k1) != m.end()) {
+        return m[k1];
+    } else if (m.find(k2) != m.end()) {
+        return m[k2];
+    }
     int r;
     int zeros = 0;
     longint total;
@@ -153,8 +162,8 @@ longint mult(longint a, longint b)
         zeros++;
         total = add(total, sr);
     }
+    m[k1] = total;
     return total;
-
 }
 
 longint div(longint a, longint b) {
@@ -193,12 +202,14 @@ longint operator+(longint& a, longint& b) {
 //////////////////////////////////////////
 
 //std::vector<std::vector<longint>> mem;
-longint mem[300][300];
+const int sz = 300;
+
+longint mem[sz][sz];
 void resetMem() 
 {
     //mem.clear();
-    const int sz = 300;
     //mem.resize(sz);
+    m.clear();
     for (int i = 0; i < sz; i++) {
         //mem[i].resize(sz);
         for (int j = 0; j < sz; j++) {
@@ -209,8 +220,8 @@ void resetMem()
 longint countCatalans(int n, int d) {
     //std::cout << "countCatalans " << n << " d=" << d << " \n";
     const int c0 = 1;
-    if (n <= 1) { return c0; }
-    if (d <= 1) { return c0; }
+    if (n <= 1 || d <= 1) { return c0; }
+     
     if (mem[n][d].val.size()) 
     {
         return mem[n][d];
@@ -222,8 +233,9 @@ longint countCatalans(int n, int d) {
         res = add(res, mult(a , b));
         //std::cout << res.val << "\n";
     }
-    mem[n][d] = res;
-    return res;
+    std::swap(mem[n][d], res);
+     
+    return mem[n][d];
 }
 void solve(int n, int d) {
     resetMem();
