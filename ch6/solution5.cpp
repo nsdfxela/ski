@@ -181,6 +181,8 @@ longint div(longint a, longint b) {
     return trimz(res);
 }
 
+
+
 longint operator+(longint& a, longint& b) {
     longint res = add(a, b);
     return res;
@@ -198,6 +200,16 @@ bool operator<=(const longint& a, const longint& b) {
     return (a < b) || (a == b);
 }
 
+longint longpow(longint n, longint pow)
+{
+    if (pow == 0) { return 1; }
+    longint res = n;
+    for (longint i = 1; i < pow; i=add(i, 1)) {
+        res = mult(res, n);
+    }
+    return res;
+}
+
 longint factorial(const longint &n) {
     longint a = 1;
     longint res = 1;
@@ -210,12 +222,33 @@ longint factorial(const longint &n) {
 ////// Long arithmetics ends here /\
 //////////////////////////////////////////
 
+int countNumberOfLabelsForTree(int k, int d) {
+    int res = 0;
+    for (int i = 0; i <= d; i++) {
+        res += pow(k, i);
+    }
+    return res;
+}
+
+longint countPartitionsOfSetIntoSubsets(int numberOfElements, int sizeOfSet) {
+    // the general formula is:
+    // n! / (n1! n2! ... nk! )
+    // but in this case sizes of all of subset are equal (lets say ns), so we get
+    // n! / (ns!)^k
+    return div(factorial(numberOfElements), longpow(factorial(sizeOfSet), sizeOfSet));
+    
+}
 
 void solve(int k, int d) {
-
+    int totalNumberOfLabelsForTree = countNumberOfLabelsForTree(k, d);
+    int numberOfDescendantElementsOfRoot = totalNumberOfLabelsForTree - 1;
+    int numberOfElementsInEverySubTree = numberOfDescendantElementsOfRoot / k;
+    longint result = 1;
+    longint waysToChooseSubtreesOutOfDescendants = countPartitionsOfSetIntoSubsets(numberOfDescendantElementsOfRoot, numberOfElementsInEverySubTree);
+    mult(result, waysToChooseSubtreesOutOfDescendants);
 }
 int main(int argc, char**argv) {
-
+    longpow(6, 1);
 #if __GNUC__
     std::istream& istr = std::cin;
 #else
