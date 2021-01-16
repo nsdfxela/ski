@@ -3,6 +3,8 @@
 #include <vector>
 #include <fstream>
 #include <sstream>
+#include <cmath>
+#include <algorithm>
 using namespace std;
 /*
     Long arithmetics is copy-pasted from previous exercise solution
@@ -219,6 +221,11 @@ longint factorial(const longint &n) {
     }
     return res;
 }
+
+std::ostream& operator<< (std::ostream& st, const longint& n) {
+    return st << n.val;
+}
+
 ////// Long arithmetics ends here /\
 //////////////////////////////////////////
 
@@ -230,22 +237,30 @@ int countNumberOfLabelsForTree(int k, int d) {
     return res;
 }
 
-longint countPartitionsOfSetIntoSubsets(int numberOfElements, int sizeOfSet) {
+longint countPartitionsOfSetIntoSubsets(int numberOfElements, int sizeOfSet, int numberOfSubsets) {
     // the general formula is:
     // n! / (n1! n2! ... nk! )
     // but in this case sizes of all of subset are equal (lets say ns), so we get
     // n! / (ns!)^k
-    return div(factorial(numberOfElements), longpow(factorial(sizeOfSet), sizeOfSet));
+    return div(factorial(numberOfElements), longpow(factorial(sizeOfSet), numberOfSubsets));
     
 }
 
-void solve(int k, int d) {
+longint countWaysToArrangeLabelsForTree(int k, int d) {
+    if (d == 1) { return factorial(k); }
     int totalNumberOfLabelsForTree = countNumberOfLabelsForTree(k, d);
     int numberOfDescendantElementsOfRoot = totalNumberOfLabelsForTree - 1;
     int numberOfElementsInEverySubTree = numberOfDescendantElementsOfRoot / k;
     longint result = 1;
-    longint waysToChooseSubtreesOutOfDescendants = countPartitionsOfSetIntoSubsets(numberOfDescendantElementsOfRoot, numberOfElementsInEverySubTree);
-    mult(result, waysToChooseSubtreesOutOfDescendants);
+    longint waysToChooseSubtreesOutOfDescendants = countPartitionsOfSetIntoSubsets(numberOfDescendantElementsOfRoot, numberOfElementsInEverySubTree, k);
+    result = mult(result, waysToChooseSubtreesOutOfDescendants);
+    longint numberOfWaysToArrangeLabelsForSubtree = countWaysToArrangeLabelsForTree(k, d - 1);
+    result = mult(result, longpow(numberOfWaysToArrangeLabelsForSubtree, k)); // ^k because there are k subtrees
+    return result;
+}
+
+void solve(int k, int d) {
+    std::cout << countWaysToArrangeLabelsForTree(k, d) << '\n';
 }
 int main(int argc, char**argv) {
     longpow(6, 1);
