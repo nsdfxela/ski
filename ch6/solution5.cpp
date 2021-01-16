@@ -6,8 +6,11 @@
 #include <cmath>
 #include <algorithm>
 using namespace std;
+
+/* 10247 - Complete Tree Labeling */
+
 /*
-    Long arithmetics is copy-pasted from previous exercise solution
+    Long arithmetics is copy-pasted from previous exercise solutions (and extended here)
 */
 ////// Long arithmetics starts here \/
 //////////////////////////////////////////
@@ -240,7 +243,7 @@ int countNumberOfLabelsForTree(int k, int d) {
 longint countPartitionsOfSetIntoSubsets(int numberOfElements, int sizeOfSet, int numberOfSubsets) {
     // the general formula is:
     // n! / (n1! n2! ... nk! )
-    // but in this case sizes of all of subset are equal (lets say ns), so we get
+    // but in this case sizes of all of subsets are equal (lets say ns), so we get
     // n! / (ns!)^k
     return div(factorial(numberOfElements), longpow(factorial(sizeOfSet), numberOfSubsets));
     
