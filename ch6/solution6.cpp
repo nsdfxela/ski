@@ -249,8 +249,8 @@ longint advancedHanoi(int n, int k)
     if (D[n].sign > 0) { return D[n]; }
 
     longint ah = advancedHanoi(k, k);
-    D[n] = mult(ah, 2) + sub(longpow(2, sub(n, k)), 1);
-    return D[n];
+    
+    return mult(ah, 2) + sub(longpow(2, sub(n, k)), 1);
 }
 
 longint advancedHanoi(int n)
@@ -264,6 +264,7 @@ longint advancedHanoi(int n)
             minval = h;
         }
     }
+    D[n] = minval;
     return minval;
 }
 
