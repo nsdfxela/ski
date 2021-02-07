@@ -285,7 +285,7 @@ int main() {
 
     
     for (int i = 1; i < 10000; i++) {
-        std:cout << advancedHanoi(i) << '\n';
+        std:cout << sub(advancedHanoi(i), advancedHanoi(i-1)) << '\n';
     }
 #if __GNUC__
     std::istream& istr = std::cin;
