@@ -240,12 +240,31 @@ void basicHanoi(int n, int from, int to, int buffer) {
     basicHanoi(n - 1, buffer, to, from);
 }
 
-longint advancedHanoi(longint n, longint k)
+
+
+std::vector<longint> D(10001);
+
+longint advancedHanoi(int n, int k)
 {
-    if (n == 0) { return 0; }
-    if (n == 1) { return 1; }
+    if (D[n].sign > 0) { return D[n]; }
+
     longint ah = advancedHanoi(k, k);
-    return mult(ah, 2) + sub(longpow(2, sub(n, k)), 1);
+    D[n] = mult(ah, 2) + sub(longpow(2, sub(n, k)), 1);
+    return D[n];
+}
+
+longint advancedHanoi(int n)
+{
+    if (D[n].sign > 0) { return D[n]; }
+
+    longint minval("", -1);
+    for (int k = 1; k < n; k++) {
+        auto h = advancedHanoi(n, k);
+        if (minval.val == "" || h < minval) {
+            minval = h;
+        }
+    }
+    return minval;
 }
 
 void solve(int n) {
@@ -254,10 +273,18 @@ void solve(int n) {
 }
 
 int main() {
+    longint m1;
+    m1.sign = -1;
+    m1.val = "1";
+    std::fill(D.begin(), D.end(), m1);
+    D[0] = 0;
+    D[1] = 1;
+    D[2] = 3;
+    D[3] = 5;
 
-    int t = 4;
-    for (int i = 1; i < t-1; i++) {
-    std:cout << advancedHanoi(t, i) << '\n';
+    
+    for (int i = 1; i < 10000; i++) {
+        std:cout << advancedHanoi(i) << '\n';
     }
 #if __GNUC__
     std::istream& istr = std::cin;
