@@ -7,6 +7,8 @@
 #include <sstream>
 using namespace std;
 
+/* UVa 10254 The Priest Mathematician */
+
 /*
     Long arithmetics is copy-pasted from previous exercise solutions (and extended here)
 */
@@ -250,7 +252,7 @@ longint advancedHanoi(int n, int k)
 
     longint ah = advancedHanoi(k, k);
     
-    return mult(ah, 2) + sub(longpow(2, sub(n, k)), 1);
+    return add(mult(ah, 2), sub(longpow(2, sub(n, k)), 1));
 }
 
 longint advancedHanoi(int n)
@@ -270,7 +272,7 @@ longint advancedHanoi(int n)
 
 void solve(int n) {
 
-
+    std::cout << D[n] << '\n';
 }
 
 int main() {
@@ -279,13 +281,36 @@ int main() {
     m1.val = "1";
     std::fill(D.begin(), D.end(), m1);
     D[0] = 0;
-    D[1] = 1;
-    D[2] = 3;
-    D[3] = 5;
+    //D[1] = 1;
+    //D[2] = 3;
+    //D[3] = 5;
+    /*  1
+        2
+        2
+        4
+        4
+        4
+        8
+        8
+        8
+        8
+        16
+        16
+        16
+        16
+        16
+        32*/
+    longint diff = 1;
+    int currentIntervalLength = 1;
+    int intervalLength = 1;
 
-    
-    for (int i = 1; i < 10000; i++) {
-        std:cout << sub(advancedHanoi(i), advancedHanoi(i-1)) << '\n';
+    for (int i = 1; i < 10001; i++) {
+        D[i] = D[i - 1] + diff;
+        if (!--currentIntervalLength) {
+            currentIntervalLength = ++intervalLength;
+            diff = mult(diff, 2);
+        }
+        //std:cout << sub(advancedHanoi(i), advancedHanoi(i-1)) << '\n';
     }
 #if __GNUC__
     std::istream& istr = std::cin;
