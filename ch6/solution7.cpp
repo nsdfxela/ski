@@ -3,6 +3,9 @@
 #include <string>
 #include <vector>
 #include <fstream>
+#include <unordered_map>
+
+//UVa 10049	Self - describing Sequence
 
 const int NMAX = 2000000000;
 
@@ -11,8 +14,12 @@ struct seq {
     int from;
     int to;
 };
+
+std::unordered_map<int, int> M;
+static std::vector<seq> G;
+
 void naiveGolomb2() {
-    static std::vector<seq> G;
+    M.reserve(680000);
     G.push_back(seq{ 1, 1, 1 });
     G.push_back(seq{ 2, 2, 3 });
 
@@ -27,6 +34,7 @@ void naiveGolomb2() {
                 s.to = s.from + G[i].val - 1;
                 s.val = curPos;
                 G.push_back(s);
+                //M[s.to] = G.size() - 1;
                 curPos++;
                 break;
             }
@@ -34,23 +42,34 @@ void naiveGolomb2() {
     }
 
 }
+
+
 void naiveGolomb() {
-    static std::vector<int> G;
-    if (!G.empty()) { return; }
-    G.push_back(1);
-    G.push_back(2);
+    std::vector<int> theG;
+
+    if (!theG.empty()) { return; }
+    theG.push_back(1);
+    theG.push_back(2);
 
     int ival = 2;
 
     for (; ival < NMAX; ival++) {
-        for (int i = 0; i < G[ival-1]; i++) {
-            G.push_back(ival);
+        for (int i = 0; i < theG[ival-1]; i++) {
+            theG.push_back(ival);
         }
     }
 }
 
 void solve(int n) {
-
+    for (int i = 0; i < G.size(); i++) {
+        if (n >= G[i].from && n <= G[i].to) {
+            std::cout << G[i].val << '\n';
+        }
+    }
+    /*for (int i = n; i >= 0; i--) {
+        if (curPos >= G[i].from && curPos <= G[i].to) {
+        }
+    }*/
 }
 
 int main() {
