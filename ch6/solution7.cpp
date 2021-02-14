@@ -6,6 +6,32 @@
 
 const int NMAX = 2000000000;
 
+struct seq {
+    int val;
+    int from;
+    int to;
+};
+void naiveGolomb2() {
+    static std::vector<seq> G;
+    G.push_back(seq{ 1, 1, 1 });
+    G.push_back(seq{ 2, 2, 3 });
+
+    int curPos = 3;
+    while (curPos < NMAX) {
+        for (int i = G.size()-1; i >=0 ; i--) {
+            if (curPos >= G[i].from && curPos <= G[i].to) {
+                seq s;
+                s.from = G.back().to + 1;
+                s.to = s.from + G[i].val - 1;
+                s.val = curPos;
+                G.push_back(s);
+                curPos++;
+                break;
+            }
+        }
+    }
+
+}
 void naiveGolomb() {
     static std::vector<int> G;
     if (!G.empty()) { return; }
@@ -26,7 +52,7 @@ void solve(int n) {
 }
 
 int main() {
-    naiveGolomb();
+    naiveGolomb2();
 #if __GNUC__
     std::istream &istr = std::cin;
 #else
