@@ -17,9 +17,11 @@ void naiveGolomb2() {
     G.push_back(seq{ 2, 2, 3 });
 
     int curPos = 3;
-    while (curPos < NMAX) {
-        for (int i = G.size()-1; i >=0 ; i--) {
+    int I = G.size() - 1;
+    while (G.back().to < NMAX) {
+        for (int i = I; i < G.size(); i++) {
             if (curPos >= G[i].from && curPos <= G[i].to) {
+                I = i;
                 seq s;
                 s.from = G.back().to + 1;
                 s.to = s.from + G[i].val - 1;
