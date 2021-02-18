@@ -10,11 +10,11 @@
 
 
 struct lmt {
-    int from, to, val;
+    unsigned long  from, to, val;
 };
 std::vector<lmt> D; 
 
-const int MAXVAL = 2000000000;
+const unsigned long MAXVAL = 2147483648ul;
 void solve(int a, int b) {
     if (D.empty()) {
         D.push_back( lmt{ 2, 2, 1 } );
@@ -34,6 +34,17 @@ void solve(int a, int b) {
                 cur++;
                 count = 2;
             }
+        }
+    }
+    if (a == b) {
+        std::cout << 0 << '\n';
+        return;
+    }
+    int v = b - a + 1;
+    for (int i = 0; i < D.size(); i++) {
+        if (v >= D[i].from && v <= D[i].to) {
+            std::cout << D[i].val << '\n';
+            return;
         }
     }
 }
