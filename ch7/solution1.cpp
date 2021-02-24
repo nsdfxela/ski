@@ -14,9 +14,12 @@ void solve(mint v) {
     std::set<mint> dvs;
     dvs.insert(1);
     int t = v;
-    for (mint i = 2; i <= s && t != 1; i++) {
-        while (t % i==0) {
+    for (mint i = 2; i <= v && t != 1; i++) {
+        /*while (t % i==0) {
             t = t / i;
+            dvs.insert(i);
+        }*/
+        if (t % i == 0) {
             dvs.insert(i);
         }
     }
@@ -35,6 +38,9 @@ void solve(mint v) {
 }
 int main(void) {
     solve(2147483648ul);
+    //solve(8);
+    /*solve(4);*/
+
 #if __GNUC__
     std::istream& istr = std::cin;
 #else
