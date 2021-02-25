@@ -36,6 +36,24 @@ void solve(mint v) {
     std::cout << '\n';
 
 }
+
+    //1 yes 
+    //1 2 no
+    //1 3 no
+    //1 2 4 yes
+    //1 5 no
+    //1 2 3 6 no
+    //1 7 no
+    //1 2 4 8 no
+    //1 3 9 yes
+    //1 2 5 10 no
+    //1 11 no
+    //1 2 3 4 6 12 no
+    //1 13 no
+    //1 2 7 14 no
+    //1 3 5 15 no
+    //1 2 4 8 16 yes
+
 int main(void) {
     solve(2147483648ul);
     //solve(8);
