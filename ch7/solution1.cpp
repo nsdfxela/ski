@@ -10,24 +10,9 @@
 typedef unsigned long int mint;
 
 void solve(mint v) {
-    auto s = (mint)ceill(std::sqrt(v));
-    std::set<mint> dvs;
-    dvs.insert(1);
-    int t = v;
-    for (mint i = 2; i <= v && t != 1; i++) {
-        /*while (t % i==0) {
-            t = t / i;
-            dvs.insert(i);
-        }*/
-        if (t % i == 0) {
-            dvs.insert(i);
-        }
-    }
-    if (v != 1)
+    auto sceil = (mint)ceill(std::sqrt(v));
+    if (sceil*sceil == v)
     {
-        dvs.insert(v);
-    }
-    if (dvs.size() % 2) {
         std::cout << "yes";
     }
     else {
@@ -53,9 +38,18 @@ void solve(mint v) {
     //1 2 7 14 no
     //1 3 5 15 no
     //1 2 4 8 16 yes
+    //1 17 no
+    //1 2 3 6 9 18 no
+    //1 19 no
+    //1 2 4 5 10 20 no
+    //1 3 7 21 no
+    //1 11 22 no
+    //1 23 no
+    //1 2 3 4 6 8 12 24 no
+    //1 5 25 yes
 
 int main(void) {
-    solve(2147483648ul);
+    //solve(2147483648ul);
     //solve(8);
     /*solve(4);*/
 
