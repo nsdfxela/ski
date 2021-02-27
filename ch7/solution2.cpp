@@ -12,7 +12,7 @@
 //4^8 mod 17 = 1 mod 17
 //4^16 mod 17 = 1 mod 17 = 1
 //4^17 mod 17 = 4^16 * 4^1 mod 17 = 4
-void checkKM(int a, int n) {
+int checkKM(int a, int n) {
     std::unordered_map<int, int> results;
 
     int cur = a % n;
@@ -24,16 +24,27 @@ void checkKM(int a, int n) {
     }
     int leftover = n - pw / 2;
     std::vector<int> l;
+    int res = cur;
     for (int i = leftover; i >= 1; i--) {
         if (results.find(i) != results.end()) {
             leftover -= i;
             l.push_back(results[i]);
         }
     }
+    for (int i = 0; i < l.size(); i++) {
+        res *= l[i];
+    }
+    return res%n;
 }
 void solve(int v) {
     for (int i = 3; i < v; i++) {
-        checkKM(i, v);
+        int r = checkKM(i, v);
+        if (r == i) {
+            std::cout << v << " is normal\n";
+        }
+        else {
+            break;
+        }
     }
 }
 int main(void) {
