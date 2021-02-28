@@ -26,9 +26,12 @@ int checkKM(int a, int n) {
     std::vector<int> l;
     int res = cur;
     for (int i = leftover; i >= 1; i--) {
-        if (results.find(i) != results.end()) {
+        if (results.find(i) != results.end() && leftover >= i) {
             leftover -= i;
             l.push_back(results[i]);
+        }
+        else {
+           // std::cout << "err!";
         }
     }
     for (int i = 0; i < l.size(); i++) {
@@ -37,14 +40,21 @@ int checkKM(int a, int n) {
     return res%n;
 }
 void solve(int v) {
-    for (int i = 3; i < v; i++) {
+    int i = 3;
+    bool c = false;
+    for (; i < v; i++) {
         int r = checkKM(i, v);
-        if (r == i) {
-            std::cout << v << " is normal\n";
+        if (r != i) {
+            c = true;
         }
         else {
+            c = false;
+            std::cout << v << " is normal.\n";
             break;
         }
+    }
+    if (c) {
+        std::cout << "The number " << v << " Carmicheal normal.\n";
     }
 }
 int main(void) {
