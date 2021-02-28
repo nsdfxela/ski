@@ -3,7 +3,11 @@
 #include <vector>
 #include <string>
 #include <cmath>
-#include <unordered_map>
+#include <map>
+
+
+//10006	Carmichael Numbers
+//https://onlinejudge.org/index.php?option=com_onlinejudge&Itemid=8&page=show_problem&problem=947
 
 //a^n mod n == a
 //17 : 4 ^ 17 mod 17 == 4 
@@ -34,35 +38,53 @@ bool isprime(int v) {
     return true;
 }
 
-int checkKM(int a, int n, std::unordered_map<int, int> &results) {
-    int cur = a % n;
+
+
+int checkKM(int a, int n, std::map<int, int> &results) {
+    unsigned int cur = a % n;
     results[1] = cur;
     int pw = 2;
     for (; pw < n; pw *= 2) {
-        cur = (cur * cur) % n;
+        cur = (cur * cur) % (unsigned int)n;
         results[pw] = cur;
     }
     int leftover = n - pw / 2;
     std::vector<int> l;
     unsigned int res = cur;
-    for (int i = leftover; i >= 1; i--) {
-        if (results.find(i) != results.end() && leftover >= i) {
-            leftover -= i;
-            l.push_back(results[i]);
+    //for (int i = leftover; i >= 1; i--) {
+    for(auto it = results.rbegin(); it != results.rend() && leftover; it++){
+        int f = it->first;
+        int s = it->second;
+        while (leftover >= f) {
+            leftover -= f;
+            l.push_back(s);
         }
-        else {
-           // std::cout << "err!";
-        }
+
+        //if (results.find(i) != results.end() && leftover >= i) {
+        //    leftover -= i;
+        //    l.push_back(results[i]);
+        //}
+        //else {
+        //   // std::cout << "err!";
+        //}
     }
     for (int i = 0; i < l.size(); i++) {
         res = res * l[i]%n;
     }
     return res%n;
 }
+
+//NOTE:
+//CM numbers are always non-prime, so we can skip all the prime numbers
 void solve(int v) {
+    bool prm = isprime(v);
+    if (prm) {
+        std::cout << v << " is normal.\n";
+        return;
+    }
     int i = 3;
     bool c = false;
-    std::unordered_map<int, int> che;
+    std::map<int, int> che;
     for (; i < v; i++) {
         che.clear();
         int r = checkKM(i, v, che);
@@ -74,8 +96,8 @@ void solve(int v) {
             break;
         }
     }
-    if (c&& !isprime(v)) {
-        std::cout << "The number " << v << " is a Carmicheal.\n";
+    if (c) {
+        std::cout << "The number " << v << " is a Carmichael number.\n";
     }
     else {
         std::cout << v << " is normal.\n";
@@ -83,6 +105,7 @@ void solve(int v) {
 }
 int main(void) {
    // checkKM(4, 17);
+    //solve(62745);
 #if __GNUC__
     std::istream& istr = std::cin;
 #else
