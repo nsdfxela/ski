@@ -2,6 +2,7 @@
 #include <fstream>
 #include <vector>
 #include <string>
+#include <cmath>
 #include <unordered_map>
 
 //a^n mod n == a
@@ -12,9 +13,28 @@
 //4^8 mod 17 = 1 mod 17
 //4^16 mod 17 = 1 mod 17 = 1
 //4^17 mod 17 = 4^16 * 4^1 mod 17 = 4
-int checkKM(int a, int n) {
-    std::unordered_map<int, int> results;
 
+//246^1729 mod 1729 == 246
+//246^1 mod 1729 = 246
+//246^2 mod 1729 = 1
+//246^4 mod 1729 = 1
+//246^8 mod 1729 = 1
+//246^16 mod 1729 = 1
+//...
+//246^1024 mod 1729 = 1
+//246^1024 * 246^705 = 246^512*246^128*246^64*246^1
+bool isprime(int v) {
+    if (v == 2)return true;
+    int l = ceil(std::sqrt(v));
+    for (int i = 2; i < l; i++) {
+        if (v % i == 0) {
+            return false;
+        }
+    }
+    return true;
+}
+
+int checkKM(int a, int n, std::unordered_map<int, int> &results) {
     int cur = a % n;
     results[1] = cur;
     int pw = 2;
@@ -24,7 +44,7 @@ int checkKM(int a, int n) {
     }
     int leftover = n - pw / 2;
     std::vector<int> l;
-    int res = cur;
+    unsigned int res = cur;
     for (int i = leftover; i >= 1; i--) {
         if (results.find(i) != results.end() && leftover >= i) {
             leftover -= i;
@@ -35,30 +55,34 @@ int checkKM(int a, int n) {
         }
     }
     for (int i = 0; i < l.size(); i++) {
-        res *= l[i];
+        res = res * l[i]%n;
     }
     return res%n;
 }
 void solve(int v) {
     int i = 3;
     bool c = false;
+    std::unordered_map<int, int> che;
     for (; i < v; i++) {
-        int r = checkKM(i, v);
-        if (r != i) {
+        che.clear();
+        int r = checkKM(i, v, che);
+        if (r == i) {
             c = true;
         }
         else {
             c = false;
-            std::cout << v << " is normal.\n";
             break;
         }
     }
-    if (c) {
-        std::cout << "The number " << v << " Carmicheal normal.\n";
+    if (c&& !isprime(v)) {
+        std::cout << "The number " << v << " is a Carmicheal.\n";
+    }
+    else {
+        std::cout << v << " is normal.\n";
     }
 }
 int main(void) {
-    checkKM(4, 17);
+   // checkKM(4, 17);
 #if __GNUC__
     std::istream& istr = std::cin;
 #else
